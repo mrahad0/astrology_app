@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:astrology_app/controllers/profile_controller/personal_info_edit_controller.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
@@ -13,14 +12,8 @@ class PersonalInfoEdit extends StatefulWidget {
 }
 
 class _PersonalInfoEditState extends State<PersonalInfoEdit> {
-  final PersonalInfoEditController controller = Get.put(PersonalInfoEditController());
-
-  Future<void> _pickImage() async {
-    final image = await controller.showImageSourceDialog(context);
-    if (image != null) {
-      controller.profileImage = image;
-    }
-  }
+  final PersonalInfoEditController controller =
+  Get.put(PersonalInfoEditController());
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +43,7 @@ class _PersonalInfoEditState extends State<PersonalInfoEdit> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header with Save button
+                  /// ---------- HEADER ----------
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -63,13 +56,12 @@ class _PersonalInfoEditState extends State<PersonalInfoEdit> {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          controller.saveData();
-                        },
+                        onPressed: controller.saveData,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF2A2F4A),
                           foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -81,38 +73,37 @@ class _PersonalInfoEditState extends State<PersonalInfoEdit> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Profile picture
+                  /// ---------- PROFILE IMAGE ----------
                   Center(
                     child: Stack(
                       children: [
-                        Obx(() => CircleAvatar(
+                        CircleAvatar(
                           radius: 50,
                           backgroundColor: const Color(0xFF3A3F5A),
-                          backgroundImage: controller.profileImage != null
-                              ? FileImage(controller.profileImage!)
-                              : (controller.userProfile.value?.profile?.profilePicture != null
-                              ? NetworkImage(controller.userProfile.value!.profile!.profilePicture!)
-                              : null),
-                          child: controller.profileImage == null &&
-                              (controller.userProfile.value?.profile?.profilePicture == null)
-                              ? const Icon(Icons.person, size: 50, color: Colors.grey)
+                          backgroundImage: _buildProfileImage(),
+                          child: _showPlaceholderIcon()
+                              ? const Icon(Icons.person,
+                              size: 50, color: Colors.grey)
                               : null,
-                        )),
-
+                        ),
                         Positioned(
                           bottom: 0,
                           right: 0,
                           child: GestureDetector(
-                            onTap: _pickImage,
+                            onTap: () => controller.pickImage(context),
                             child: Container(
                               width: 32,
                               height: 32,
                               decoration: BoxDecoration(
                                 color: const Color(0xFF3A3F5A),
                                 shape: BoxShape.circle,
-                                border: Border.all(color: const Color(0xFF1A1F3A), width: 2),
+                                border: Border.all(
+                                  color: const Color(0xFF1A1F3A),
+                                  width: 2,
+                                ),
                               ),
-                              child: const Icon(Icons.add, size: 18, color: Colors.white),
+                              child: const Icon(Icons.add,
+                                  size: 18, color: Colors.white),
                             ),
                           ),
                         ),
@@ -121,21 +112,38 @@ class _PersonalInfoEditState extends State<PersonalInfoEdit> {
                   ),
                   const SizedBox(height: 32),
 
-                  // Form fields
-                  CustomTextField(label: "Name", controller: controller.nameController),
+                  /// ---------- FORM ----------
+                  CustomTextField(
+                    label: "Name",
+                    controller: controller.nameController,
+                  ),
                   const SizedBox(height: 20),
                   CustomTextField(
-                      label: "Email",
-                      controller: controller.emailController,
-                      keyboardType: TextInputType.emailAddress),
+                    label: "Email",
+                    controller: controller.emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    enabled: false, // read-only
+                  ),
                   const SizedBox(height: 20),
-                  CustomTextField(label: "Date of Birth", controller: controller.dobController),
+                  CustomTextField(
+                    label: "Date of Birth",
+                    controller: controller.dobController,
+                  ),
                   const SizedBox(height: 20),
-                  CustomTextField(label: "Time of Birth", controller: controller.timeController),
+                  CustomTextField(
+                    label: "Time of Birth",
+                    controller: controller.timeController,
+                  ),
                   const SizedBox(height: 20),
-                  CustomTextField(label: "Birth Country", controller: controller.countryController),
+                  CustomTextField(
+                    label: "Birth Country",
+                    controller: controller.countryController,
+                  ),
                   const SizedBox(height: 20),
-                  CustomTextField(label: "Birth City", controller: controller.cityController),
+                  CustomTextField(
+                    label: "Birth City",
+                    controller: controller.cityController,
+                  ),
                 ],
               ),
             ),
@@ -145,60 +153,62 @@ class _PersonalInfoEditState extends State<PersonalInfoEdit> {
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  /// ---------- IMAGE HELPERS ----------
+  ImageProvider? _buildProfileImage() {
+    if (controller.profileImage != null) {
+      return FileImage(controller.profileImage!);
+    }
+    if (controller.profileImageUrl.isNotEmpty) {
+      return NetworkImage(controller.profileImageUrl.value);
+    }
+    return null;
+  }
+
+  bool _showPlaceholderIcon() {
+    return controller.profileImage == null &&
+        controller.profileImageUrl.isEmpty;
   }
 }
 
-//================ Custom Text Field =================//
 class CustomTextField extends StatelessWidget {
   final String label;
   final TextEditingController controller;
   final TextInputType? keyboardType;
+  final bool enabled;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     required this.label,
     required this.controller,
     this.keyboardType,
-  }) : super(key: key);
+    this.enabled = true,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(
-        label,
-        style: const TextStyle(
-          fontSize: 14,
-          color: Colors.white,
-          fontWeight: FontWeight.w400,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label,
+            style: const TextStyle(fontSize: 14, color: Colors.white)),
+        const SizedBox(height: 8),
+        TextField(
+          controller: controller,
+          keyboardType: keyboardType,
+          enabled: enabled,
+          style: const TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: const Color(0xFF0F1329),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
         ),
-      ),
-      const SizedBox(height: 8),
-      TextField(
-        controller: controller,
-        keyboardType: keyboardType,
-        style: const TextStyle(color: Colors.white, fontSize: 15),
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: const Color(0xFF0F1329),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFF2A2F4A)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFF2A2F4A)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFF3A3F5A)),
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        ),
-      ),
-    ]);
+      ],
+    );
   }
 }
+
+
 

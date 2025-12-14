@@ -1,50 +1,3 @@
-// import 'package:astrology_app/data/models/profile_model.dart';
-// import 'package:astrology_app/data/services/api_checker.dart';
-// import 'package:astrology_app/data/services/api_client.dart';
-// import 'package:astrology_app/data/services/api_constant.dart';
-// import 'package:flutter/material.dart';
-//
-// class PersonalInfoController {
-//   final TextEditingController nameController = TextEditingController(text: 'Sadiq');
-//   final TextEditingController emailController = TextEditingController(text: 'Sadiq1999@gmail.com');
-//   final TextEditingController dobController = TextEditingController(text: '12/12/1999');
-//   final TextEditingController timeController = TextEditingController(text: '12:00 pm');
-//   final TextEditingController countryController = TextEditingController(text: 'Bangladesh');
-//   final TextEditingController cityController = TextEditingController(text: 'Dhaka');
-//
-//   // Dispose all controllers
-//   void dispose() {
-//     nameController.dispose();
-//     emailController.dispose();
-//     dobController.dispose();
-//     timeController.dispose();
-//     countryController.dispose();
-//     cityController.dispose();
-//   }
-//
-//   // Get all data as a Map
-//   Map<String, String> getData() {
-//     return {
-//       'name': nameController.text,
-//       'email': emailController.text,
-//       'dateOfBirth': dobController.text,
-//       'timeOfBirth': timeController.text,
-//       'birthCountry': countryController.text,
-//       'birthCity': cityController.text,
-//     };
-//   }
-//
-//   // Clear all fields
-//   void clearAll() {
-//     nameController.clear();
-//     emailController.clear();
-//     dobController.clear();
-//     timeController.clear();
-//     countryController.clear();
-//     cityController.clear();
-//   }
-// }
-
 import 'package:astrology_app/data/models/profile_model.dart';
 import 'package:astrology_app/data/services/api_checker.dart';
 import 'package:astrology_app/data/services/api_client.dart';
@@ -64,6 +17,9 @@ class PersonalInfoController extends GetxController {
   final TextEditingController countryController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
 
+  // Profile image URL (full URL)
+  RxString profileImageUrl = ''.obs;
+
   @override
   void onClose() {
     nameController.dispose();
@@ -76,25 +32,34 @@ class PersonalInfoController extends GetxController {
   }
 
   Future<void> fetchUserInfo() async {
-    isLoading(true);
+    try {
+      isLoading(true);
 
-    final response = await ApiClient.getData(ApiConstant.userprofile);
+      final response = await ApiClient.getData(ApiConstant.userprofile);
 
-    if (response.statusCode == 200) {
-      userInfo.value = UserProfile.fromJson(response.body);
+      if (response.statusCode == 200) {
+        userInfo.value = UserProfile.fromJson(response.body);
 
+        final profile = userInfo.value?.profile;
 
-      // populate text controllers
-      nameController.text = userInfo.value?.name ?? '';
-      emailController.text = userInfo.value?.email ?? '';
-      dobController.text = userInfo.value?.profile?.dateOfBirth ?? '';
-      timeController.text = userInfo.value?.profile?.timeOfBirth ?? '';
-      countryController.text = userInfo.value?.profile?.birthCountry ?? '';
-      cityController.text = userInfo.value?.profile?.birthCity ?? '';
-    } else {
-      ApiChecker.checkApi(response);
+        // Populate text controllers
+        nameController.text = userInfo.value?.name ?? '';
+        emailController.text = userInfo.value?.email ?? '';
+        dobController.text = profile?.dateOfBirth ?? '';
+        timeController.text = profile?.timeOfBirth ?? '';
+        countryController.text = profile?.birthCountry ?? '';
+        cityController.text = profile?.birthCity ?? '';
+
+        // ✅ Use full profile image URL
+        profileImageUrl.value = profile?.profilePictureUrl ?? '';
+      } else {
+        ApiChecker.checkApi(response);
+      }
+    } catch (e) {
+      debugPrint("FETCH ERROR: $e");
+    } finally {
+      isLoading(false);
     }
-
-    isLoading(false);
   }
 }
+

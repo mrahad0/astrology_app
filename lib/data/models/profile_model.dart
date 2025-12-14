@@ -22,25 +22,17 @@ class UserProfile {
       email: json['email'],
       isVerified: json['is_verified'],
       dateJoined: json['date_joined'],
-      profile: json['profile'] != null ? Profile.fromJson(json['profile']) : null,
+      profile: json['profile'] != null
+          ? Profile.fromJson(json['profile'])
+          : null,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "id": id,
-      "name": name,
-      "email": email,
-      "is_verified": isVerified,
-      "date_joined": dateJoined,
-      "profile": profile?.toJson(),
-    };
   }
 }
 
 class Profile {
   final int id;
-  final String? profilePicture;
+  final String? profilePicture;      // Relative path
+  final String? profilePictureUrl;   // Full URL (use this for UI)
   final String? dateOfBirth;
   final String? timeOfBirth;
   final String? birthCountry;
@@ -51,6 +43,7 @@ class Profile {
   Profile({
     required this.id,
     this.profilePicture,
+    this.profilePictureUrl,
     this.dateOfBirth,
     this.timeOfBirth,
     this.birthCountry,
@@ -63,6 +56,7 @@ class Profile {
     return Profile(
       id: json['id'],
       profilePicture: json['profile_picture'],
+      profilePictureUrl: json['profile_picture_url'],
       dateOfBirth: json['date_of_birth'],
       timeOfBirth: json['time_of_birth'],
       birthCountry: json['birth_country'],
@@ -71,17 +65,6 @@ class Profile {
       updatedAt: json['updated_at'],
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "id": id,
-      "profile_picture": profilePicture,
-      "date_of_birth": dateOfBirth,
-      "time_of_birth": timeOfBirth,
-      "birth_country": birthCountry,
-      "birth_city": birthCity,
-      "created_at": createdAt,
-      "updated_at": updatedAt,
-    };
-  }
 }
+
+
