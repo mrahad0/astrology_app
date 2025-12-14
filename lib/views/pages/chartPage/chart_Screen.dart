@@ -143,7 +143,7 @@ class _ChartScreenState extends State<ChartScreen> {
         height: 170,
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: CustomColors.secondbackgroundColor,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Color(0xff2A2F45)),
         ),
