@@ -83,6 +83,7 @@ class PersonalInfoController extends GetxController {
     if (response.statusCode == 200) {
       userInfo.value = UserProfile.fromJson(response.body);
 
+
       // populate text controllers
       nameController.text = userInfo.value?.name ?? '';
       emailController.text = userInfo.value?.email ?? '';

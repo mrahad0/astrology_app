@@ -1,53 +1,41 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:get/get.dart';
 
+import '../../Data/services/api_checker.dart';
+import '../../Data/services/api_client.dart';
+import '../../Data/services/api_constant.dart';
+import '../../views/base/custom_snackBar.dart';
+
 class ChangePassController extends GetxController {
-  // Text Controllers
-  final currentPassController = TextEditingController();
-  final newPassController = TextEditingController();
-  final confirmPassController = TextEditingController();
+  RxBool isLoading = false.obs;
 
-  // Reactive variables
-  var currentPassError = RxnString();
-  var newPassError = RxnString();
-  var confirmPassError = RxnString();
+  Future<void> changePassword(
+      String oldPassword,
+      String newPassword,
+      String confirmPassword,
+      ) async {
 
-  var obscureCurrent = true.obs;
-  var obscureNew = true.obs;
-  var obscureConfirm = true.obs;
+    isLoading(true);
 
-  // Validate fields
-  bool validateFields() {
-    currentPassError.value = null;
-    newPassError.value = null;
-    confirmPassError.value = null;
+    final body = jsonEncode({
+      "old_password": oldPassword.trim(),
+      "new_password": newPassword.trim(),
+      "confirm_password": confirmPassword.trim(),
+    });
 
-    if (currentPassController.text.isEmpty) {
-      currentPassError.value = "Current password cannot be empty";
+    final response = await ApiClient.postData(
+      ApiConstant.userChangePassword,
+      body,
+    );
+
+    if (response.statusCode == 200) {
+      showCustomSnackBar(
+          response.body["message"] ?? "Password changed successfully!", isError: false);
+    } else {
+      ApiChecker.checkApi(response);
     }
 
-    if (newPassController.text.isEmpty) {
-      newPassError.value = "New password cannot be empty";
-    } else if (newPassController.text.length < 6) {
-      newPassError.value = "New password must be at least 6 characters";
-    }
-
-    if (confirmPassController.text.isEmpty) {
-      confirmPassError.value = "Please confirm new password";
-    } else if (confirmPassController.text != newPassController.text) {
-      confirmPassError.value = "Passwords do not match";
-    }
-
-    return currentPassError.value == null &&
-        newPassError.value == null &&
-        confirmPassError.value == null;
-  }
-
-  @override
-  void onClose() {
-    currentPassController.dispose();
-    newPassController.dispose();
-    confirmPassController.dispose();
-    super.onClose();
+    isLoading(false);
   }
 }
+

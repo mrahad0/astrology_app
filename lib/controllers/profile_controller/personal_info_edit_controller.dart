@@ -2,13 +2,11 @@ import 'dart:io';
 import 'package:astrology_app/data/models/profile_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import '../../Data/services/api_client.dart';
 import '../../Data/services/api_constant.dart';
 import '../../Data/services/api_checker.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../helpers/prefs_helpers.dart';
-import '../../Data/utils/app_constants.dart';
+
 
 class PersonalInfoEditController extends GetxController {
   RxBool isLoading = false.obs;
@@ -26,10 +24,8 @@ class PersonalInfoEditController extends GetxController {
   File? get profileImage => profileImageFile.value;
   set profileImage(File? file) => profileImageFile.value = file;
 
-  // User profile
+  // User Profile Data
   Rx<UserProfile?> userProfile = Rx<UserProfile?>(null);
-
-  final ApiClient apiClient = ApiClient();
 
   @override
   void onInit() {
@@ -37,15 +33,17 @@ class PersonalInfoEditController extends GetxController {
     fetchUserProfile();
   }
 
-  /// Fetch user info from API
+  /// ------------------------- FETCH PROFILE -------------------------
   Future<void> fetchUserProfile() async {
     try {
       isLoading(true);
+
       final response = await ApiClient.getData(ApiConstant.userprofile);
+
       if (response.statusCode == 200) {
         userProfile.value = UserProfile.fromJson(response.body);
 
-        // Populate controllers safely
+        // Populate text fields
         nameController.text = userProfile.value?.name ?? "";
         emailController.text = userProfile.value?.email ?? "";
         dobController.text = userProfile.value?.profile?.dateOfBirth ?? "";
@@ -55,76 +53,87 @@ class PersonalInfoEditController extends GetxController {
       } else {
         ApiChecker.checkApi(response);
       }
+    } catch (e) {
+      debugPrint("FETCH ERROR: $e");
     } finally {
       isLoading(false);
     }
   }
 
-  /// Save updated info with image (multipart)
+  /// ------------------------- UPDATE PROFILE (PATCH MULTIPART) -------------------------
   Future<void> saveData() async {
     try {
       isLoading(true);
 
-      final token = await PrefsHelper.getString(AppConstants.bearerToken);
+      // Build body with DRF-compatible flat field names
+      Map<String, String> body = {
+        'name': nameController.text.trim(),
+        'email': emailController.text.trim(),
+        'date_of_birth': dobController.text.trim(),
+        'time_of_birth': timeController.text.trim(),
+        'birth_country': countryController.text.trim(),
+        'birth_city': cityController.text.trim(),
+      };
 
-      var uri = Uri.parse(ApiConstant.userprofile);
-      var request = http.MultipartRequest('PUT', uri);
-      request.headers['Authorization'] = 'Bearer $token';
+      // Log for debugging
+      debugPrint("=== Preparing PATCH to ${ApiConstant.userprofile}");
+      debugPrint("=== Fields: $body");
+      debugPrint("=== File path: ${profileImage?.path}");
 
-      // Add text fields
-      request.fields['name'] = nameController.text.trim();
-      request.fields['email'] = emailController.text.trim();
-      request.fields['profile[date_of_birth]'] = dobController.text.trim();
-      request.fields['profile[time_of_birth]'] = timeController.text.trim();
-      request.fields['profile[birth_country]'] = countryController.text.trim();
-      request.fields['profile[birth_city]'] = cityController.text.trim();
-
-      // Add image if selected
+      List<MultipartBody> files = [];
       if (profileImage != null) {
-        request.files.add(await http.MultipartFile.fromPath(
-          'profile_picture', // Must match backend field name
-          profileImage!.path,
-        ));
+        // DRF expects 'profile_picture' field name (flat)
+        files.add(MultipartBody('profile_picture', profileImage!));
       }
 
-      // Send request
-      var streamedResponse = await request.send();
-      var response = await http.Response.fromStream(streamedResponse);
+      final response = await ApiClient.patchMultipartData(
+        ApiConstant.userprofile,
+        body,
+        multipartBody: files,
+      );
+
+      debugPrint("UPDATE STATUS: ${response.statusCode}");
+      debugPrint("UPDATE BODY: ${response.body}");
 
       if (response.statusCode == 200) {
         Get.snackbar("Success", "Profile updated successfully!");
-        await fetchUserProfile(); // Refresh profile data
+        await fetchUserProfile();
       } else {
-        print("Error saving profile: ${response.body}");
-        ApiChecker.checkApi(response as Response);
+        ApiChecker.checkApi(response);
       }
+    } catch (e) {
+      debugPrint("UPDATE ERROR: $e");
+      Get.snackbar("Error", "Failed to update profile. Try again!");
     } finally {
       isLoading(false);
     }
   }
 
-  /// Pick image from camera/gallery
+  /// ------------------------- PICK IMAGE -------------------------
   Future<File?> showImageSourceDialog(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
+
     final source = await showDialog<ImageSource>(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text("Select Image Source"),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context, ImageSource.camera),
-              child: const Text("Camera")),
+            onPressed: () => Navigator.pop(context, ImageSource.camera),
+            child: const Text("Camera"),
+          ),
           TextButton(
-              onPressed: () => Navigator.pop(context, ImageSource.gallery),
-              child: const Text("Gallery")),
+            onPressed: () => Navigator.pop(context, ImageSource.gallery),
+            child: const Text("Gallery"),
+          ),
         ],
       ),
     );
 
     if (source != null) {
-      final pickedFile = await picker.pickImage(source: source);
-      if (pickedFile != null) {
-        profileImage = File(pickedFile.path);
+      final picked = await picker.pickImage(source: source);
+      if (picked != null) {
+        profileImage = File(picked.path);
         return profileImage;
       }
     }
@@ -142,6 +151,10 @@ class PersonalInfoEditController extends GetxController {
     super.onClose();
   }
 }
+
+
+
+
 
 
 

@@ -20,4 +20,8 @@ class ApiConstant{
 
   static String userprofile = "/profile/";
 
+  static String userChangePassword = "/change-password/";
+
+  static String natalChart = "/natal/";
+
 }

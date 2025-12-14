@@ -2,7 +2,6 @@ import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 import 'package:get/get.dart';
 
@@ -22,6 +21,7 @@ class _VedicDetailsState extends State<VedicDetails> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
               /// ---- INFO CARD ----
               Container(
                 padding: const EdgeInsets.all(20),
@@ -64,7 +64,10 @@ class _VedicDetailsState extends State<VedicDetails> {
               Center(
                 child: Container(
                   height: 350,
-                  width:MediaQuery.of(context).size.width,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
@@ -159,7 +162,9 @@ class _VedicDetailsState extends State<VedicDetails> {
 
               /// ---- GENERATE BUTTON ----
 
-              CustomButton(text: "Generate",onpress: (){Get.toNamed(Routes.aiComprehensive);},),
+              CustomButton(text: "Generate", onpress: () {
+                Get.toNamed(Routes.aiComprehensive);
+              },),
 
 
               const SizedBox(height: 20),
@@ -260,18 +265,5 @@ class _VedicDetailsState extends State<VedicDetails> {
       ),
     );
   }
-
-  /// ----------------------------
-  /// PLANET DOT WIDGET
-  /// ----------------------------
-  Widget _buildPlanet(Color color, double size) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
-    );
-  }
 }
+

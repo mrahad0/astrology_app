@@ -35,7 +35,9 @@ class _WesternDatailsState extends State<WesternDatails> {
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
-                            fontWeight: FontWeight.w600)),
+                            fontWeight: FontWeight.w600)
+                    ),
+
                     const SizedBox(height: 20),
 
                     _infoRow("Name:", "Sadiqul"),
@@ -76,7 +78,6 @@ class _WesternDatailsState extends State<WesternDatails> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 24),
 
               /// ---- PLANETARY POSITIONS ----
@@ -112,7 +113,12 @@ class _WesternDatailsState extends State<WesternDatails> {
               const SizedBox(height: 40),
 
               /// ---- GENERATE BUTTON ----
-             CustomButton(text: "Generate",onpress: (){Get.toNamed(Routes.aiComprehensive);},)
+              CustomButton(
+                text: "Generate",
+                onpress: (){
+                  Get.toNamed(Routes.aiComprehensive);
+                  },
+              )
 
             ],
           ),
@@ -188,7 +194,8 @@ class _WesternDatailsState extends State<WesternDatails> {
           Text(title,
               style: const TextStyle(
                   color: Color(0xffFF6B9D),
-                  fontWeight: FontWeight.w600)),
+                  fontWeight: FontWeight.w600)
+          ),
           Text(subtitle, style: const TextStyle(color: Colors.white70)),
         ],
       ),

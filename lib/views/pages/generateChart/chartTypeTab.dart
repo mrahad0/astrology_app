@@ -190,12 +190,13 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
         ),
         child: Row(
           children: [
-             Icon(Icons.lock, color: Colors.white54, size: 18),
-             SizedBox(width: 8),
-             Expanded(child: Text(title, style: const TextStyle(color: Colors.white54))),
+            Icon(Icons.lock, color: Colors.white54, size: 18),
+            SizedBox(width: 8),
+            Expanded(child: Text(title, style: const TextStyle(color: Colors.white54))),
           ],
         ),
       ),
     );
   }
 }
+

@@ -1,9 +1,9 @@
 import 'package:astrology_app/views/pages/ai_reading/ai_comprehensive.dart';
 import 'package:astrology_app/views/pages/ai_reading/ai_reading.dart';
 import 'package:astrology_app/views/pages/ai_reading/saved_chart.dart';
-import 'package:astrology_app/views/pages/authentication/forgotPass_Screen.dart';
-import 'package:astrology_app/views/pages/authentication/login_Screen.dart';
-import 'package:astrology_app/views/pages/authentication/otp_Screen.dart';
+import 'package:astrology_app/views/pages/authentication/forgotpass_screen.dart';
+import 'package:astrology_app/views/pages/authentication/login_screen.dart';
+import 'package:astrology_app/views/pages/authentication/otp_screen.dart';
 import 'package:astrology_app/views/pages/authentication/otp_for_create.dart';
 import 'package:astrology_app/views/pages/chartPage/chart_Screen.dart';
 import 'package:astrology_app/views/pages/generateChart/synastry_chart.dart';
@@ -27,8 +27,8 @@ import 'package:astrology_app/views/pages/subscription/single_purchase.dart';
 import 'package:astrology_app/views/pages/subscription/single_report.dart';
 import 'package:astrology_app/views/pages/subscription/subscription_page.dart';
 import 'package:get/get.dart';
-import '../views/pages/authentication/newPass_Screen.dart';
-import '../views/pages/authentication/signUp_Screen.dart';
+import '../views/pages/authentication/newpass_screen.dart';
+import '../views/pages/authentication/register_screen.dart';
 import '../views/pages/generateChart/review_Tab.dart';
 
 class Routes {
@@ -89,7 +89,7 @@ List<GetPage> pages = [
   GetPage(name: Routes.paymentType,transition: Transition.noTransition, transitionDuration: const Duration(milliseconds: 0), page: () => PaymentType()),
   GetPage(name: Routes.reviewPage,transition: Transition.noTransition, transitionDuration: const Duration(milliseconds: 0),page: () => ReviewGeneratePage()),
   GetPage(name: Routes.westernDetails,transition: Transition.noTransition, transitionDuration: const Duration(milliseconds: 0), page: () => WesternDatails()),
-  GetPage(name: Routes.mainDetailChart,transition: Transition.noTransition, transitionDuration: const Duration(milliseconds: 0), page: () => MainDetailChart()),
+  GetPage(name: Routes.mainDetailChart,transition: Transition.noTransition, transitionDuration: const Duration(milliseconds: 0), page: () => MainDetailChart(selectedCharts: [],)),
   GetPage(name: Routes.personalInfo,transition: Transition.noTransition, transitionDuration: const Duration(milliseconds: 0), page: () => PersonalInfo()),
   GetPage(name: Routes.personalInfoEdit,transition: Transition.noTransition, transitionDuration: const Duration(milliseconds: 0), page: () => PersonalInfoEdit()),
   GetPage(name: Routes.astroData,transition: Transition.noTransition, transitionDuration: const Duration(milliseconds: 0), page: () => AstroDataScreen()),
@@ -98,3 +98,4 @@ List<GetPage> pages = [
   GetPage(name: Routes.singleInfo,transition: Transition.noTransition, transitionDuration: const Duration(milliseconds: 0), page: () => SingleInfo()),
   GetPage(name: Routes.singleReport,transition: Transition.noTransition, transitionDuration: const Duration(milliseconds: 0), page: () => SingleReport()),
 ];
+

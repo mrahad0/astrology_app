@@ -9,7 +9,7 @@ import '../13sign_details.dart' show Sign13Details;
 // -----------------------------------------------------------
 
 class MainDetailChart extends StatefulWidget {
-  const MainDetailChart({super.key});
+  const MainDetailChart({super.key, required List selectedCharts});
 
   @override
   State<MainDetailChart> createState() => _MainDetailChart();

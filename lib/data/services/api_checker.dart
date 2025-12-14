@@ -1,4 +1,4 @@
-// import 'package:astrology_app/views/base/custom_SnackBar.dart';
+// import 'package:astrology_app/views/base/custom_snackBar.dart';
 // import 'package:get/get.dart';
 //
 //
@@ -16,7 +16,7 @@
 //   }
 // }
 
-import 'package:astrology_app/views/base/custom_SnackBar.dart';
+import 'package:astrology_app/views/base/custom_snackBar.dart';
 import 'package:get/get.dart';
 
 class ApiChecker {
