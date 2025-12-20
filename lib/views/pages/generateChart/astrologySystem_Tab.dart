@@ -1,9 +1,13 @@
+// astrology_system_tab.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
+import '../../../controllers/chart_controller/chart_controller.dart';
+
 
 class AstrologysystemTab extends StatefulWidget {
   final VoidCallback onNext;
@@ -14,6 +18,7 @@ class AstrologysystemTab extends StatefulWidget {
 }
 
 class _AstrologysystemTab extends State<AstrologysystemTab> {
+  final ChartController controller = Get.put(ChartController());
   int selectedIndex = 0;
 
   @override
@@ -33,7 +38,7 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
                   color: CustomColors.secondbackgroundColor,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color:Color(0xff2A2F45),
+                    color: Color(0xff2A2F45),
                     width: 1,
                   ),
                 ),
@@ -44,17 +49,15 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
                       "Select Chart Type",
                       style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-
                     const SizedBox(height: 16),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(child: buildCard(0, "Natal \nChart", "assets/icons/natal.svg")),
-                        SizedBox(width: 8,),
+                        SizedBox(width: 8),
                         Expanded(child: buildCard(1, "Transit \nChart", "assets/icons/transit.svg")),
-                        SizedBox(width: 8,),
-                        Expanded(child: buildCard(2, "Synastry \nChart","assets/icons/synastry.svg")),
+                        SizedBox(width: 8),
+                        Expanded(child: buildCard(2, "Synastry \nChart", "assets/icons/synastry.svg")),
                       ],
                     ),
                   ],
@@ -62,30 +65,25 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
               ),
               const Spacer(),
 
-              // ---- Next Button ----
-
               CustomButton(
                 text: "Next",
                 onpress: () {
                   if (selectedIndex == 0) {
+                    controller.setChartType('Natal');
                     Get.toNamed(Routes.natalChart);
-                  }
-                  else if (selectedIndex == 1) {
-                    Get.toNamed(Routes.transitChart );
-                  }
-                  else if (selectedIndex == 2) {
+                  } else if (selectedIndex == 1) {
+                    controller.setChartType('Transit');
+                    Get.toNamed(Routes.transitChart);
+                  } else if (selectedIndex == 2) {
+                    controller.setChartType('Synastry');
                     Get.toNamed(Routes.synastryChart);
                   }
-
                 },
               ),
-
-
 
               const SizedBox(height: 20),
             ],
           ),
-
         ),
       ),
     );
@@ -114,12 +112,19 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
           children: [
             SvgPicture.asset(url),
             const SizedBox(height: 12),
-            Text(title,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: isSelected ? Colors.purple : Colors.white, fontSize: 14,fontWeight: FontWeight.w600))
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: isSelected ? Colors.purple : Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            )
           ],
         ),
       ),
     );
   }
 }
+

@@ -87,7 +87,5 @@ class NetworkCaller{
       );
 
     }
-
-
   }
 }

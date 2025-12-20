@@ -1,9 +1,13 @@
+// synastry_chart.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../controllers/chart_controller/chart_controller.dart';
+
 
 class SynastryChart extends StatefulWidget {
   final VoidCallback onNext;
@@ -14,8 +18,19 @@ class SynastryChart extends StatefulWidget {
 }
 
 class _SynastryChart extends State<SynastryChart> {
-  DateTime? selectedDate;
-  TimeOfDay? selectedTime;
+  final ChartController controller = Get.find<ChartController>();
+
+  final TextEditingController name1Controller = TextEditingController();
+  final TextEditingController city1Controller = TextEditingController();
+  final TextEditingController country1Controller = TextEditingController();
+  DateTime? selectedDate1;
+  TimeOfDay? selectedTime1;
+
+  final TextEditingController name2Controller = TextEditingController();
+  final TextEditingController city2Controller = TextEditingController();
+  final TextEditingController country2Controller = TextEditingController();
+  DateTime? selectedDate2;
+  TimeOfDay? selectedTime2;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +49,6 @@ class _SynastryChart extends State<SynastryChart> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-              // ------------------- Step Progress Bar -------------------
               Row(
                 children: [
                   _stepBar(true),
@@ -54,7 +67,6 @@ class _SynastryChart extends State<SynastryChart> {
 
               const SizedBox(height: 20),
 
-              // ---------------------- INPUT CARD 1 -----------------------
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -64,31 +76,22 @@ class _SynastryChart extends State<SynastryChart> {
                 ),
                 child: Column(
                   children: [
-                    _inputField("Name", "Enter your accurate name"),
+                    _inputField("Name", "Enter your accurate name", controller: name1Controller),
                     const SizedBox(height: 15),
-
-                    // Date Picker
-                    _inputField("Date of Birth", "mm/dd/yyyy",
-                        icon: Icons.calendar_today, onTap: pickDate),
+                    _inputField("Date of Birth", selectedDate1 == null ? "mm/dd/yyyy" : "${selectedDate1!.month}/${selectedDate1!.day}/${selectedDate1!.year}",
+                        icon: Icons.calendar_today, onTap: () => pickDate(1)),
                     const SizedBox(height: 15),
-
-                    _inputField("Birth City", "Enter accurate birth city name"),
+                    _inputField("Birth City", "Enter accurate birth city name", controller: city1Controller),
                     const SizedBox(height: 15),
-
-                    _inputField("Birth Country", "Enter accurate birth country name"),
+                    _inputField("Birth Country", "Enter accurate birth country name", controller: country1Controller),
                     const SizedBox(height: 15),
-
-                    // Time Picker
-                    _inputField("Birth Time", "Enter accurate birth time",
-                        icon: Icons.access_time, onTap: pickTime),
+                    _inputField("Birth Time", selectedTime1 == null ? "Enter accurate birth time" : "${selectedTime1!.hour}:${selectedTime1!.minute.toString().padLeft(2, '0')}",
+                        icon: Icons.access_time, onTap: () => pickTime(1)),
                   ],
                 ),
               ),
 
               const SizedBox(height: 25),
-
-
-              // ---------------------- INPUT CARD 2 -----------------------
 
               const Text(
                 "Partner 2: Birth Information",
@@ -106,34 +109,43 @@ class _SynastryChart extends State<SynastryChart> {
                 ),
                 child: Column(
                   children: [
-                    _inputField("Name", "Enter your accurate name"),
+                    _inputField("Name", "Enter your accurate name", controller: name2Controller),
                     const SizedBox(height: 15),
-
-                    // Date Picker
-                    _inputField("Date of Birth", "mm/dd/yyyy",
-                        icon: Icons.calendar_today, onTap: pickDate),
+                    _inputField("Date of Birth", selectedDate2 == null ? "mm/dd/yyyy" : "${selectedDate2!.month}/${selectedDate2!.day}/${selectedDate2!.year}",
+                        icon: Icons.calendar_today, onTap: () => pickDate(2)),
                     const SizedBox(height: 15),
-
-                    _inputField("Birth City", "Enter accurate birth city name"),
+                    _inputField("Birth City", "Enter accurate birth city name", controller: city2Controller),
                     const SizedBox(height: 15),
-
-                    _inputField("Birth Country", "Enter accurate birth country name"),
+                    _inputField("Birth Country", "Enter accurate birth country name", controller: country2Controller),
                     const SizedBox(height: 15),
-
-                    // Time Picker
-                    _inputField("Birth Time", "Enter accurate birth time",
-                        icon: Icons.access_time, onTap: pickTime),
+                    _inputField("Birth Time", selectedTime2 == null ? "Enter accurate birth time" : "${selectedTime2!.hour}:${selectedTime2!.minute.toString().padLeft(2, '0')}",
+                        icon: Icons.access_time, onTap: () => pickTime(2)),
                   ],
                 ),
               ),
 
-
               const SizedBox(height: 60),
 
-              // ---------------------- NEXT BUTTON -----------------------
               CustomButton(
                 text: "Next",
                 onpress: () {
+                  controller.setChartData({
+                    'type': 'Synastry',
+                    'partner1': {
+                      'name': name1Controller.text,
+                      'dateOfBirth': selectedDate1,
+                      'birthCity': city1Controller.text,
+                      'birthCountry': country1Controller.text,
+                      'birthTime': selectedTime1,
+                    },
+                    'partner2': {
+                      'name': name2Controller.text,
+                      'dateOfBirth': selectedDate2,
+                      'birthCity': city2Controller.text,
+                      'birthCountry': country2Controller.text,
+                      'birthTime': selectedTime2,
+                    },
+                  });
                   Get.toNamed(Routes.chartType);
                 },
               ),
@@ -146,8 +158,7 @@ class _SynastryChart extends State<SynastryChart> {
     );
   }
 
-  // -------------------- DATE PICKER --------------------
-  Future<void> pickDate() async {
+  Future<void> pickDate(int partner) async {
     DateTime? d = await showDatePicker(
       context: context,
       initialDate: DateTime(2000),
@@ -156,25 +167,35 @@ class _SynastryChart extends State<SynastryChart> {
     );
 
     if (d != null) {
-      setState(() => selectedDate = d);
+      setState(() {
+        if (partner == 1) {
+          selectedDate1 = d;
+        } else {
+          selectedDate2 = d;
+        }
+      });
     }
   }
 
-  // -------------------- TIME PICKER --------------------
-  Future<void> pickTime() async {
+  Future<void> pickTime(int partner) async {
     TimeOfDay? t = await showTimePicker(
       context: context,
       initialTime: TimeOfDay(hour: 10, minute: 00),
     );
 
     if (t != null) {
-      setState(() => selectedTime = t);
+      setState(() {
+        if (partner == 1) {
+          selectedTime1 = t;
+        } else {
+          selectedTime2 = t;
+        }
+      });
     }
   }
 
-  // ---------------------- INPUT FIELD ----------------------
   Widget _inputField(String title, String hint,
-      {IconData? icon, Function()? onTap}) {
+      {IconData? icon, Function()? onTap, TextEditingController? controller}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -197,7 +218,8 @@ class _SynastryChart extends State<SynastryChart> {
               children: [
                 Expanded(
                   child: TextField(
-                    enabled: onTap == null, // disable typing when picker
+                    controller: controller,
+                    enabled: onTap == null,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       hintText: hint,
@@ -216,43 +238,6 @@ class _SynastryChart extends State<SynastryChart> {
     );
   }
 
-  // --------------------- PICKER FIELD ---------------------
-  Widget _pickerField({
-    required String hint,
-    required String value,
-    required Function() onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 50,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.white38),
-          color: CustomColors.secondbackgroundColor,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-        child: Text(
-          value.isEmpty ? hint : value,
-          style: TextStyle(
-            color: value.isEmpty ? const Color(0xffABABAB) : Colors.white,
-            fontSize: 16,
-          ),
-        ),
-      ),
-    );
-  }
-
-  // --------------------- LABEL ---------------------
-  Widget _label(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6, top: 16),
-      child: Text(text, style: const TextStyle(color: Colors.white70, fontSize: 14)),
-    );
-  }
-
-  // ---------------------- STEP BAR ----------------------
   Widget _stepBar(bool filled) {
     return Expanded(
       child: Container(
@@ -266,4 +251,5 @@ class _SynastryChart extends State<SynastryChart> {
     );
   }
 }
+
 

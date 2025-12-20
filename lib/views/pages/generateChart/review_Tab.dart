@@ -1,31 +1,36 @@
+// review_tab.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+
+import '../../../controllers/chart_controller/chart_controller.dart';
+
 
 class ReviewGeneratePage extends StatelessWidget {
   const ReviewGeneratePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(title: "Generate Chart", leading:IconButton(
-        onPressed: () {
-          Get.back();
-        },
-        icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-      ),),
+    final ChartController controller = Get.find<ChartController>();
 
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: "Generate Chart",
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-              /// ----------- PROGRESS BAR -----------
               Row(
                 children: [
                   _stepBar(true),
@@ -37,7 +42,6 @@ class ReviewGeneratePage extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              /// ----------- DETAILS CARD -----------
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
@@ -46,35 +50,23 @@ class ReviewGeneratePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: const Color(0xFF2F3448)),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Review & Generate",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                child: Obx(() {
+                  final chartType = controller.selectedChartType.value;
+                  final data = controller.chartData;
 
-                    const SizedBox(height: 20),
+                  if (chartType == 'Natal') {
+                    return _buildNatalReview(data);
+                  } else if (chartType == 'Transit') {
+                    return _buildTransitReview(data);
+                  } else if (chartType == 'Synastry') {
+                    return _buildSynastryReview(data);
+                  }
 
-                    _infoRow("Chart Type:", "Natal Chart"),
-                    _infoRow("Name:", "Sadiqul"),
-                    _infoRow("Date of Birth:", "11/13/2005"),
-                    _infoRow("Birth Time:", "7:00 pm"),
-                    _infoRow("Time Zone:", "GMT+6"),
-                    _infoRow("Birth City:", "Dhaka"),
-                    _infoRow("Birth Country:", "Bangladesh"),
-                  ],
-                ),
+                  return const SizedBox.shrink();
+                }),
               ),
 
               const SizedBox(height: 60),
-
-
-              /// ----------- BUTTON -----------
 
               SizedBox(
                 width: double.infinity,
@@ -86,7 +78,9 @@ class ReviewGeneratePage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: () {Get.toNamed(Routes.mainDetailChart);},
+                  onPressed: () {
+                    Get.toNamed(Routes.mainDetailChart);
+                  },
                   child: const Text(
                     "Generate Chart",
                     style: TextStyle(
@@ -105,7 +99,115 @@ class ReviewGeneratePage extends StatelessWidget {
     );
   }
 
-  /// PROGRESS BAR ITEM
+  Widget _buildNatalReview(RxMap<String, dynamic> data) {
+    final date = data['dateOfBirth'] as DateTime?;
+    final time = data['birthTime'] as TimeOfDay?;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Review & Generate",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 20),
+        _infoRow("Chart Type:", "Natal Chart"),
+        _infoRow("Name:", data['name'] ?? '-'),
+        _infoRow("Date of Birth:", date != null ? "${date.month}/${date.day}/${date.year}" : '-'),
+        _infoRow("Birth Time:", time != null ? "${time.hour}:${time.minute.toString().padLeft(2, '0')}" : '-'),
+        _infoRow("Time Zone:", "GMT+6"),
+        _infoRow("Birth City:", data['birthCity'] ?? '-'),
+        _infoRow("Birth Country:", data['birthCountry'] ?? '-'),
+      ],
+    );
+  }
+
+  Widget _buildTransitReview(RxMap<String, dynamic> data) {
+    final futureDate = data['futureDate'] as DateTime?;
+    final pastDate = data['pastDate'] as DateTime?;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Review & Generate",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 20),
+        _infoRow("Chart Type:", "Transit Chart"),
+        _infoRow("Future Date:", futureDate != null ? "${futureDate.day}/${futureDate.month}/${futureDate.year}" : '-'),
+        _infoRow("Past Date:", pastDate != null ? "${pastDate.day}/${pastDate.month}/${pastDate.year}" : '-'),
+      ],
+    );
+  }
+
+  Widget _buildSynastryReview(RxMap<String, dynamic> data) {
+    final partner1 = data['partner1'] as Map<String, dynamic>?;
+    final partner2 = data['partner2'] as Map<String, dynamic>?;
+
+    final date1 = partner1?['dateOfBirth'] as DateTime?;
+    final time1 = partner1?['birthTime'] as TimeOfDay?;
+
+    final date2 = partner2?['dateOfBirth'] as DateTime?;
+    final time2 = partner2?['birthTime'] as TimeOfDay?;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Review & Generate",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 20),
+        _infoRow("Chart Type:", "Synastry Chart"),
+
+        const SizedBox(height: 10),
+        const Text(
+          "Partner 1:",
+          style: TextStyle(
+            color: Colors.purpleAccent,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        _infoRow("Name:", partner1?['name'] ?? '-'),
+        _infoRow("Date of Birth:", date1 != null ? "${date1.month}/${date1.day}/${date1.year}" : '-'),
+        _infoRow("Birth Time:", time1 != null ? "${time1.hour}:${time1.minute.toString().padLeft(2, '0')}" : '-'),
+        _infoRow("Birth City:", partner1?['birthCity'] ?? '-'),
+        _infoRow("Birth Country:", partner1?['birthCountry'] ?? '-'),
+
+        const SizedBox(height: 15),
+        const Text(
+          "Partner 2:",
+          style: TextStyle(
+            color: Colors.purpleAccent,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        _infoRow("Name:", partner2?['name'] ?? '-'),
+        _infoRow("Date of Birth:", date2 != null ? "${date2.month}/${date2.day}/${date2.year}" : '-'),
+        _infoRow("Birth Time:", time2 != null ? "${time2.hour}:${time2.minute.toString().padLeft(2, '0')}" : '-'),
+        _infoRow("Birth City:", partner2?['birthCity'] ?? '-'),
+        _infoRow("Birth Country:", partner2?['birthCountry'] ?? '-'),
+      ],
+    );
+  }
+
   Widget _stepBar(bool active) {
     return Expanded(
       child: Container(
@@ -119,7 +221,6 @@ class ReviewGeneratePage extends StatelessWidget {
     );
   }
 
-  /// INFO ROW
   Widget _infoRow(String title, String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -135,7 +236,6 @@ class ReviewGeneratePage extends StatelessWidget {
               ),
             ),
           ),
-
           Expanded(
             child: Text(
               value,

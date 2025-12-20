@@ -17,7 +17,7 @@ class PersonalInfoController extends GetxController {
   final TextEditingController countryController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
 
-  // Profile image URL (full URL)
+
   RxString profileImageUrl = ''.obs;
 
   @override
@@ -50,7 +50,6 @@ class PersonalInfoController extends GetxController {
         countryController.text = profile?.birthCountry ?? '';
         cityController.text = profile?.birthCity ?? '';
 
-        // ✅ Use full profile image URL
         profileImageUrl.value = profile?.profilePictureUrl ?? '';
       } else {
         ApiChecker.checkApi(response);

@@ -1,9 +1,13 @@
+// natal_chart.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../controllers/chart_controller/chart_controller.dart';
+
 
 class NatalChart extends StatefulWidget {
   final VoidCallback onNext;
@@ -14,6 +18,12 @@ class NatalChart extends StatefulWidget {
 }
 
 class _NatalChart extends State<NatalChart> {
+  final ChartController controller = Get.find<ChartController>();
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController countryController = TextEditingController();
+
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
 
@@ -34,8 +44,6 @@ class _NatalChart extends State<NatalChart> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-              // ------------------- Step Progress Bar -------------------
               Row(
                 children: [
                   _stepBar(true),
@@ -54,7 +62,6 @@ class _NatalChart extends State<NatalChart> {
 
               const SizedBox(height: 20),
 
-              // ---------------------- INPUT CARD -----------------------
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -64,22 +71,16 @@ class _NatalChart extends State<NatalChart> {
                 ),
                 child: Column(
                   children: [
-                    _inputField("Name", "enter your accurate name"),
+                    _inputField("Name", "enter your accurate name", controller: nameController),
                     const SizedBox(height: 15),
-
-                    // Date Picker
-                    _inputField("Date of Birth", "mm/dd/yyyy",
+                    _inputField("Date of Birth", selectedDate == null ? "mm/dd/yyyy" : "${selectedDate!.month}/${selectedDate!.day}/${selectedDate!.year}",
                         icon: Icons.calendar_today, onTap: pickDate),
                     const SizedBox(height: 15),
-
-                    _inputField("Birth City", "Enter accurate birth city name"),
+                    _inputField("Birth City", "Enter accurate birth city name", controller: cityController),
                     const SizedBox(height: 15),
-
-                    _inputField("Birth Country", "Enter accurate birth country name"),
+                    _inputField("Birth Country", "Enter accurate birth country name", controller: countryController),
                     const SizedBox(height: 15),
-
-                    // Time Picker
-                    _inputField("Birth Time", "Enter accurate birth time",
+                    _inputField("Birth Time", selectedTime == null ? "Enter accurate birth time" : "${selectedTime!.hour}:${selectedTime!.minute.toString().padLeft(2, '0')}",
                         icon: Icons.access_time, onTap: pickTime),
                   ],
                 ),
@@ -87,10 +88,17 @@ class _NatalChart extends State<NatalChart> {
 
               const SizedBox(height: 60),
 
-              // ---------------------- NEXT BUTTON -----------------------
               CustomButton(
                 text: "Next",
                 onpress: () {
+                  controller.setChartData({
+                    'type': 'Natal',
+                    'name': nameController.text,
+                    'dateOfBirth': selectedDate,
+                    'birthCity': cityController.text,
+                    'birthCountry': countryController.text,
+                    'birthTime': selectedTime,
+                  });
                   Get.toNamed(Routes.chartType);
                 },
               ),
@@ -103,7 +111,6 @@ class _NatalChart extends State<NatalChart> {
     );
   }
 
-  // -------------------- DATE PICKER --------------------
   Future<void> pickDate() async {
     DateTime? d = await showDatePicker(
       context: context,
@@ -117,7 +124,6 @@ class _NatalChart extends State<NatalChart> {
     }
   }
 
-  // -------------------- TIME PICKER --------------------
   Future<void> pickTime() async {
     TimeOfDay? t = await showTimePicker(
       context: context,
@@ -129,9 +135,8 @@ class _NatalChart extends State<NatalChart> {
     }
   }
 
-  // ---------------------- INPUT FIELD ----------------------
   Widget _inputField(String title, String hint,
-      {IconData? icon, Function()? onTap}) {
+      {IconData? icon, Function()? onTap, TextEditingController? controller}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -154,7 +159,8 @@ class _NatalChart extends State<NatalChart> {
               children: [
                 Expanded(
                   child: TextField(
-                    enabled: onTap == null, // disable typing when picker
+                    controller: controller,
+                    enabled: onTap == null,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       hintText: hint,
@@ -173,43 +179,6 @@ class _NatalChart extends State<NatalChart> {
     );
   }
 
-  // --------------------- PICKER FIELD ---------------------
-  Widget _pickerField({
-    required String hint,
-    required String value,
-    required Function() onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 50,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.white38),
-          color: CustomColors.secondbackgroundColor,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-        child: Text(
-          value.isEmpty ? hint : value,
-          style: TextStyle(
-            color: value.isEmpty ? const Color(0xffABABAB) : Colors.white,
-            fontSize: 16,
-          ),
-        ),
-      ),
-    );
-  }
-
-  // --------------------- LABEL ---------------------
-  Widget _label(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6, top: 16),
-      child: Text(text, style: const TextStyle(color: Colors.white70, fontSize: 14)),
-    );
-  }
-
-  // ---------------------- STEP BAR ----------------------
   Widget _stepBar(bool filled) {
     return Expanded(
       child: Container(

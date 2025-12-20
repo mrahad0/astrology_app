@@ -1,8 +1,10 @@
+// chart_type_tab.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_alertDialog.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
+import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,29 +17,50 @@ class ChartTypeTab extends StatefulWidget {
 }
 
 class _ChartTypeTabState extends State<ChartTypeTab> {
-  bool western = false;
-  bool vedic = false;
-  bool sign13 = false;
-  bool evolutionary = false;
+  final ChartController controller = Get.find<ChartController>();
+
+  void _handleNext() {
+    if (controller.selectedSystems.isEmpty) {
+      // Show SnackBar if no system is selected
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            'Please select at least one astrology system',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red.shade700,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } else {
+      // Navigate if at least one system is selected
+      Get.toNamed(Routes.reviewPage);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Generate Chart", leading:IconButton(
-        onPressed: () {
-          Get.back();
-        },
-        icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-      ),),
-
+      appBar: CustomAppBar(
+        title: "Generate Chart",
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-              ///---------------- Progress Bar ----------------
               Row(
                 children: [
                   _stepBar(true),
@@ -49,7 +72,6 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
 
               const SizedBox(height: 20),
 
-              ///---------------- Card ----------------
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -71,41 +93,38 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
 
                     const SizedBox(height: 16),
 
-                    ///---------------- Vertical List ----------------
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _chartBox("Western Astrology", western, (v) {
-                          setState(() => western = v!);
-                        }),
+                    Obx(() {
+                      final availableSystems = controller.availableSystems;
+                      final isNatal = controller.selectedChartType.value == 'Natal';
 
-                        const SizedBox(height: 10),
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (availableSystems.contains('Western'))
+                            _chartBox("Western Astrology", 'Western'),
 
-                        _chartBox("Vedic Astrology", vedic, (v) {
-                          setState(() => vedic = v!);
-                        }),
+                          if (availableSystems.contains('Western'))
+                            const SizedBox(height: 10),
 
-                        const SizedBox(height: 10),
+                          if (availableSystems.contains('Vedic'))
+                            _chartBox("Vedic Astrology", 'Vedic'),
 
-                        _chartBox("13-Signs (Ophiuchus)", sign13, (v) {
-                          setState(() => sign13 = v!);
-                        }),
+                          if (isNatal) ...[
+                            const SizedBox(height: 10),
+                            _chartBox("13-Signs (Ophiuchus)", '13-Signs'),
 
-                        const SizedBox(height: 10),
+                            const SizedBox(height: 10),
+                            _chartBox("Evolutionary", 'Evolutionary'),
 
-                        _chartBox("Evolutionary", evolutionary, (v) {
-                          setState(() => evolutionary = v!);
-                        }),
+                            const SizedBox(height: 10),
+                            _chartBox("Galactic Astrology",'Galactic'),
 
-                        const SizedBox(height: 10),
-
-                        _lockedBox("Galactic Astrology"),
-
-                        const SizedBox(height: 10),
-
-                        _lockedBox("Human Design Profile  (Type, Strategy, Authority, Profile, Cross)"),
-                      ],
-                    ),
+                            const SizedBox(height: 10),
+                            _chartBox("Human Design Profile  (Type, Strategy, Authority, Profile, Cross)",'Human Design'),
+                          ],
+                        ],
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -114,7 +133,7 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
 
               CustomButton(
                 text: "Next",
-                onpress: (){Get.toNamed(Routes.reviewPage);},
+                onpress: _handleNext,
               ),
 
               const SizedBox(height: 20),
@@ -125,7 +144,6 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
     );
   }
 
-  ///---------------- Step Bar ----------------
   Widget _stepBar(bool active) {
     return Expanded(
       child: Container(
@@ -139,41 +157,45 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
     );
   }
 
-  ///---------------- Enabled Chart Box ----------------
-  Widget _chartBox(String title, bool value, Function(bool?) onChanged) {
-    return InkWell(
-      onTap: () => onChanged(!value),
-      child: Container(
-        height: 60,
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
+  Widget _chartBox(String title, String systemKey) {
+    return Obx(() {
+      final isSelected = controller.selectedSystems.contains(systemKey);
+
+      return InkWell(
+        onTap: () => controller.toggleSystem(systemKey),
+        child: Container(
+          height: 60,
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: Colors.white24),
-            color: CustomColors.secondbackgroundColor
+            color: CustomColors.secondbackgroundColor,
+          ),
+          child: Row(
+            children: [
+              Checkbox(
+                value: isSelected,
+                onChanged: (v) => controller.toggleSystem(systemKey),
+                activeColor: const Color(0xFF8A2BE2),
+                checkColor: Colors.white,
+                side: const BorderSide(color: Colors.white),
+              ),
+              Expanded(child: Text(title, style: const TextStyle(color: Colors.white))),
+            ],
+          ),
         ),
-        child: Row(
-          children: [
-            Checkbox(
-              value: value,
-              onChanged: onChanged,
-              activeColor: const Color(0xFF8A2BE2),
-              checkColor: Colors.white,
-              side: const BorderSide(color: Colors.white),
-            ),
-            Text(title, style: const TextStyle(color: Colors.white)),
-          ],
-        ),
-      ),
-    );
+      );
+    });
   }
 
-  ///---------------- Locked Premium Box ----------------
   Widget _lockedBox(String title) {
     return InkWell(
       onTap: () {
         CustomAlertdialog(
-          onPressed: (){Get.toNamed(Routes.subscriptionPage);},
+          onPressed: () {
+            Get.toNamed(Routes.subscriptionPage);
+          },
           context: context,
           title: "Need upgrade your plane",
           content: "You have to upgrade your subscription plane for generate this chart",
@@ -199,4 +221,7 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
     );
   }
 }
+
+
+
 

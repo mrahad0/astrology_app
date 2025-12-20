@@ -1,9 +1,13 @@
+// transit_chart.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../controllers/chart_controller/chart_controller.dart';
+
 
 class TransitChart extends StatefulWidget {
   final VoidCallback onNext;
@@ -14,6 +18,7 @@ class TransitChart extends StatefulWidget {
 }
 
 class _TransitChartState extends State<TransitChart> {
+  final ChartController controller = Get.find<ChartController>();
   DateTime? futureDate;
   DateTime? pastDate;
 
@@ -33,7 +38,6 @@ class _TransitChartState extends State<TransitChart> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ---------------- Step Bar ----------------
               Row(
                 children: [
                   _stepBar(true),
@@ -53,15 +57,15 @@ class _TransitChartState extends State<TransitChart> {
               ),
               const SizedBox(height: 20),
 
-              // ---------------- Container with 2 Date Fields ----------------
               Container(
+                height: 250,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
                   color: CustomColors.secondbackgroundColor,
                   border: Border.all(color: const Color(0xFF2F3448)),
                 ),
-                child: Row(
+                child: Column(
                   children: [
                     Expanded(
                       child: _dateField(
@@ -70,7 +74,8 @@ class _TransitChartState extends State<TransitChart> {
                         onTap: pickStartDate,
                       ),
                     ),
-                    const SizedBox(width: 15),
+                    const SizedBox(height: 20),
+
                     Expanded(
                       child: _dateField(
                         title: "Past Date",
@@ -85,7 +90,14 @@ class _TransitChartState extends State<TransitChart> {
               const SizedBox(height: 60),
               CustomButton(
                 text: "Next",
-                onpress: () => Get.toNamed(Routes.chartType),
+                onpress: () {
+                  controller.setChartData({
+                    'type': 'Transit',
+                    'futureDate': futureDate,
+                    'pastDate': pastDate,
+                  });
+                  Get.toNamed(Routes.chartType);
+                },
               ),
               const SizedBox(height: 20),
             ],
@@ -95,7 +107,6 @@ class _TransitChartState extends State<TransitChart> {
     );
   }
 
-  // ---------------- Date Field Widget ----------------
   Widget _dateField({
     required String title,
     DateTime? value,
@@ -123,6 +134,7 @@ class _TransitChartState extends State<TransitChart> {
             ),
             const SizedBox(height: 6),
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
                   child: Text(
@@ -142,7 +154,6 @@ class _TransitChartState extends State<TransitChart> {
     );
   }
 
-  // ---------------- Date Pickers ----------------
   Future<void> pickStartDate() async {
     final picked = await showDatePicker(
       context: context,
@@ -163,7 +174,6 @@ class _TransitChartState extends State<TransitChart> {
     if (picked != null) setState(() => pastDate = picked);
   }
 
-  // ---------------- Step Bar ----------------
   Widget _stepBar(bool filled) {
     return Expanded(
       child: Container(
@@ -177,3 +187,4 @@ class _TransitChartState extends State<TransitChart> {
     );
   }
 }
+
