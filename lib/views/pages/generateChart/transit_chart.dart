@@ -1,4 +1,4 @@
-// transit_chart.dart
+// lib/views/pages/generateChart/transit_chart.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/chart_controller/chart_controller.dart';
-
 
 class TransitChart extends StatefulWidget {
   final VoidCallback onNext;
@@ -19,8 +18,16 @@ class TransitChart extends StatefulWidget {
 
 class _TransitChartState extends State<TransitChart> {
   final ChartController controller = Get.find<ChartController>();
+
+  // Transit needs natal birth info
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController countryController = TextEditingController();
+  DateTime? birthDate;
+  TimeOfDay? birthTime;
+
+  // Plus transit date
   DateTime? futureDate;
-  DateTime? pastDate;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +56,7 @@ class _TransitChartState extends State<TransitChart> {
               const SizedBox(height: 25),
 
               const Text(
-                "Birth Information",
+                "Birth Information (For Natal Chart)",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -57,8 +64,8 @@ class _TransitChartState extends State<TransitChart> {
               ),
               const SizedBox(height: 20),
 
+              // Birth Info Container
               Container(
-                height: 250,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
@@ -67,23 +74,44 @@ class _TransitChartState extends State<TransitChart> {
                 ),
                 child: Column(
                   children: [
-                    Expanded(
-                      child: _dateField(
-                        title: "Future Date",
-                        value: futureDate,
-                        onTap: pickStartDate,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    Expanded(
-                      child: _dateField(
-                        title: "Past Date",
-                        value: pastDate,
-                        onTap: pickEndDate,
-                      ),
-                    ),
+                    _inputField("Name", "enter your name", controller: nameController),
+                    const SizedBox(height: 15),
+                    _inputField("Date of Birth", birthDate == null ? "mm/dd/yyyy" : "${birthDate!.month}/${birthDate!.day}/${birthDate!.year}",
+                        icon: Icons.calendar_today, onTap: pickBirthDate),
+                    const SizedBox(height: 15),
+                    _inputField("Birth Time", birthTime == null ? "enter birth time" : "${birthTime!.hour}:${birthTime!.minute.toString().padLeft(2, '0')}",
+                        icon: Icons.access_time, onTap: pickBirthTime),
+                    const SizedBox(height: 15),
+                    _inputField("Birth City", "Enter city", controller: cityController),
+                    const SizedBox(height: 15),
+                    _inputField("Birth Country", "Enter country", controller: countryController),
                   ],
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              const Text(
+                "Transit Date",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 20),
+
+              // Transit Date Container
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  color: CustomColors.secondbackgroundColor,
+                  border: Border.all(color: const Color(0xFF2F3448)),
+                ),
+                child: _dateField(
+                  title: "Transit Date",
+                  value: futureDate,
+                  onTap: pickTransitDate,
                 ),
               ),
 
@@ -93,8 +121,12 @@ class _TransitChartState extends State<TransitChart> {
                 onpress: () {
                   controller.setChartData({
                     'type': 'Transit',
+                    'name': nameController.text,
+                    'dateOfBirth': birthDate,
+                    'birthTime': birthTime,
+                    'birthCity': cityController.text,
+                    'birthCountry': countryController.text,
                     'futureDate': futureDate,
-                    'pastDate': pastDate,
                   });
                   Get.toNamed(Routes.chartType);
                 },
@@ -104,6 +136,50 @@ class _TransitChartState extends State<TransitChart> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _inputField(String title, String hint,
+      {IconData? icon, Function()? onTap, TextEditingController? controller}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+        ),
+        const SizedBox(height: 8),
+
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            decoration: BoxDecoration(
+              color: const Color(0xFF111424),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: const Color(0xFF2F3448)),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: controller,
+                    enabled: onTap == null,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: hint,
+                      hintStyle: const TextStyle(color: Colors.grey),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                if (icon != null)
+                  Icon(icon, color: Colors.grey, size: 20),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -154,7 +230,25 @@ class _TransitChartState extends State<TransitChart> {
     );
   }
 
-  Future<void> pickStartDate() async {
+  Future<void> pickBirthDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: birthDate ?? DateTime(2000),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) setState(() => birthDate = picked);
+  }
+
+  Future<void> pickBirthTime() async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: birthTime ?? TimeOfDay(hour: 10, minute: 0),
+    );
+    if (picked != null) setState(() => birthTime = picked);
+  }
+
+  Future<void> pickTransitDate() async {
     final picked = await showDatePicker(
       context: context,
       initialDate: futureDate ?? DateTime.now(),
@@ -162,16 +256,6 @@ class _TransitChartState extends State<TransitChart> {
       lastDate: DateTime(2100),
     );
     if (picked != null) setState(() => futureDate = picked);
-  }
-
-  Future<void> pickEndDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: pastDate ?? DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null) setState(() => pastDate = picked);
   }
 
   Widget _stepBar(bool filled) {

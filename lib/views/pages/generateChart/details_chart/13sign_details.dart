@@ -1,152 +1,184 @@
-import 'package:astrology_app/Routes/routes.dart';
+import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Sign13Details extends StatefulWidget {
+class Sign13Details extends StatelessWidget {
   const Sign13Details({super.key});
 
   @override
-  State<Sign13Details> createState() => _Sign13Details();
-}
-
-class _Sign13Details extends State<Sign13Details> {
-  @override
   Widget build(BuildContext context) {
+    final ChartController controller = Get.find<ChartController>();
+
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// ---- INFO CARD ----
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xff262A40)),
-                  borderRadius: BorderRadius.circular(14),
-                  color: CustomColors.secondbackgroundColor,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Info",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 20),
-                    _infoRow("Name:", "Sadiqul"),
-                    _infoRow("Date of Birth:", "11/13/2005"),
-                    _infoRow("Birth Time:", "7:00 pm"),
-                    _infoRow("Time Zone:", "GMT+6"),
-                    _infoRow("Birth City:", "Dhaka"),
-                    _infoRow("Birth Country:", "Bangladesh"),
-                  ],
-                ),
+        child: Obx(() {
+          final response = controller.natalResponse.value;
+
+          if (response == null ||
+              !response.charts.containsKey('13_sign')) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Color(0xFF9A3BFF),
               ),
+            );
+          }
 
-              const SizedBox(height: 24),
+          final sign13 = response.charts['13_sign']!;
 
-              /// ---- 13-SIGN CHART WHEEL ----
-              const Text(
-                "13-Signs Chart Wheel",
-                style: TextStyle(
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                /// ---------- INFO CARD ----------
+                _infoCard(sign13),
+
+                const SizedBox(height: 24),
+
+                /// ---------- CHART IMAGE ----------
+                const Text(
+                  "13-Signs Chart Wheel",
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 17,
-                    fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 16),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 16),
 
-              Center(
-                child: Container(
+                Container(
                   height: 350,
-                  width:MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.all(16),
+                  width: double.infinity,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
                     color: CustomColors.secondbackgroundColor,
-                    border: Border.all(color: const Color(0xff262A40)),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  child:Image.asset(
+                  child: sign13.imageUrl.isNotEmpty
+                      ? Image.network(
+                    sign13.imageUrl,
+                    fit: BoxFit.contain,
+                  )
+                      : Image.asset(
                     "assets/images/chartimage.png",
-                    fit: BoxFit.fill,
+                    fit: BoxFit.contain,
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 16),
+                const SizedBox(height: 24),
 
-              /// ---- DESCRIPTION TEXT ----
-              const Text(
-                "In the 13-signs system, your placements shift slightly",
-                style: TextStyle(color: Colors.white70, fontSize: 14),
-                textAlign: TextAlign.center,
-              ),
-
-              const SizedBox(height: 24),
-
-              /// ---- SUN POSITION ----
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: CustomColors.secondbackgroundColor,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: const Color(0xff2B2F45)),
-                ),
-                child: RichText(
-                  text: const TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Sun: ',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14,
-                        ),
-                      ),
-                      TextSpan(
-                        text: 'Taurus',
-                        style: TextStyle(
-                          color: Color(0xffA855F7),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
+                /// ---------- PLANETS ----------
+                const Text(
+                  "Planetary Positions",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-              ),
+                const SizedBox(height: 12),
 
-              const SizedBox(height: 40),
+                ...sign13.planets.entries.map((entry) {
+                  final planet = entry.value;
 
-              /// ---- GENERATE READING BUTTON ----
-              CustomButton(text: "Generate",onpress: (){Get.toNamed(Routes.aiComprehensive);},),
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: CustomColors.secondbackgroundColor,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: const Color(0xff2B2F45)),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            planet.name,
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          "${planet.sign}  ${planet.degree}°",
+                          style: const TextStyle(
+                            color: Color(0xffA855F7),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
 
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
+                const SizedBox(height: 40),
+
+                CustomButton(
+                  text: "Generate AI Interpretation",
+                  onpress: () {
+                    Get.toNamed('/ai-comprehensive');
+                  },
+                ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
 
-  /// ----------------------------
-  /// INFO ROW WIDGET
-  /// ----------------------------
-  Widget _infoRow(String key, String value) {
+  /// ---------- INFO CARD ----------
+  Widget _infoCard(sign13) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xff262A40)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Info",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 16),
+          _infoRow("Name", sign13.name),
+          _infoRow("Birth Date", sign13.birthDate),
+          _infoRow("Birth Time", sign13.birthTime),
+          _infoRow("Sun Sign", sign13.sunSign),
+          _infoRow("Moon Sign", sign13.moonSign),
+          _infoRow("Rising Sign", sign13.risingSign),
+        ],
+      ),
+    );
+  }
+
+  Widget _infoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Row(
         children: [
           SizedBox(
-            width: 110,
-            child: Text(key,
-                style: const TextStyle(color: Colors.grey, fontSize: 14)),
+            width: 120,
+            child: Text(
+              "$label:",
+              style: const TextStyle(color: Colors.grey),
+            ),
           ),
           Expanded(
-            child: Text(value,
-                style: const TextStyle(color: Colors.white, fontSize: 14)),
+            child: Text(
+              value,
+              style: const TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),

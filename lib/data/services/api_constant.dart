@@ -24,4 +24,8 @@ class ApiConstant{
 
   static String natalChart = "/natal/";
 
+  static String transitChart = "/transits/";
+
+  static String synastryChart = "/synastry/";
+
 }

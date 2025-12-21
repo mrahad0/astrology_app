@@ -1,4 +1,4 @@
-// review_tab.dart
+// lib/views/pages/generateChart/review_Tab.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/chart_controller/chart_controller.dart';
-
 
 class ReviewGeneratePage extends StatelessWidget {
   const ReviewGeneratePage({super.key});
@@ -42,54 +41,83 @@ class ReviewGeneratePage extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: CustomColors.secondbackgroundColor,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFF2F3448)),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: CustomColors.secondbackgroundColor,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: const Color(0xFF2F3448)),
+                    ),
+                    child: Obx(() {
+                      final chartType = controller.selectedChartType.value;
+                      final data = controller.chartData;
+
+                      if (chartType == 'Natal') {
+                        return _buildNatalReview(data);
+                      } else if (chartType == 'Transit') {
+                        return _buildTransitReview(data);
+                      } else if (chartType == 'Synastry') {
+                        return _buildSynastryReview(data);
+                      }
+
+                      return const SizedBox.shrink();
+                    }),
+                  ),
                 ),
-                child: Obx(() {
-                  final chartType = controller.selectedChartType.value;
-                  final data = controller.chartData;
-
-                  if (chartType == 'Natal') {
-                    return _buildNatalReview(data);
-                  } else if (chartType == 'Transit') {
-                    return _buildTransitReview(data);
-                  } else if (chartType == 'Synastry') {
-                    return _buildSynastryReview(data);
-                  }
-
-                  return const SizedBox.shrink();
-                }),
               ),
 
-              const SizedBox(height: 60),
+              const SizedBox(height: 20),
 
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF8A2BE2),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+              // 🚀 GENERATE BUTTON WITH API CALL
+              Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    ),
+                  );
+                }
+
+                return SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF8A2BE2),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () async {
+                      bool success = await controller.generateChart();
+                      if (success) {
+                        Get.toNamed(Routes.mainDetailChart);
+                      } else {
+                        // Show error
+                        Get.snackbar(
+                          'Error',
+                          controller.errorMessage.value,
+                          backgroundColor: Colors.red,
+                          colorText: Colors.white,
+                          snackPosition: SnackPosition.BOTTOM,
+                        );
+                      }
+                    },
+                    child: const Text(
+                      "Generate Chart",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
-                  onPressed: () {
-                    Get.toNamed(Routes.mainDetailChart);
-                  },
-                  child: const Text(
-                    "Generate Chart",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-              ),
+                );
+              }),
 
               const SizedBox(height: 20),
             ],
@@ -117,8 +145,11 @@ class ReviewGeneratePage extends StatelessWidget {
         const SizedBox(height: 20),
         _infoRow("Chart Type:", "Natal Chart"),
         _infoRow("Name:", data['name'] ?? '-'),
-        _infoRow("Date of Birth:", date != null ? "${date.month}/${date.day}/${date.year}" : '-'),
-        _infoRow("Birth Time:", time != null ? "${time.hour}:${time.minute.toString().padLeft(2, '0')}" : '-'),
+        _infoRow("Date of Birth:",
+            date != null ? "${date.month}/${date.day}/${date.year}" : '-'),
+        _infoRow("Birth Time:", time != null
+            ? "${time.hour}:${time.minute.toString().padLeft(2, '0')}"
+            : '-'),
         _infoRow("Time Zone:", "GMT+6"),
         _infoRow("Birth City:", data['birthCity'] ?? '-'),
         _infoRow("Birth Country:", data['birthCountry'] ?? '-'),
@@ -143,8 +174,12 @@ class ReviewGeneratePage extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         _infoRow("Chart Type:", "Transit Chart"),
-        _infoRow("Future Date:", futureDate != null ? "${futureDate.day}/${futureDate.month}/${futureDate.year}" : '-'),
-        _infoRow("Past Date:", pastDate != null ? "${pastDate.day}/${pastDate.month}/${pastDate.year}" : '-'),
+        _infoRow("Future Date:", futureDate != null
+            ? "${futureDate.day}/${futureDate.month}/${futureDate.year}"
+            : '-'),
+        _infoRow("Past Date:", pastDate != null
+            ? "${pastDate.day}/${pastDate.month}/${pastDate.year}"
+            : '-'),
       ],
     );
   }
@@ -172,7 +207,6 @@ class ReviewGeneratePage extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         _infoRow("Chart Type:", "Synastry Chart"),
-
         const SizedBox(height: 10),
         const Text(
           "Partner 1:",
@@ -184,11 +218,14 @@ class ReviewGeneratePage extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         _infoRow("Name:", partner1?['name'] ?? '-'),
-        _infoRow("Date of Birth:", date1 != null ? "${date1.month}/${date1.day}/${date1.year}" : '-'),
-        _infoRow("Birth Time:", time1 != null ? "${time1.hour}:${time1.minute.toString().padLeft(2, '0')}" : '-'),
+        _infoRow("Date of Birth:", date1 != null
+            ? "${date1.month}/${date1.day}/${date1.year}"
+            : '-'),
+        _infoRow("Birth Time:", time1 != null
+            ? "${time1.hour}:${time1.minute.toString().padLeft(2, '0')}"
+            : '-'),
         _infoRow("Birth City:", partner1?['birthCity'] ?? '-'),
         _infoRow("Birth Country:", partner1?['birthCountry'] ?? '-'),
-
         const SizedBox(height: 15),
         const Text(
           "Partner 2:",
@@ -200,8 +237,12 @@ class ReviewGeneratePage extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         _infoRow("Name:", partner2?['name'] ?? '-'),
-        _infoRow("Date of Birth:", date2 != null ? "${date2.month}/${date2.day}/${date2.year}" : '-'),
-        _infoRow("Birth Time:", time2 != null ? "${time2.hour}:${time2.minute.toString().padLeft(2, '0')}" : '-'),
+        _infoRow("Date of Birth:", date2 != null
+            ? "${date2.month}/${date2.day}/${date2.year}"
+            : '-'),
+        _infoRow("Birth Time:", time2 != null
+            ? "${time2.hour}:${time2.minute.toString().padLeft(2, '0')}"
+            : '-'),
         _infoRow("Birth City:", partner2?['birthCity'] ?? '-'),
         _infoRow("Birth Country:", partner2?['birthCountry'] ?? '-'),
       ],

@@ -1,8 +1,12 @@
+// lib/views/pages/generateChart/details_chart/evolutionary_details.dart
 import 'package:astrology_app/Routes/routes.dart';
+import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../../data/models/chart_models/natal_chart_model.dart';
 
 class EvolutionaryDetails extends StatefulWidget {
   const EvolutionaryDetails({super.key});
@@ -12,127 +16,158 @@ class EvolutionaryDetails extends StatefulWidget {
 }
 
 class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
+  final ChartController controller = Get.find<ChartController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// ---- INFO CARD ----
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xff262A40)),
-                  borderRadius: BorderRadius.circular(14),
-                  color: CustomColors.secondbackgroundColor,
+        child: Obx(() {
+          NatalChartModel? evolutionaryData;
+
+          if (controller.selectedChartType.value == 'Natal' &&
+              controller.natalResponse.value != null) {
+            evolutionaryData = controller.natalResponse.value!.charts['evolutionary'];
+          }
+
+          if (evolutionaryData == null) {
+            return const Center(
+              child: CircularProgressIndicator(color: Color(0xFF9A3BFF)),
+            );
+          }
+
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// ---- INFO CARD ----
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xff262A40)),
+                    borderRadius: BorderRadius.circular(14),
+                    color: CustomColors.secondbackgroundColor,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Info",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600)),
+                      const SizedBox(height: 20),
+                      _infoRow("Name:", evolutionaryData.name),
+                      _infoRow("Date of Birth:", evolutionaryData.birthDate),
+                      _infoRow("Birth Time:", evolutionaryData.birthTime),
+                      _infoRow("Sun Sign:", evolutionaryData.sunSign),
+                      _infoRow("Moon Sign:", evolutionaryData.moonSign),
+                      _infoRow("Rising Sign:", evolutionaryData.risingSign),
+                    ],
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                const SizedBox(height: 24),
+
+                /// ---- EVOLUTIONARY POINTS CHART ----
+                const Text(
+                  "Evolutionary Chart",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 16),
+
+                Center(
+                  child: Container(
+                    height: 350,
+                    width: MediaQuery.of(context).size.width,
+                    child: evolutionaryData.imageUrl.isNotEmpty
+                        ? Image.network(
+                      evolutionaryData.imageUrl,
+                      fit: BoxFit.contain,
+                      loadingBuilder: (context, child, progress) {
+                        if (progress == null) return child;
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: Color(0xFF9A3BFF),
+                          ),
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Center(
+                          child: Icon(Icons.error,
+                              color: Colors.red, size: 50),
+                        );
+                      },
+                    )
+                        : Image.asset(
+                      "assets/images/chartimage.png",
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                /// ---- POINTS GRID ----
+                Row(
                   children: [
-                    const Text("Info",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 20),
-                    _infoRow("Name:", "Sadiqul"),
-                    _infoRow("Date of Birth:", "11/13/2005"),
-                    _infoRow("Birth Time:", "7:00 pm"),
-                    _infoRow("Time Zone:", "GMT+6"),
-                    _infoRow("Birth City:", "Dhaka"),
-                    _infoRow("Birth Country:", "Bangladesh"),
+                    Expanded(
+                      child: _pointCard(
+                        "North Node",
+                        evolutionaryData.planets['North Node']?.sign ?? '-',
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _pointCard(
+                        "South Node",
+                        evolutionaryData.planets['South Node']?.sign ?? '-',
+                      ),
+                    ),
                   ],
                 ),
-              ),
 
-              const SizedBox(height: 24),
+                const SizedBox(height: 12),
 
-              /// ---- EVOLUTIONARY POINTS CHART ----
-              const Text(
-                "Evolutionary Chart",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 16),
-
-              Center(
-                child: Container(
-                  height: 350,
-                  width:MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: CustomColors.secondbackgroundColor,
-                    border: Border.all(color: const Color(0xff262A40)),
-                  ),
-                  child: Image.asset(
-                    "assets/images/chartimage.png",
-                    fit: BoxFit.fill,
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _pointCard(
+                        "Pluto",
+                        evolutionaryData.planets['Pluto']?.sign ?? '-',
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _pointCard(
+                        "Chiron",
+                        evolutionaryData.planets['Chiron']?.sign ?? '-',
+                      ),
+                    ),
+                  ],
                 ),
-              ),
 
-              const SizedBox(height: 24),
+                const SizedBox(height: 40),
 
-              /// ---- POINTS GRID ----
-              Row(
-                children: [
-                  Expanded(
-                    child: _pointCard(
-                      "North Node",
-                      "Taurus 9th House",
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _pointCard(
-                      "South Node",
-                      "Scorpio 3rd House",
-                    ),
-                  ),
-                ],
-              ),
+                CustomButton(
+                  text: "Generate",
+                  onpress: () {
+                    Get.toNamed(Routes.aiComprehensive);
+                  },
+                ),
 
-              const SizedBox(height: 12),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: _pointCard(
-                      "Pluto Polar",
-                      "Scorpio 3rd House",
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _pointCard(
-                      "Chiron",
-                      "Libra 1st House",
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 40),
-
-              /// ---- GENERATE READING BUTTON ----
-              CustomButton(text: "Generate",onpress: (){Get.toNamed(Routes.aiComprehensive);},),
-
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
 
-  /// ----------------------------
-  /// INFO ROW WIDGET
-  /// ----------------------------
   Widget _infoRow(String key, String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -152,9 +187,6 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
     );
   }
 
-  /// ----------------------------
-  /// POINT CARD WIDGET
-  /// ----------------------------
   Widget _pointCard(String title, String subtitle) {
     return Container(
       height: 100,

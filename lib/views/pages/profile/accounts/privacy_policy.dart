@@ -14,18 +14,17 @@ class PrivacyPolicyScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 50),
               Row(
                 children: [
                   GestureDetector(onTap:(){Get.back();},child: Icon(Icons.arrow_back_ios,color: Colors.white,)),
                   SizedBox(width: 20,),
                   Text(
                     "Privacy & Policy",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    style: TextStyle(color: Colors.white, fontSize: 24),
                   ),
                 ],
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 30),
               // --- Section 1 ---
               _buildSection(
                 context,

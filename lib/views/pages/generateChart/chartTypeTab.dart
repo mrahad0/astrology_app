@@ -111,7 +111,7 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
 
                           if (isNatal) ...[
                             const SizedBox(height: 10),
-                            _chartBox("13-Signs (Ophiuchus)", '13-Signs'),
+                            _chartBox("13-Signs (Ophiuchus)", '13_sign'),
 
                             const SizedBox(height: 10),
                             _chartBox("Evolutionary", 'Evolutionary'),
