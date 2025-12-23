@@ -80,38 +80,35 @@ class PersonalInfo extends StatelessWidget {
                     const SizedBox(height: 24),
 
                     // Profile Picture
-                  Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: const Color(0xFF3A3F5A),
-                          width: 2,
+                    Center(
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: const Color(0xFF3A3F5A),
+                            width: 2,
+                          ),
                         ),
-                      ),
-                      child: Obx(() {
-                        if (controller.profileImageUrl.isNotEmpty) {
-                          return ClipOval(
-                            child: Image.network(
-                              controller.profileImageUrl.value, // ✅ full URL
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Container(
-                                color: const Color(0xFF2A2F4A),
-                                child: const Icon(Icons.person, size: 50, color: Colors.grey),
+                        child: Obx(() {
+                          if (controller.profileImageUrl.isNotEmpty) {
+                            return ClipOval(
+                              child: Image.network(
+                                controller.profileImageUrl.value, // ✅ full URL
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => Container(
+                                  color: const Color(0xFF2A2F4A),
+                                  child: const Icon(Icons.person, size: 50, color: Colors.grey),
+                                ),
                               ),
-                            ),
-                          );
-                        } else {
-                          return Container(
-                            color: const Color(0xFF2A2F4A),
-                            child: const Icon(Icons.person, size: 50, color: Colors.grey),
-                          );
-                        }
-                      }),
+                            );
+                          } else {
+                            return const Icon(Icons.person, size: 50, color: Colors.grey);
+                          }
+                        }),
+                      ),
                     ),
-                  ),
                     const SizedBox(height: 32),
 
                     // Text Fields

@@ -1,6 +1,7 @@
 // lib/controllers/chart_controller/chart_controller.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../data/models/chart_models/natal_chart_model.dart';
 import '../../data/models/chart_models/synastry_chart_model.dart';
@@ -57,6 +58,16 @@ class ChartController extends GetxController {
     errorMessage.value = '';
   }
 
+  // 🔧 Helper: Format Date Consistently
+  String _formatDate(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
+  }
+
+  // 🔧 Helper: Format Time Consistently
+  String _formatTime(TimeOfDay time) {
+    return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}:00';
+  }
+
   // 🚀 Generate Chart API Call
   Future<bool> generateChart() async {
     isLoading.value = true;
@@ -73,6 +84,7 @@ class ChartController extends GetxController {
       return false;
     } catch (e) {
       errorMessage.value = 'Failed to generate chart: $e';
+      print('❌ Chart Generation Error: $e');
       return false;
     } finally {
       isLoading.value = false;
@@ -89,10 +101,13 @@ class ChartController extends GetxController {
       return false;
     }
 
+    print('📅 Natal Birth Date: ${_formatDate(date)}');
+    print('⏰ Natal Birth Time: ${_formatTime(time)}');
+
     final response = await ChartService.generateNatalChart(
-      name: chartData['name'] ?? '',
-      birthDate: '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
-      birthTime: '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}:00',
+      name: chartData['name'] ?? 'User',
+      birthDate: _formatDate(date),
+      birthTime: _formatTime(time),
       birthCity: chartData['birthCity'] ?? '',
       birthCountry: chartData['birthCountry'] ?? '',
       systems: selectedSystems.toList(),
@@ -100,6 +115,7 @@ class ChartController extends GetxController {
 
     if (response != null) {
       natalResponse.value = response;
+      print('✅ Natal Chart Generated Successfully');
       return true;
     } else {
       errorMessage.value = 'Failed to generate natal chart';
@@ -107,38 +123,68 @@ class ChartController extends GetxController {
     }
   }
 
-  // Generate Transit Chart - FIXED
+  // Generate Transit Chart - FIXED DATE HANDLING
   Future<bool> _generateTransitChart() async {
-    // Transit needs natal birth data + transit date
-    final date = chartData['dateOfBirth'] as DateTime?;
-    final time = chartData['birthTime'] as TimeOfDay?;
+    final birthDate = chartData['dateOfBirth'] as DateTime?;
+    final birthTime = chartData['birthTime'] as TimeOfDay?;
     final futureDate = chartData['futureDate'] as DateTime?;
 
-    if (date == null || time == null || futureDate == null) {
-      errorMessage.value = 'Please provide complete information';
+    // ✅ Validation
+    if (birthDate == null || birthTime == null) {
+      errorMessage.value = 'Please provide birth information';
       return false;
     }
 
+    if (futureDate == null) {
+      errorMessage.value = 'Please provide transit date';
+      return false;
+    }
+
+    // ✅ Check if transit date is valid (can be past or future)
+    // Transit date should not be before birth date
+    if (futureDate.isBefore(birthDate)) {
+      errorMessage.value = 'Transit date cannot be before birth date';
+      return false;
+    }
+
+    final formattedBirthDate = _formatDate(birthDate);
+    final formattedBirthTime = _formatTime(birthTime);
+    final formattedTransitDate = _formatDate(futureDate);
+
+    print('📅 Transit Birth Date: $formattedBirthDate');
+    print('⏰ Transit Birth Time: $formattedBirthTime');
+    print('📅 Transit Date: $formattedTransitDate');
+
+    // ✅ Verify dates are correct
+    final birthDateTime = DateTime(birthDate.year, birthDate.month, birthDate.day);
+    final transitDateTime = DateTime(futureDate.year, futureDate.month, futureDate.day);
+
+    print('🔍 Birth: $birthDateTime');
+    print('🔍 Transit: $transitDateTime');
+    print('🔍 Days difference: ${transitDateTime.difference(birthDateTime).inDays}');
+
     final response = await ChartService.generateTransitChart(
       name: chartData['name'] ?? 'User',
-      birthDate: '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
-      birthTime: '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}:00',
+      birthDate: formattedBirthDate,
+      birthTime: formattedBirthTime,
       birthCity: chartData['birthCity'] ?? '',
       birthCountry: chartData['birthCountry'] ?? '',
-      transitDate: '${futureDate.year}-${futureDate.month.toString().padLeft(2, '0')}-${futureDate.day.toString().padLeft(2, '0')}',
+      transitDate: formattedTransitDate,
       systems: selectedSystems.toList(),
     );
 
     if (response != null) {
       transitResponse.value = response;
+      print('✅ Transit Chart Generated Successfully');
       return true;
     } else {
       errorMessage.value = 'Failed to generate transit chart';
+      print('❌ Transit Chart Generation Failed');
       return false;
     }
   }
 
-  // Generate Synastry Chart - FIXED
+  // Generate Synastry Chart - FIXED DATE HANDLING
   Future<bool> _generateSynastryChart() async {
     final partner1 = chartData['partner1'] as Map<String, dynamic>?;
     final partner2 = chartData['partner2'] as Map<String, dynamic>?;
@@ -158,18 +204,23 @@ class ChartController extends GetxController {
       return false;
     }
 
+    print('📅 Partner 1 Birth Date: ${_formatDate(date1)}');
+    print('⏰ Partner 1 Birth Time: ${_formatTime(time1)}');
+    print('📅 Partner 2 Birth Date: ${_formatDate(date2)}');
+    print('⏰ Partner 2 Birth Time: ${_formatTime(time2)}');
+
     final profile1Data = {
-      "name": partner1['name'] ?? '',
-      "birth_date": '${date1.year}-${date1.month.toString().padLeft(2, '0')}-${date1.day.toString().padLeft(2, '0')}',
-      "birth_time": '${time1.hour.toString().padLeft(2, '0')}:${time1.minute.toString().padLeft(2, '0')}:00',
+      "name": partner1['name'] ?? 'Partner 1',
+      "birth_date": _formatDate(date1),
+      "birth_time": _formatTime(time1),
       "birth_city": partner1['birthCity'] ?? '',
       "birth_country": partner1['birthCountry'] ?? '',
     };
 
     final profile2Data = {
-      "name": partner2['name'] ?? '',
-      "birth_date": '${date2.year}-${date2.month.toString().padLeft(2, '0')}-${date2.day.toString().padLeft(2, '0')}',
-      "birth_time": '${time2.hour.toString().padLeft(2, '0')}:${time2.minute.toString().padLeft(2, '0')}:00',
+      "name": partner2['name'] ?? 'Partner 2',
+      "birth_date": _formatDate(date2),
+      "birth_time": _formatTime(time2),
       "birth_city": partner2['birthCity'] ?? '',
       "birth_country": partner2['birthCountry'] ?? '',
     };
@@ -182,9 +233,11 @@ class ChartController extends GetxController {
 
     if (response != null) {
       synastryResponse.value = response;
+      print('✅ Synastry Chart Generated Successfully');
       return true;
     } else {
       errorMessage.value = 'Failed to generate synastry chart';
+      print('❌ Synastry Chart Generation Failed');
       return false;
     }
   }

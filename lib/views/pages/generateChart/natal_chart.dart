@@ -145,10 +145,10 @@ class _NatalChart extends State<NatalChart> {
           style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 8),
-
         GestureDetector(
           onTap: onTap,
           child: Container(
+            height: 55, // ✅ fixed height দিয়ে দিন সব field এর জন্য
             padding: const EdgeInsets.symmetric(horizontal: 14),
             decoration: BoxDecoration(
               color: const Color(0xFF111424),
@@ -158,14 +158,27 @@ class _NatalChart extends State<NatalChart> {
             child: Row(
               children: [
                 Expanded(
-                  child: TextField(
+                  child: onTap != null // যদি onTap থাকে (date/time field)
+                      ? Align(
+                    alignment: Alignment.centerLeft, // ✅ text কে vertically center করবে
+                    child: Text(
+                      hint,
+                      style: TextStyle(
+                        color: hint.contains("mm/dd/yyyy") || hint.contains("Enter accurate")
+                            ? Colors.grey  // placeholder text grey
+                            : Colors.white, // selected value white
+                        fontSize: 16,
+                      ),
+                    ),
+                  )
+                      : TextField( // normal text field
                     controller: controller,
-                    enabled: onTap == null,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       hintText: hint,
                       hintStyle: const TextStyle(color: Colors.grey),
                       border: InputBorder.none,
+                      contentPadding: EdgeInsets.zero, // ✅ extra padding remove
                     ),
                   ),
                 ),

@@ -8,7 +8,7 @@ import 'controllers/chart_controller/chart_controller.dart';
 import 'helpers/di.dart' as di;
 
 void main() async {
-  Get.put(ChartController());
+  Get.put(ChartController(),permanent: true);
   await di.init();
   runApp(Astrology_App());
 }

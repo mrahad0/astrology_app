@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:astrology_app/views/base/custom_snackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -92,9 +93,10 @@ class PersonalInfoEditController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        Get.snackbar("Success", "Profile updated successfully");
+        showCustomSnackBar("Profile Updated Successfully", isError: false);
+        if (profileImage != null)
         await fetchUserProfile();
-        profileImageFile.value = null; // reset picked image
+        profileImageFile.value = null;
       } else {
         ApiChecker.checkApi(response);
       }

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/chart_controller/chart_controller.dart';
+import '../../base/custom_snackBar.dart';
 
 class ReviewGeneratePage extends StatelessWidget {
   const ReviewGeneratePage({super.key});
@@ -98,14 +99,8 @@ class ReviewGeneratePage extends StatelessWidget {
                       if (success) {
                         Get.toNamed(Routes.mainDetailChart);
                       } else {
-                        // Show error
-                        Get.snackbar(
-                          'Error',
-                          controller.errorMessage.value,
-                          backgroundColor: Colors.red,
-                          colorText: Colors.white,
-                          snackPosition: SnackPosition.BOTTOM,
-                        );
+                        showCustomSnackBar("Failed to generate chart",
+                            isError: true);
                       }
                     },
                     child: const Text(
@@ -174,12 +169,12 @@ class ReviewGeneratePage extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         _infoRow("Chart Type:", "Transit Chart"),
-        _infoRow("Future Date:", futureDate != null
+        _infoRow("Transit Date:", futureDate != null
             ? "${futureDate.day}/${futureDate.month}/${futureDate.year}"
             : '-'),
-        _infoRow("Past Date:", pastDate != null
-            ? "${pastDate.day}/${pastDate.month}/${pastDate.year}"
-            : '-'),
+        // _infoRow("Past Date:", pastDate != null
+        //     ? "${pastDate.day}/${pastDate.month}/${pastDate.year}"
+        //     : '-'),
       ],
     );
   }
