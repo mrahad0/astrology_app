@@ -125,41 +125,41 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
               const SizedBox(height: 20),
 
               // ------------------ HORIZONTAL FILTER BUTTONS ---------------------
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.generate(filters.length, (index) {
-                    bool isSelected = selectedFilter == index;
-
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() => selectedFilter = index);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
-                          decoration: BoxDecoration(
-                            color: isSelected ? Colors.purple : CustomColors.secondbackgroundColor,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: isSelected ? Colors.purple : const Color(0xff2A2F45),
-                            ),
-                          ),
-                          child: Text(
-                            filters[index],
-                            style: TextStyle(
-                              color: isSelected ? Colors.white : Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                ),
-              ),
+              // SingleChildScrollView(
+              //   scrollDirection: Axis.horizontal,
+              //   child: Row(
+              //     children: List.generate(filters.length, (index) {
+              //       bool isSelected = selectedFilter == index;
+              //
+              //       return Padding(
+              //         padding: const EdgeInsets.only(right: 10),
+              //         child: GestureDetector(
+              //           onTap: () {
+              //             setState(() => selectedFilter = index);
+              //           },
+              //           child: Container(
+              //             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+              //             decoration: BoxDecoration(
+              //               color: isSelected ? Colors.purple : CustomColors.secondbackgroundColor,
+              //               borderRadius: BorderRadius.circular(12),
+              //               border: Border.all(
+              //                 color: isSelected ? Colors.purple : const Color(0xff2A2F45),
+              //               ),
+              //             ),
+              //             child: Text(
+              //               filters[index],
+              //               style: TextStyle(
+              //                 color: isSelected ? Colors.white : Colors.white,
+              //                 fontSize: 14,
+              //                 fontWeight: FontWeight.w500,
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              //       );
+              //     }),
+              //   ),
+              // ),
 
               const SizedBox(height: 22),
 

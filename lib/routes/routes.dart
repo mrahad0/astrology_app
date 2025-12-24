@@ -105,7 +105,7 @@ List<GetPage> pages = [
   GetPage(name: Routes.savedChart,
       transition: Transition.noTransition,
       transitionDuration: const Duration(milliseconds: 0),
-      page: () => SavedChartScreen()),
+      page: () => SavedChart()),
   GetPage(name: Routes.aiReading,
       transition: Transition.noTransition,
       transitionDuration: const Duration(milliseconds: 0),

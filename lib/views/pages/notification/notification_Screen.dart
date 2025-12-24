@@ -1,55 +1,14 @@
 import 'package:astrology_app/utils/color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import '../../../controllers/notification_controller/notification_controller.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Different types of notifications
-    final List<Map<String, String>> notifications = [
-      {
-        'title': 'Chart Generated',
-        'subtitle': 'Your birth chart has been generated successfully.',
-      },
-      {
-        'title': 'Premium Subscription',
-        'subtitle': 'Your premium subscription will expire in 3 days.',
-      },
-      {
-        'title': 'Daily Horoscope',
-        'subtitle': 'Your daily horoscope for today is ready to read.',
-      },
-      {
-        'title': 'Compatibility Match',
-        'subtitle': 'Found a 95% compatibility match with Sarah Johnson.',
-      },
-      {
-        'title': 'Transit Alert',
-        'subtitle': 'Mercury retrograde starts tomorrow. Prepare yourself!',
-      },
-      {
-        'title': 'New Feature',
-        'subtitle': 'Vedic astrology system is now available in your app.',
-      },
-      {
-        'title': 'Reading Complete',
-        'subtitle': 'Your personalized reading has been completed.',
-      },
-      {
-        'title': 'Weekly Forecast',
-        'subtitle': 'Your weekly forecast for this week is now available.',
-      },
-      {
-        'title': 'Special Offer',
-        'subtitle': 'Get 50% off on Platinum plan. Limited time offer!',
-      },
-      {
-        'title': 'Profile Updated',
-        'subtitle': 'Your birth details have been updated successfully.',
-      },
-    ];
+    final NotificationController controller = Get.put(NotificationController());
 
     return Scaffold(
       appBar: AppBar(
@@ -65,29 +24,83 @@ class NotificationScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: ListView.builder(
-        padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 70),
-        itemCount: notifications.length,
-        itemBuilder: (context, index) {
-          final notification = notifications[index];
-          return NotificationCard(
-            title: notification['title']!,
-            subtitle: notification['subtitle']!,
+      body: Obx(() {
+        if (controller.isLoading.value && controller.notifications.isEmpty) {
+          return const Center(
+            child: CircularProgressIndicator(),
           );
-        },
-      ),
+        }
+
+        if (controller.notifications.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.notifications_none,
+                  size: 64,
+                  color: Colors.grey,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'No notifications yet',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return RefreshIndicator(
+          onRefresh: controller.refreshNotifications,
+          child: ListView.builder(
+            padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 70),
+            itemCount: controller.notifications.length,
+            itemBuilder: (context, index) {
+              final notification = controller.notifications[index];
+              return InkWell(
+                onTap: () {
+                  if (notification.id != null && notification.isRead == false) {
+                    int idx = controller.notifications.indexWhere((n) => n.id == notification.id);
+                    if (idx != -1) {
+                      controller.notifications[idx].isRead = true;
+                      controller.notifications.refresh();
+                      controller.calculateUnreadCount();
+                    }
+                  }
+                },
+                child: NotificationCard(
+                  title: notification.title ?? 'Notification',
+                  subtitle: notification.message ?? '',
+                  time: controller.getFormattedTime(notification.createdAt),
+                  isRead: notification.isRead ?? false,
+                  notificationType: notification.notificationType ?? 'success',
+                ),
+              );
+            },
+          ),
+        );
+      }),
     );
   }
 }
 
-// --- Component 1: The Individual Notification Card ---
 class NotificationCard extends StatelessWidget {
   final String title;
   final String subtitle;
+  final String time;
+  final bool isRead;
+  final String notificationType;
 
   const NotificationCard({
     required this.title,
     required this.subtitle,
+    this.time = '',
+    this.isRead = false,
+    this.notificationType = 'success',
     super.key,
   });
 
@@ -104,11 +117,21 @@ class NotificationCard extends StatelessWidget {
             color: Color(0xff2E334A),
             width: 1,
           ),
+          // Glow effect শুধু unread notification এ
+          boxShadow: !isRead
+              ? [
+            BoxShadow(
+              color: Colors.blue.withOpacity(0.3),
+              blurRadius: 8,
+              spreadRadius: 1,
+            ),
+          ]
+              : null,
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Left-side image placeholder
+            // Left-side image (original থেকে)
             Container(
               width: 50,
               height: 50,
@@ -124,13 +147,28 @@ class NotificationCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      if (time.isNotEmpty)
+                        Text(
+                          time,
+                          style: TextStyle(
+                            color: Color(0xff8B8B8B),
+                            fontSize: 12,
+                          ),
+                        ),
+                    ],
                   ),
                   const SizedBox(height: 4),
                   Text(

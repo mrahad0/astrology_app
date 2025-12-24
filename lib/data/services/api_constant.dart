@@ -28,4 +28,6 @@ class ApiConstant{
 
   static String synastryChart = "/synastry/";
 
+  static String notifications = "/notifications/";
+
 }
