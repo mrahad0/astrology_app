@@ -53,13 +53,6 @@ class NotificationController extends GetxController {
   /// Mark notification as read (if API supports it)
   Future<void> markAsRead(int notificationId) async {
     try {
-      // Assuming you have an endpoint to mark as read
-      // Response response = await ApiClient.putData(
-      //   '${ApiConstant.notifications}$notificationId/',
-      //   {'is_read': true},
-      // );
-
-      // For now, just update locally
       int index = notifications.indexWhere((n) => n.id == notificationId);
       if (index != -1) {
         notifications[index].isRead = true;
@@ -74,13 +67,7 @@ class NotificationController extends GetxController {
   /// Mark all notifications as read
   Future<void> markAllAsRead() async {
     try {
-      // Assuming you have an endpoint to mark all as read
-      // Response response = await ApiClient.postData(
-      //   '${ApiConstant.notifications}mark-all-read/',
-      //   {},
-      // );
 
-      // For now, just update locally
       for (var notification in notifications) {
         notification.isRead = true;
       }
@@ -139,12 +126,6 @@ class NotificationController extends GetxController {
       );
 
       if (confirm == true) {
-        // Assuming you have an endpoint to clear all
-        // Response response = await ApiClient.deleteData(
-        //   '${ApiConstant.notifications}clear-all/',
-        // );
-
-        // For now, just clear locally
         notifications.clear();
         unreadCount.value = 0;
         Get.snackbar(

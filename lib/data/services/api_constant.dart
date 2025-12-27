@@ -30,4 +30,8 @@ class ApiConstant{
 
   static String notifications = "/notifications/";
 
+  static String oldSavedCharts = "/user/saved/";
+
+  static const String recentCharts = "/user/recent/";
+
 }

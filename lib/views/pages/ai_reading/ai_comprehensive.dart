@@ -130,9 +130,9 @@ class _AiComprehensiveState extends State<AiComprehensive> {
                       Text(
                         'Info',
                         style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
                         ),
                       ),
                       SizedBox(height: 16),
@@ -310,9 +310,9 @@ class SectionCard extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
             ),
           ),
           const SizedBox(height: 8),

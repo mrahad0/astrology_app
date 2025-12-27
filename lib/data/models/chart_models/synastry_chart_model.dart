@@ -1,7 +1,8 @@
-// lib/models/chart_models/synastry_chart_model.dart
+// lib/data/models/chart_models/synastry_chart_model.dart
 import 'aspect_model.dart';
 
 class SynastryChartData {
+  final String chartId;  // 🆕 Added
   final double compatibilityScore;
   final List<AspectModel> aspects;
   final String interpretation;
@@ -10,6 +11,7 @@ class SynastryChartData {
   final String system;
 
   SynastryChartData({
+    required this.chartId,
     required this.compatibilityScore,
     required this.aspects,
     required this.interpretation,
@@ -27,7 +29,20 @@ class SynastryChartData {
           .toList();
     }
 
+    // 🆕 Extract or generate chartId
+    String extractedChartId = json['chart_id'] ?? json['id'] ?? '';
+
+    // If no chartId, generate from profile names
+    if (extractedChartId.isEmpty) {
+      final profile1 = json['profile1_name'] ?? 'partner1';
+      final profile2 = json['profile2_name'] ?? 'partner2';
+      final system = json['system'] ?? 'western';
+      extractedChartId = '${profile1}_${profile2}_synastry_$system'
+          .replaceAll(' ', '_');
+    }
+
     return SynastryChartData(
+      chartId: extractedChartId,
       compatibilityScore: (json['compatibility_score'] ?? 0).toDouble(),
       aspects: aspectList,
       interpretation: json['interpretation'] ?? '',

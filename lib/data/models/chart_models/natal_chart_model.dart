@@ -1,14 +1,42 @@
-// lib/models/chart_models/natal_chart_model.dart
+// lib/data/models/chart_models/natal_chart_model.dart
 import 'planet_model.dart';
 import 'house_model.dart';
 import 'aspect_model.dart';
 
+class LocationData {
+  final String city;
+  final String country;
+  final double latitude;
+  final double longitude;
+  final String timezone;
+
+  LocationData({
+    required this.city,
+    required this.country,
+    required this.latitude,
+    required this.longitude,
+    required this.timezone,
+  });
+
+  factory LocationData.fromJson(Map<String, dynamic> json) {
+    return LocationData(
+      city: json['city'] ?? '',
+      country: json['country'] ?? '',
+      latitude: (json['latitude'] ?? 0).toDouble(),
+      longitude: (json['longitude'] ?? 0).toDouble(),
+      timezone: json['timezone'] ?? '',
+    );
+  }
+}
+
 class NatalChartModel {
+  final String chartId;  // 🆕 Added
   final String system;
   final String name;
   final String birthDate;
   final String birthTime;
   final String imageUrl;
+  final LocationData location;  // 🆕 Added
   final Map<String, PlanetModel> planets;
   final Map<int, HouseModel> houses;
   final List<AspectModel> aspects;
@@ -17,11 +45,13 @@ class NatalChartModel {
   final String risingSign;
 
   NatalChartModel({
+    required this.chartId,
     required this.system,
     required this.name,
     required this.birthDate,
     required this.birthTime,
     required this.imageUrl,
+    required this.location,
     required this.planets,
     required this.houses,
     required this.aspects,
@@ -56,18 +86,66 @@ class NatalChartModel {
           .toList();
     }
 
+    // Parse location
+    LocationData locationData = LocationData(
+      city: '',
+      country: '',
+      latitude: 0.0,
+      longitude: 0.0,
+      timezone: '',
+    );
+
+    if (json['location'] != null) {
+      locationData = LocationData.fromJson(json['location']);
+    }
+
     return NatalChartModel(
+      chartId: json['chart_id'] ?? json['id'] ?? '', // Try multiple keys
       system: systemKey,
       name: json['name'] ?? '',
       birthDate: json['birth_date'] ?? '',
       birthTime: json['birth_time'] ?? '',
       imageUrl: '', // Will be set from images map
+      location: locationData,
       planets: planetMap,
       houses: houseMap,
       aspects: aspectList,
       sunSign: json['sun_sign'] ?? '',
       moonSign: json['moon_sign'] ?? '',
       risingSign: json['rising_sign'] ?? json['ascendant'] ?? '',
+    );
+  }
+
+  // Helper method to create copy with updated imageUrl
+  NatalChartModel copyWith({
+    String? chartId,
+    String? system,
+    String? name,
+    String? birthDate,
+    String? birthTime,
+    String? imageUrl,
+    LocationData? location,
+    Map<String, PlanetModel>? planets,
+    Map<int, HouseModel>? houses,
+    List<AspectModel>? aspects,
+    String? sunSign,
+    String? moonSign,
+    String? risingSign,
+  }) {
+    return NatalChartModel(
+      chartId: chartId ?? this.chartId,
+      system: system ?? this.system,
+      name: name ?? this.name,
+      birthDate: birthDate ?? this.birthDate,
+      birthTime: birthTime ?? this.birthTime,
+      imageUrl: imageUrl ?? this.imageUrl,
+      location: location ?? this.location,
+      planets: planets ?? this.planets,
+      houses: houses ?? this.houses,
+      aspects: aspects ?? this.aspects,
+      sunSign: sunSign ?? this.sunSign,
+      moonSign: moonSign ?? this.moonSign,
+      risingSign: risingSign ?? this.risingSign,
     );
   }
 }
@@ -103,22 +181,10 @@ class NatalChartResponse {
       });
     }
 
-    // Set image URLs to charts
+    // Set image URLs to charts using copyWith
     chartMap.forEach((key, chart) {
       if (imageMap.containsKey(key)) {
-        chartMap[key] = NatalChartModel(
-          system: chart.system,
-          name: chart.name,
-          birthDate: chart.birthDate,
-          birthTime: chart.birthTime,
-          imageUrl: imageMap[key]!,
-          planets: chart.planets,
-          houses: chart.houses,
-          aspects: chart.aspects,
-          sunSign: chart.sunSign,
-          moonSign: chart.moonSign,
-          risingSign: chart.risingSign,
-        );
+        chartMap[key] = chart.copyWith(imageUrl: imageMap[key]);
       }
     });
 

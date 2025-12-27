@@ -9,6 +9,9 @@ class CustomTextFromField extends StatelessWidget {
     this.obscureText = false,
     this.validator,
     this.keyboardType,
+    this.onTap,
+    this.suffixIcon,
+    this.readOnly
   });
 
   final TextEditingController? controller;
@@ -16,17 +19,25 @@ class CustomTextFromField extends StatelessWidget {
   bool obscureText;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
+  Function()? onTap;
+  Widget? suffixIcon;
+  bool? readOnly;
+
+
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onTap:onTap,
       controller: controller,
+      readOnly: readOnly??false,
       keyboardType: keyboardType,
       obscureText: obscureText,
       validator: validator,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         hintText: hintText,
+        suffixIcon: suffixIcon,
         hintStyle: const TextStyle(
           color: Color(0xffABABAB),
           fontSize: 14,

@@ -28,8 +28,6 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
       controller: widget.controller,
       keyboardType: widget.keyboardType,
       obscureText: _obscureText,
-
-      // 🔥 Validator Added
       validator: widget.validator,
 
       style: const TextStyle(color: Colors.white),
@@ -53,7 +51,6 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
           borderSide: const BorderSide(color: Colors.white38),
         ),
 
-        // 🔴 Error Border
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: Colors.redAccent),
@@ -63,13 +60,11 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
           borderSide: const BorderSide(color: Colors.redAccent),
         ),
 
-        // 🔴 Error Text Style
         errorStyle: const TextStyle(
           color: Colors.redAccent,
           fontSize: 12,
         ),
 
-        // 👁️ Eye Toggle
         suffixIcon: IconButton(
           icon: Icon(
             _obscureText ? Icons.visibility_off : Icons.visibility,

@@ -117,7 +117,6 @@ class NotificationCard extends StatelessWidget {
             color: Color(0xff2E334A),
             width: 1,
           ),
-          // Glow effect শুধু unread notification এ
           boxShadow: !isRead
               ? [
             BoxShadow(
@@ -136,7 +135,7 @@ class NotificationCard extends StatelessWidget {
               width: 50,
               height: 50,
               child: Center(
-                child: Image.asset("assets/icons/image 5.png"),
+                child: Image.asset("assets/images/logo.png1.png"),
               ),
             ),
 

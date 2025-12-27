@@ -3,8 +3,8 @@ import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SavedChartScreen extends StatelessWidget {
-  const SavedChartScreen({super.key});
+class SavedChartsDetails extends StatelessWidget {
+  const SavedChartsDetails({super.key});
 
   @override
   Widget build(BuildContext context) {

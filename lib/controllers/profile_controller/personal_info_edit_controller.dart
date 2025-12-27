@@ -55,8 +55,6 @@ class PersonalInfoEditController extends GetxController {
         timeController.text = profile?.timeOfBirth ?? '';
         countryController.text = profile?.birthCountry ?? '';
         cityController.text = profile?.birthCity ?? '';
-
-        // ✅ Use full URL for NetworkImage
         profileImageUrl.value = profile?.profilePictureUrl ?? '';
       } else {
         ApiChecker.checkApi(response);
@@ -102,7 +100,7 @@ class PersonalInfoEditController extends GetxController {
       }
     } catch (e) {
       debugPrint("UPDATE ERROR: $e");
-      Get.snackbar("Error", "Failed to update profile");
+      showCustomSnackBar("Error" "Failed to update profile");
     } finally {
       isLoading(false);
     }

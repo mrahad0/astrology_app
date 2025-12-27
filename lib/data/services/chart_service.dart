@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../models/chart_models/natal_chart_model.dart';
 import '../models/chart_models/synastry_chart_model.dart';
 import '../models/chart_models/transit_chart_model.dart';
@@ -43,11 +42,11 @@ class ChartService {
         debugPrint('✅ Natal Chart Success: ${response.body}');
         return NatalChartResponse.fromJson(response.body);
       } else {
-        debugPrint('❌ Natal Chart Error: ${response.statusText}');
+        debugPrint('Natal Chart Error: ${response.statusText}');
         return null;
       }
     } catch (e) {
-      debugPrint('❌ Natal Chart Exception: $e');
+      debugPrint('Natal Chart Exception: $e');
       return null;
     }
   }
@@ -77,7 +76,7 @@ class ChartService {
         "save_profile": true,
       });
 
-      debugPrint('🚀 Transit Chart Request: $body');
+      debugPrint('Transit Chart Request: $body');
 
       Response response = await ApiClient.postData(
         ApiConstant.transitChart,
@@ -85,14 +84,14 @@ class ChartService {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        debugPrint('✅ Transit Chart Success: ${response.body}');
+        debugPrint('Transit Chart Success: ${response.body}');
         return TransitChartResponse.fromJson(response.body);
       } else {
-        debugPrint('❌ Transit Chart Error: ${response.statusText}');
+        debugPrint('Transit Chart Error: ${response.statusText}');
         return null;
       }
     } catch (e) {
-      debugPrint('❌ Transit Chart Exception: $e');
+      debugPrint('Transit Chart Exception: $e');
       return null;
     }
   }
@@ -112,7 +111,7 @@ class ChartService {
         "save_profile": true,
       });
 
-      debugPrint('🚀 Synastry Chart Request: $body');
+      debugPrint('Synastry Chart Request: $body');
 
       Response response = await ApiClient.postData(
         ApiConstant.synastryChart,
@@ -120,14 +119,14 @@ class ChartService {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        debugPrint('✅ Synastry Chart Success: ${response.body}');
+        debugPrint('Synastry Chart Success: ${response.body}');
         return SynastryChartResponse.fromJson(response.body);
       } else {
-        debugPrint('❌ Synastry Chart Error: ${response.statusText}');
+        debugPrint('Synastry Chart Error: ${response.statusText}');
         return null;
       }
     } catch (e) {
-      debugPrint('❌ Synastry Chart Exception: $e');
+      debugPrint('Synastry Chart Exception: $e');
       return null;
     }
   }

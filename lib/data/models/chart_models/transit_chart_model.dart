@@ -1,4 +1,5 @@
-// lib/models/chart_models/transit_chart_model.dart
+// lib/data/models/chart_models/transit_chart_model.dart
+
 class TransitModel {
   final String planet;
   final String aspect;
@@ -35,6 +36,7 @@ class TransitModel {
 }
 
 class TransitChartData {
+  final String chartId;  // 🆕 Extract from natal_data
   final String transitDate;
   final List<TransitModel> transits;
   final int significantAspects;
@@ -42,8 +44,10 @@ class TransitChartData {
   final String interpretation;
   final String profileName;
   final String system;
+  final Map<String, dynamic>? natalData;  // 🆕 Store full natal data
 
   TransitChartData({
+    required this.chartId,
     required this.transitDate,
     required this.transits,
     required this.significantAspects,
@@ -51,6 +55,7 @@ class TransitChartData {
     required this.interpretation,
     required this.profileName,
     required this.system,
+    this.natalData,
   });
 
   factory TransitChartData.fromJson(Map<String, dynamic> json) {
@@ -62,7 +67,28 @@ class TransitChartData {
           .toList();
     }
 
+    // 🆕 Extract chartId from natal_data
+    String extractedChartId = '';
+    Map<String, dynamic>? natalDataMap;
+
+    if (json['natal_data'] != null) {
+      natalDataMap = json['natal_data'] as Map<String, dynamic>;
+
+      // Try to get chart_id from natal_data
+      extractedChartId = natalDataMap['chart_id'] ??
+          natalDataMap['id'] ??
+          '';
+    }
+
+    // If still empty, create from profile name
+    if (extractedChartId.isEmpty) {
+      final profileName = json['profile_name'] ?? 'user';
+      final system = json['system'] ?? 'western';
+      extractedChartId = '${profileName}_transit_$system'.replaceAll(' ', '_');
+    }
+
     return TransitChartData(
+      chartId: extractedChartId,
       transitDate: json['transit_date'] ?? '',
       transits: transitList,
       significantAspects: json['significant_aspects'] ?? 0,
@@ -70,6 +96,7 @@ class TransitChartData {
       interpretation: json['interpretation'] ?? '',
       profileName: json['profile_name'] ?? '',
       system: json['system'] ?? '',
+      natalData: natalDataMap,
     );
   }
 }
@@ -110,4 +137,3 @@ class TransitChartResponse {
     );
   }
 }
-

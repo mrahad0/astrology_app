@@ -3,11 +3,11 @@ import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
+import 'package:astrology_app/views/base/custom_snackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/chart_controller/chart_controller.dart';
-
 
 class NatalChart extends StatefulWidget {
   final VoidCallback onNext;
@@ -71,7 +71,7 @@ class _NatalChart extends State<NatalChart> {
                 ),
                 child: Column(
                   children: [
-                    _inputField("Name", "enter your accurate name", controller: nameController),
+                    _inputField("Name", "Enter your accurate name", controller: nameController),
                     const SizedBox(height: 15),
                     _inputField("Date of Birth", selectedDate == null ? "mm/dd/yyyy" : "${selectedDate!.month}/${selectedDate!.day}/${selectedDate!.year}",
                         icon: Icons.calendar_today, onTap: pickDate),
@@ -91,15 +91,17 @@ class _NatalChart extends State<NatalChart> {
               CustomButton(
                 text: "Next",
                 onpress: () {
-                  controller.setChartData({
-                    'type': 'Natal',
-                    'name': nameController.text,
-                    'dateOfBirth': selectedDate,
-                    'birthCity': cityController.text,
-                    'birthCountry': countryController.text,
-                    'birthTime': selectedTime,
-                  });
-                  Get.toNamed(Routes.chartType);
+                  if (_validateInputs()) {
+                    controller.setChartData({
+                      'type': 'Natal',
+                      'name': nameController.text,
+                      'dateOfBirth': selectedDate,
+                      'birthCity': cityController.text,
+                      'birthCountry': countryController.text,
+                      'birthTime': selectedTime,
+                    });
+                    Get.toNamed(Routes.chartType);
+                  }
                 },
               ),
 
@@ -109,6 +111,18 @@ class _NatalChart extends State<NatalChart> {
         ),
       ),
     );
+  }
+
+  bool _validateInputs() {
+    if (nameController.text.isEmpty ||
+        cityController.text.isEmpty ||
+        countryController.text.isEmpty ||
+        selectedDate == null ||
+        selectedTime == null) {
+     showCustomSnackBar("All fields are required.");
+      return false;
+    }
+    return true;
   }
 
   Future<void> pickDate() async {
@@ -148,7 +162,7 @@ class _NatalChart extends State<NatalChart> {
         GestureDetector(
           onTap: onTap,
           child: Container(
-            height: 55, // ✅ fixed height দিয়ে দিন সব field এর জন্য
+            height: 55,
             padding: const EdgeInsets.symmetric(horizontal: 14),
             decoration: BoxDecoration(
               color: const Color(0xFF111424),
@@ -158,27 +172,27 @@ class _NatalChart extends State<NatalChart> {
             child: Row(
               children: [
                 Expanded(
-                  child: onTap != null // যদি onTap থাকে (date/time field)
+                  child: onTap != null
                       ? Align(
-                    alignment: Alignment.centerLeft, // ✅ text কে vertically center করবে
+                    alignment: Alignment.centerLeft,
                     child: Text(
                       hint,
                       style: TextStyle(
                         color: hint.contains("mm/dd/yyyy") || hint.contains("Enter accurate")
-                            ? Colors.grey  // placeholder text grey
-                            : Colors.white, // selected value white
+                            ? Colors.grey
+                            : Colors.white,
                         fontSize: 16,
                       ),
                     ),
                   )
-                      : TextField( // normal text field
+                      : TextField(
                     controller: controller,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       hintText: hint,
                       hintStyle: const TextStyle(color: Colors.grey),
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.zero, // ✅ extra padding remove
+                      contentPadding: EdgeInsets.zero,
                     ),
                   ),
                 ),
@@ -205,6 +219,3 @@ class _NatalChart extends State<NatalChart> {
     );
   }
 }
-
-
-

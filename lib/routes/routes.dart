@@ -41,9 +41,10 @@ class Routes {
   static String mainScreen = "/MainScreen";
   static String chartPage = "/ChartPage";
   static String generateChartScreen = "/GenerateChart";
-  static String savedChart = "/SavedChart";
+  static String savedChart = "/saved-chart";
+  static String savedChartDetails = "/saved-chart-details";
   static String aiReading = "/AiReading";
-  static String aiComprehensive = "/AiComprehensive";
+  static String aiComprehensive = "/ai-comprehensive";
   static String privacyPolicy = "/PrivacyPolicy";
   static String changePass = "/ChangePassword";
   static String natalChart = "/NatalChart";
@@ -63,6 +64,9 @@ class Routes {
   static String singlePurchasePlan = "/SinglePurchasePlan";
   static String singleInfo = "/SingleInfo";
   static String singleReport = "/SingleReport";
+
+
+
 }
 
 List<GetPage> pages = [
@@ -102,18 +106,18 @@ List<GetPage> pages = [
       transition: Transition.noTransition,
       transitionDuration: const Duration(milliseconds: 0),
       page: () => GenerateChart()),
-  GetPage(name: Routes.savedChart,
-      transition: Transition.noTransition,
-      transitionDuration: const Duration(milliseconds: 0),
-      page: () => SavedChart()),
+  GetPage(
+    name: Routes.savedChart,
+    page: () => SavedChart(),
+  ),
   GetPage(name: Routes.aiReading,
       transition: Transition.noTransition,
       transitionDuration: const Duration(milliseconds: 0),
       page: () => AiReadingScreen()),
-  GetPage(name: Routes.aiComprehensive,
-      transition: Transition.noTransition,
-      transitionDuration: const Duration(milliseconds: 0),
-      page: () => AiComprehensive()),
+  GetPage(
+    name: Routes.aiComprehensive,
+    page: () => const AiComprehensive(),
+  ),
   GetPage(name: Routes.privacyPolicy,
       transition: Transition.noTransition,
       transitionDuration: const Duration(milliseconds: 0),

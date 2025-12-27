@@ -58,17 +58,120 @@ class ChartController extends GetxController {
     errorMessage.value = '';
   }
 
-  // 🔧 Helper: Format Date Consistently
   String _formatDate(DateTime date) {
     return DateFormat('yyyy-MM-dd').format(date);
   }
 
-  // 🔧 Helper: Format Time Consistently
   String _formatTime(TimeOfDay time) {
     return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}:00';
   }
 
-  // 🚀 Generate Chart API Call
+  // 🆕 Get chart IDs for AI interpretation - SIMPLIFIED
+  List<Map<String, String>> getChartIdsForInterpretation() {
+    List<Map<String, String>> charts = [];
+    final type = selectedChartType.value.toLowerCase();
+
+    if (type == 'natal' && natalResponse.value != null) {
+      natalResponse.value!.charts.forEach((systemKey, chart) {
+        if (chart.chartId.isNotEmpty) {
+          charts.add({
+            "chart_id": chart.chartId,
+            "chart_type": "natal",
+            "system": systemKey,
+          });
+        }
+      });
+    }
+    else if (type == 'transit' && transitResponse.value != null) {
+      transitResponse.value!.results.forEach((systemKey, chart) {
+        if (chart.chartId.isNotEmpty) {
+          charts.add({
+            "chart_id": chart.chartId,
+            "chart_type": "transit",
+            "system": systemKey,
+          });
+        }
+      });
+    }
+    else if (type == 'synastry' && synastryResponse.value != null) {
+      synastryResponse.value!.results.forEach((systemKey, chart) {
+        if (chart.chartId.isNotEmpty) {
+          charts.add({
+            "chart_id": chart.chartId,
+            "chart_type": "synastry",
+            "system": systemKey,
+          });
+        }
+      });
+    }
+
+    print('📊 Chart IDs for interpretation: $charts');
+    return charts;
+  }
+
+  // 🆕 Get chart info for display
+  Map<String, dynamic> getChartInfo() {
+    final type = selectedChartType.value;
+
+    if (type == 'Natal') {
+      final response = natalResponse.value;
+      if (response == null || response.charts.isEmpty) return {};
+
+      final system = selectedSystems.isNotEmpty
+          ? selectedSystems.first.toLowerCase().replaceAll(' ', '_')
+          : 'western';
+      final chart = response.charts[system];
+      if (chart == null) return {};
+
+      return {
+        'Name': chart.name,
+        'Date of Birth': chart.birthDate,
+        'Birth Time': chart.birthTime,
+        'Birth City': chart.location.city,
+        'Birth Country': chart.location.country,
+        'Sun Sign': chart.sunSign,
+        'Moon Sign': chart.moonSign,
+        'Rising Sign': chart.risingSign,
+      };
+    }
+    else if (type == 'Transit') {
+      final response = transitResponse.value;
+      if (response == null || response.results.isEmpty) return {};
+
+      final system = selectedSystems.isNotEmpty
+          ? selectedSystems.first.toLowerCase()
+          : 'western';
+      final chart = response.results[system];
+      if (chart == null) return {};
+
+      return {
+        'Name': chart.profileName,
+        'Transit Date': chart.transitDate,
+        'Overall Quality': chart.overallQuality,
+        'Significant Aspects': '${chart.significantAspects}',
+      };
+    }
+    else if (type == 'Synastry') {
+      final response = synastryResponse.value;
+      if (response == null || response.results.isEmpty) return {};
+
+      final system = selectedSystems.isNotEmpty
+          ? selectedSystems.first.toLowerCase()
+          : 'western';
+      final chart = response.results[system];
+      if (chart == null) return {};
+
+      return {
+        'Partner 1': chart.profile1Name,
+        'Partner 2': chart.profile2Name,
+        'Compatibility Score': '${chart.compatibilityScore.toStringAsFixed(1)}%',
+        'Total Aspects': '${chart.aspects.length}',
+      };
+    }
+
+    return {};
+  }
+
   Future<bool> generateChart() async {
     isLoading.value = true;
     errorMessage.value = '';
@@ -91,7 +194,6 @@ class ChartController extends GetxController {
     }
   }
 
-  // Generate Natal Chart
   Future<bool> _generateNatalChart() async {
     final date = chartData['dateOfBirth'] as DateTime?;
     final time = chartData['birthTime'] as TimeOfDay?;
@@ -116,6 +218,7 @@ class ChartController extends GetxController {
     if (response != null) {
       natalResponse.value = response;
       print('✅ Natal Chart Generated Successfully');
+      print('📋 Chart IDs: ${response.charts.keys.map((k) => response.charts[k]?.chartId).toList()}');
       return true;
     } else {
       errorMessage.value = 'Failed to generate natal chart';
@@ -123,13 +226,11 @@ class ChartController extends GetxController {
     }
   }
 
-  // Generate Transit Chart - FIXED DATE HANDLING
   Future<bool> _generateTransitChart() async {
     final birthDate = chartData['dateOfBirth'] as DateTime?;
     final birthTime = chartData['birthTime'] as TimeOfDay?;
     final futureDate = chartData['futureDate'] as DateTime?;
 
-    // ✅ Validation
     if (birthDate == null || birthTime == null) {
       errorMessage.value = 'Please provide birth information';
       return false;
@@ -140,51 +241,32 @@ class ChartController extends GetxController {
       return false;
     }
 
-    // ✅ Check if transit date is valid (can be past or future)
-    // Transit date should not be before birth date
     if (futureDate.isBefore(birthDate)) {
       errorMessage.value = 'Transit date cannot be before birth date';
       return false;
     }
 
-    final formattedBirthDate = _formatDate(birthDate);
-    final formattedBirthTime = _formatTime(birthTime);
-    final formattedTransitDate = _formatDate(futureDate);
-
-    print('📅 Transit Birth Date: $formattedBirthDate');
-    print('⏰ Transit Birth Time: $formattedBirthTime');
-    print('📅 Transit Date: $formattedTransitDate');
-
-    // ✅ Verify dates are correct
-    final birthDateTime = DateTime(birthDate.year, birthDate.month, birthDate.day);
-    final transitDateTime = DateTime(futureDate.year, futureDate.month, futureDate.day);
-
-    print('🔍 Birth: $birthDateTime');
-    print('🔍 Transit: $transitDateTime');
-    print('🔍 Days difference: ${transitDateTime.difference(birthDateTime).inDays}');
-
     final response = await ChartService.generateTransitChart(
       name: chartData['name'] ?? 'User',
-      birthDate: formattedBirthDate,
-      birthTime: formattedBirthTime,
+      birthDate: _formatDate(birthDate),
+      birthTime: _formatTime(birthTime),
       birthCity: chartData['birthCity'] ?? '',
       birthCountry: chartData['birthCountry'] ?? '',
-      transitDate: formattedTransitDate,
+      transitDate: _formatDate(futureDate),
       systems: selectedSystems.toList(),
     );
 
     if (response != null) {
       transitResponse.value = response;
       print('✅ Transit Chart Generated Successfully');
+      print('📋 Chart IDs: ${response.results.keys.map((k) => response.results[k]?.chartId).toList()}');
       return true;
     } else {
       errorMessage.value = 'Failed to generate transit chart';
-      print('❌ Transit Chart Generation Failed');
       return false;
     }
   }
 
-  // Generate Synastry Chart - FIXED DATE HANDLING
   Future<bool> _generateSynastryChart() async {
     final partner1 = chartData['partner1'] as Map<String, dynamic>?;
     final partner2 = chartData['partner2'] as Map<String, dynamic>?;
@@ -203,11 +285,6 @@ class ChartController extends GetxController {
       errorMessage.value = 'Please provide complete birth information for both partners';
       return false;
     }
-
-    print('📅 Partner 1 Birth Date: ${_formatDate(date1)}');
-    print('⏰ Partner 1 Birth Time: ${_formatTime(time1)}');
-    print('📅 Partner 2 Birth Date: ${_formatDate(date2)}');
-    print('⏰ Partner 2 Birth Time: ${_formatTime(time2)}');
 
     final profile1Data = {
       "name": partner1['name'] ?? 'Partner 1',
@@ -234,10 +311,10 @@ class ChartController extends GetxController {
     if (response != null) {
       synastryResponse.value = response;
       print('✅ Synastry Chart Generated Successfully');
+      print('📋 Chart IDs: ${response.results.keys.map((k) => response.results[k]?.chartId).toList()}');
       return true;
     } else {
       errorMessage.value = 'Failed to generate synastry chart';
-      print('❌ Synastry Chart Generation Failed');
       return false;
     }
   }

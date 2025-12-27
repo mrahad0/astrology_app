@@ -34,10 +34,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
 
                   Image.asset(
-                    "assets/images/logo.png",
-                    height: 150,
+                    "assets/images/logo.png1.png",
+                    height: 250,
+                    width: 250,
                   ),
-                  const SizedBox(height: 25),
+
+                  const SizedBox(height: 10),
 
                   const Text(
                     "Universal Astrology",
