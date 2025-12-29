@@ -1,5 +1,4 @@
 import 'package:astrology_app/controllers/auth_controller/register_controller.dart';
-import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:astrology_app/views/base/custom_textField.dart';
 import 'package:astrology_app/views/base/custom_password_field.dart';
@@ -58,7 +57,6 @@ class _SignupScreenState extends State<SignupScreen> {
           }
       );
     }
-
 
   }
 

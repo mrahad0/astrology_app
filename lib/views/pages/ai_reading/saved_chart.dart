@@ -6,11 +6,17 @@ import '../../base/custom_button.dart';
 import '../../../utils/color.dart';
 import 'saved_charts_details.dart';
 
-class SavedChart extends StatelessWidget {
+class SavedChart extends StatefulWidget {
   const SavedChart({super.key});
 
   @override
+  State<SavedChart> createState() => _SavedChartState();
+}
+
+class _SavedChartState extends State<SavedChart> {
+  @override
   Widget build(BuildContext context) {
+
     final controller = Get.put(SavedChartController());
     controller.fetchSavedCharts();
 
@@ -36,8 +42,11 @@ class SavedChart extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 22),
+
                 ...controller.savedCharts.map((chart) {
+
                   return Padding(
+
                     padding: const EdgeInsets.only(bottom: 14),
                     child: chartCard(
                       type: "${chart?.chartCategory} (${chart.systemType})",
@@ -47,6 +56,7 @@ class SavedChart extends StatelessWidget {
                     ),
                   );
                 }).toList(),
+
                 SizedBox(height: MediaQuery.of(context).size.height / 6),
               ],
             ),

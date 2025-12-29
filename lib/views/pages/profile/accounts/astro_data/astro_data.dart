@@ -1,224 +1,70 @@
-// import 'package:astrology_app/utils/color.dart';
-// import 'package:astrology_app/views/base/custom_appBar.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-//
-// class AstroDataScreen extends StatefulWidget {
-//   const AstroDataScreen({super.key});
-//
-//   @override
-//   State<AstroDataScreen> createState() => _AstroDataScreenState();
-// }
-//
-// class _AstroDataScreenState extends State<AstroDataScreen> {
-//   // Sample data list
-//   final List<AstroData> astroDataList = [
-//     AstroData(name: "Rahik rahika ahsan", gender: "Male", date: "12/11/2002"),
-//     AstroData(name: "Rahik rahika ahsan", gender: "Male", date: "12/11/2002"),
-//     AstroData(name: "Rahik rahika ahsan", gender: "Male", date: "12/11/2002"),
-//     AstroData(name: "Rahik rahika ahsan", gender: "Male", date: "12/11/2002"),
-//     AstroData(name: "Rahik rahika ahsan", gender: "Male", date: "12/11/2002"),
-//     AstroData(name: "Rahik rahika ahsan", gender: "Male", date: "12/11/2002"),
-//     AstroData(name: "Rahik rahika ahsan", gender: "Male", date: "12/11/2002"),
-//     AstroData(name: "Rahik rahika ahsan", gender: "Male", date: "12/11/2002"),
-//     AstroData(name: "Rahik rahika ahsan", gender: "Male", date: "12/11/2002"),
-//     AstroData(name: "Rahik rahika ahsan", gender: "Male", date: "12/11/2002"),
-//   ];
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: CustomAppBar(title: "Astro Data",leading: GestureDetector(onTap:(){Get.back();},child: Icon(Icons.arrow_back_ios,color: Colors.white,)),),
-//       body: SafeArea(
-//         child: Padding(
-//           padding: const EdgeInsets.all(16.0),
-//           child: Column(
-//             children: [
-//               /// ---- ADD ASTRO DATA BUTTON ----
-//               Align(
-//                 alignment: Alignment.centerRight,
-//                 child: ElevatedButton.icon(
-//                   onPressed: () {
-//                     // Navigate to add astro data page
-//                     print("Add Astro Data");
-//                   },
-//                   icon: const Icon(Icons.add, size: 20),
-//                   label: const Text(
-//                     'Add Astro Data',
-//                     style: TextStyle(
-//                       fontSize: 15,
-//                       fontWeight: FontWeight.w600,
-//                     ),
-//                   ),
-//                   style: ElevatedButton.styleFrom(
-//                     backgroundColor: CustomColors.primaryColor,
-//                     foregroundColor: Colors.white,
-//                     padding: const EdgeInsets.symmetric(
-//                       horizontal: 20,
-//                       vertical: 12,
-//                     ),
-//                     shape: RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.circular(10),
-//                     ),
-//                     elevation: 0,
-//                   ),
-//                 ),
-//               ),
-//
-//               const SizedBox(height: 20),
-//
-//               /// ---- ASTRO DATA LIST ----
-//               Expanded(
-//                 child: ListView.builder(
-//                   itemCount: astroDataList.length,
-//                   itemBuilder: (context, index) {
-//                     final data = astroDataList[index];
-//                     return _astroDataCard(
-//                       name: data.name,
-//                       gender: data.gender,
-//                       date: data.date,
-//                       onTap: () {
-//                         print("Tapped on: ${data.name}");
-//                         // Navigate to detail page
-//                       },
-//                     );
-//                   },
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   /// ----------------------------
-//   /// ASTRO DATA CARD WIDGET
-//   /// ----------------------------
-//   Widget _astroDataCard({
-//     required String name,
-//     required String gender,
-//     required String date,
-//     required VoidCallback onTap,
-//   }) {
-//     return GestureDetector(
-//       onTap: onTap,
-//       child: Container(
-//         margin: const EdgeInsets.only(bottom: 12),
-//         padding: const EdgeInsets.all(16),
-//         decoration: BoxDecoration(
-//           color: CustomColors.secondbackgroundColor,
-//           borderRadius: BorderRadius.circular(12),
-//           border: Border.all(color: const Color(0xff262A40)),
-//         ),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Text(
-//               name,
-//               style: const TextStyle(
-//                 color: Colors.white,
-//                 fontSize: 16,
-//                 fontWeight: FontWeight.w600,
-//               ),
-//             ),
-//             const SizedBox(height: 8),
-//             Text(
-//               gender,
-//               style: const TextStyle(
-//                 color: Colors.white70,
-//                 fontSize: 14,
-//               ),
-//             ),
-//             const SizedBox(height: 6),
-//             Text(
-//               date,
-//               style: const TextStyle(
-//                 color: Colors.white60,
-//                 fontSize: 14,
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
-// /// ----------------------------
-// /// ASTRO DATA MODEL
-// /// ----------------------------
-// class AstroData {
-//   final String name;
-//   final String gender;
-//   final String date;
-//
-//   AstroData({
-//     required this.name,
-//     required this.gender,
-//     required this.date,
-//   });
-// }
-
-
-
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../../controllers/chart_controller/saved_chart_controller.dart';
+import '../../../../base/custom_button.dart';
+import '../../../ai_reading/saved_charts_details.dart';
 
 class AstroDataScreen extends StatefulWidget {
   const AstroDataScreen({super.key});
 
   @override
-  State<AstroDataScreen> createState() => _AstroDataScreenState();
+  State<AstroDataScreen> createState() => AstroDataScreenState();
 }
 
-class _AstroDataScreenState extends State<AstroDataScreen> {
-  // Sample data list
-  final List<AstroData> astroDataList = [
-    AstroData(name: "Rahik rahika ahsan", gender: "Male", date: "12/11/2002", place: "Singapore"),
-    AstroData(name: "Rahik ahsan", gender: "Male", date: "12/11/2002", place: "Bangladesh"),
-    AstroData(name: "MD Ahad", gender: "Male", date: "12/11/2002", place: "India"),
-    AstroData(name: "Mousud Bitkel", gender: "Male", date: "12/11/2002", place: "USA"),
-    AstroData(name: "Rahik rahika ahsan", gender: "Male", date: "12/11/2002", place: "Singapore"),
-    AstroData(name: "Rahik ahsan", gender: "Male", date: "12/11/2002", place: "Bangladesh"),
-    AstroData(name: "Rahik rahika ahsan", gender: "Male", date: "12/11/2002", place: "Singapore"),
-    AstroData(name: "MD Ahad", gender: "Male", date: "12/11/2002", place: "India"),
-    AstroData(name: "Rahik rahika ahsan", gender: "Male", date: "12/11/2002", place: "Singapore"),
-    AstroData(name: "Mousud Bitkel", gender: "Male", date: "12/11/2002", place: "USA"),
+class AstroDataScreenState extends State<AstroDataScreen> {
 
-  ];
+  final controller = Get.put(SavedChartController());
 
   @override
   Widget build(BuildContext context) {
+
+    final controller = Get.put(SavedChartController());
+
+    controller.fetchSavedCharts();
+
     return Scaffold(
       appBar: CustomAppBar(title: "Astro Data",leading: GestureDetector(onTap:(){Get.back();},child: Icon(Icons.arrow_back_ios,color: Colors.white,)),),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: ListView.builder(
-            itemCount: astroDataList.length,
-            itemBuilder: (context, index) {
-              final data = astroDataList[index];
-              return _astroDataCard(
-                name: data.name,
-                gender: data.gender,
-                date: data.date,
-                place: data.place,
-                onTap: () {
-                  print("Tapped on: ${data.name}");
-                  // Navigate to detail page
-                },
+          child: Obx((){
+            if(controller.isLoading.value){
+              return const Center(child: CircularProgressIndicator());
+            }
+            if(controller.savedCharts.isEmpty){
+              return const Center(child: Text("No saved charts"));
+            }
+            return SingleChildScrollView(
+
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                    const SizedBox(height: 22),
+
+                ...controller.savedCharts.map((chart) {
+
+              return Padding(
+
+                padding: const EdgeInsets.only(bottom: 14),
+                child: chartCard(
+                  type: "${chart?.chartCategory} (${chart.systemType})",
+                  name: chart.name,
+                  date: chart.date,
+                  location: "${chart.city}, ${chart.country}",
+                ),
               );
-            },
-          ),
-        ),
-      ),
+            }).toList(),
+              ])
+            );
+          }),),),
+
+
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Get.toNamed(Routes.addAstroData);
+          Get.toNamed(Routes.generateChartScreen);
         },
         backgroundColor: CustomColors.primaryColor,
         icon: const Icon(Icons.add, color: Colors.white),
@@ -234,81 +80,41 @@ class _AstroDataScreenState extends State<AstroDataScreen> {
     );
   }
 
-  /// ----------------------------
-  /// ASTRO DATA CARD WIDGET
-  /// ----------------------------
-  Widget _astroDataCard({
+
+  Widget chartCard({
+    required String type,
     required String name,
-    required String gender,
     required String date,
-    required String place,
-    required VoidCallback onTap,
+    required String location,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: CustomColors.secondbackgroundColor,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xff262A40)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              name,
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xff2E334A)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(type,
               style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              gender,
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 14,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              date,
-              style: const TextStyle(
-                color: Colors.white60,
-                fontSize: 14,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              place,
-              style: const TextStyle(
-                color: Colors.white60,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
+                  fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
+          const SizedBox(height: 4),
+          Text(name, style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8))),
+          const SizedBox(height: 4),
+          Text(date, style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8))),
+          const SizedBox(height: 4),
+          Text(location, style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8))),
+          const SizedBox(height: 18),
+          CustomButton(
+            text: "View",
+            onpress: () {
+              Get.to(SavedChartsDetails());
+            },
+          )
+        ],
       ),
     );
   }
-}
-
-/// ----------------------------
-/// ASTRO DATA MODEL
-/// ----------------------------
-class AstroData {
-  final String name;
-  final String gender;
-  final String date;
-  final String place;
-
-  AstroData({
-    required this.name,
-    required this.gender,
-    required this.date,
-    required this.place,
-  });
 }

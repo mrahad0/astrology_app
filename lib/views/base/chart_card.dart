@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 class ChartCard extends StatelessWidget {
   final String text;
   final IconData icon;

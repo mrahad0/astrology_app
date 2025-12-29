@@ -30,8 +30,8 @@ class CustomAlertdialog {
             ),
           ),
           content: SizedBox(
-            width: 335,    // ✅ Set width
-            height: 60,   // ✅ Set height
+            width: MediaQuery.of(context).size.width,
+            height: 60,
             child: Text(
               content,
               style: const TextStyle(

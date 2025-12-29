@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AiComprehensive extends StatefulWidget {
-  const AiComprehensive({Key? key}) : super(key: key);
+  const AiComprehensive({super.key});
 
   @override
   State<AiComprehensive> createState() => _AiComprehensiveState();

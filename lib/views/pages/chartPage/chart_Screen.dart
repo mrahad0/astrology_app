@@ -162,7 +162,7 @@ class _ChartScreenState extends State<ChartScreen> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: () => Get.toNamed(Routes.savedChart),
+                  onTap: () => Get.toNamed(Routes.savedChartDetails),
                   child: Container(
                     height: 46,
                     decoration: BoxDecoration(color: CustomColors.primaryColor, borderRadius: BorderRadius.circular(8)),

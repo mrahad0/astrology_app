@@ -31,22 +31,17 @@ class ChartService {
         "save_profile": true,
       });
 
-      debugPrint('🚀 Natal Chart Request: $body');
-
       Response response = await ApiClient.postData(
         ApiConstant.natalChart,
         body,
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        debugPrint('✅ Natal Chart Success: ${response.body}');
         return NatalChartResponse.fromJson(response.body);
       } else {
-        debugPrint('Natal Chart Error: ${response.statusText}');
         return null;
       }
     } catch (e) {
-      debugPrint('Natal Chart Exception: $e');
       return null;
     }
   }
@@ -84,14 +79,11 @@ class ChartService {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        debugPrint('Transit Chart Success: ${response.body}');
         return TransitChartResponse.fromJson(response.body);
       } else {
-        debugPrint('Transit Chart Error: ${response.statusText}');
         return null;
       }
     } catch (e) {
-      debugPrint('Transit Chart Exception: $e');
       return null;
     }
   }
@@ -111,22 +103,17 @@ class ChartService {
         "save_profile": true,
       });
 
-      debugPrint('Synastry Chart Request: $body');
-
       Response response = await ApiClient.postData(
         ApiConstant.synastryChart,
         body,
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        debugPrint('Synastry Chart Success: ${response.body}');
         return SynastryChartResponse.fromJson(response.body);
       } else {
-        debugPrint('Synastry Chart Error: ${response.statusText}');
         return null;
       }
     } catch (e) {
-      debugPrint('Synastry Chart Exception: $e');
       return null;
     }
   }

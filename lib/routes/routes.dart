@@ -27,6 +27,7 @@ import 'package:astrology_app/views/pages/subscription/single_purchase.dart';
 import 'package:astrology_app/views/pages/subscription/single_report.dart';
 import 'package:astrology_app/views/pages/subscription/subscription_page.dart';
 import 'package:get/get.dart';
+import '../views/pages/ai_reading/saved_charts_details.dart';
 import '../views/pages/authentication/newpass_screen.dart';
 import '../views/pages/authentication/register_screen.dart';
 import '../views/pages/generateChart/review_Tab.dart';
@@ -198,6 +199,8 @@ List<GetPage> pages = [
       transition: Transition.noTransition,
       transitionDuration: const Duration(milliseconds: 0),
       page: () => SingleReport()),
+  GetPage(name: Routes.savedChartDetails,
+      transition: Transition.noTransition, page: () => SavedChartsDetails())
 ];
 
 

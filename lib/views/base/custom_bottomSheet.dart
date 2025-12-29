@@ -4,7 +4,6 @@ import 'package:astrology_app/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../Routes/routes.dart';
-
 void showLogoutBottomSheet() {
   Get.bottomSheet(
     SafeArea(
@@ -77,12 +76,15 @@ void showLogoutBottomSheet() {
                     ),
                   ),
                 ),
+
+
                 const SizedBox(width: 12),
+
 
                 // Cancel Button
                 Expanded(
                   child: ElevatedButton(
-                    //onPressed: () => Get.back(),
+
                     onPressed: () async {
                       await PrefsHelper.remove(AppConstants.bearerToken);
                       Get.offAllNamed(Routes.loginScreen);

@@ -34,8 +34,6 @@ class NotificationController extends GetxController {
       } else {
         ApiChecker.checkApi(response, getXSnackBar: true);
       }
-    } catch (e) {
-      print('Error getting notifications: $e');
     } finally {
       if (showLoading) {
         isLoading.value = false;

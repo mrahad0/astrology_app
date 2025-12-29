@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-
 import '../../data/models/chart_models/saved_chart_model.dart';
 import '../../data/services/saved_chart_service.dart';
 

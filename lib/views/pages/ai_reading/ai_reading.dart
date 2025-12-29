@@ -24,6 +24,7 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
     "Western",
     "Vedic",
     "13-Signs",
+    "Evolutionary",
     "Galactic",
     "Human Design Profile",
   ];
@@ -36,7 +37,7 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
     if (Get.arguments != null && Get.arguments is Map) {
       showBackButton = Get.arguments['showBackButton'] ?? false;
     }
-    controller.fetchRecentCharts(); // ✅ API call
+    controller.fetchRecentCharts();
   }
 
   @override

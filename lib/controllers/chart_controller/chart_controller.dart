@@ -104,8 +104,6 @@ class ChartController extends GetxController {
         }
       });
     }
-
-    print('📊 Chart IDs for interpretation: $charts');
     return charts;
   }
 
@@ -187,7 +185,6 @@ class ChartController extends GetxController {
       return false;
     } catch (e) {
       errorMessage.value = 'Failed to generate chart: $e';
-      print('❌ Chart Generation Error: $e');
       return false;
     } finally {
       isLoading.value = false;
@@ -203,9 +200,6 @@ class ChartController extends GetxController {
       return false;
     }
 
-    print('📅 Natal Birth Date: ${_formatDate(date)}');
-    print('⏰ Natal Birth Time: ${_formatTime(time)}');
-
     final response = await ChartService.generateNatalChart(
       name: chartData['name'] ?? 'User',
       birthDate: _formatDate(date),
@@ -217,8 +211,6 @@ class ChartController extends GetxController {
 
     if (response != null) {
       natalResponse.value = response;
-      print('✅ Natal Chart Generated Successfully');
-      print('📋 Chart IDs: ${response.charts.keys.map((k) => response.charts[k]?.chartId).toList()}');
       return true;
     } else {
       errorMessage.value = 'Failed to generate natal chart';
@@ -258,8 +250,6 @@ class ChartController extends GetxController {
 
     if (response != null) {
       transitResponse.value = response;
-      print('✅ Transit Chart Generated Successfully');
-      print('📋 Chart IDs: ${response.results.keys.map((k) => response.results[k]?.chartId).toList()}');
       return true;
     } else {
       errorMessage.value = 'Failed to generate transit chart';
@@ -310,8 +300,6 @@ class ChartController extends GetxController {
 
     if (response != null) {
       synastryResponse.value = response;
-      print('✅ Synastry Chart Generated Successfully');
-      print('📋 Chart IDs: ${response.results.keys.map((k) => response.results[k]?.chartId).toList()}');
       return true;
     } else {
       errorMessage.value = 'Failed to generate synastry chart';
