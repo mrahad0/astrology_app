@@ -4,6 +4,8 @@ import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../Routes/routes.dart';
+
 class Sign13Details extends StatelessWidget {
   const Sign13Details({super.key});
 
@@ -28,10 +30,31 @@ class Sign13Details extends StatelessWidget {
           final sign13 = response.charts['13_sign']!;
 
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xff262A40)),
+                    borderRadius: BorderRadius.circular(14),
+                    color: CustomColors.secondbackgroundColor,
+                  ),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(child:
+                        Text("About 13-sign Chart",style: TextStyle(color: Colors.white),),),
+                        const SizedBox(height: 10),
+                        Text("Astronomically, there are 13 constellations the Sun travels through – not 12. Ophiuchus (the serpent-bearer) sits between Scorpio and Sagittarius, but was never included in traditional astrology. Science recognizes 13; astrology uses 12.",
+                          style:TextStyle(color: Colors.white),
+                        ),
+                      ]
+                  ),
+                ),
+
+                const SizedBox(height: 24),
 
                 /// ---------- INFO CARD ----------
                 _infoCard(sign13),
@@ -40,7 +63,7 @@ class Sign13Details extends StatelessWidget {
 
                 /// ---------- CHART IMAGE ----------
                 const Text(
-                  "13-Signs Chart Wheel",
+                  "13-Sign Chart Wheel",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 17,
@@ -117,9 +140,9 @@ class Sign13Details extends StatelessWidget {
                 const SizedBox(height: 40),
 
                 CustomButton(
-                  text: "Generate AI Interpretation",
+                  text: "Generate",
                   onpress: () {
-                    Get.toNamed('/ai-comprehensive');
+                    Get.toNamed(Routes.aiComprehensive);
                   },
                 ),
               ],

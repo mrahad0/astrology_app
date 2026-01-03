@@ -22,7 +22,13 @@ class _SingleInfo extends State<SingleInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Single Info",leading: GestureDetector(onTap:(){Get.back();},child: Icon(Icons.arrow_back_ios,color: Colors.white,)),),
+      appBar: CustomAppBar(
+        title: "Single Info",
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Icon(Icons.arrow_back_ios, color: Colors.white),
+        ),
+      ),
       body: SafeArea(
           child: Column(
             children: [

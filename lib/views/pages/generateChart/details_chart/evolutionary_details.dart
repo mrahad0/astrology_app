@@ -40,6 +40,26 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xff262A40)),
+                    borderRadius: BorderRadius.circular(14),
+                    color: CustomColors.secondbackgroundColor,
+                  ),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(child:
+                        Text("About Evolutionary Chart",style: TextStyle(color: Colors.white),),),
+                        const SizedBox(height: 10),
+                        Text("Less about personality traits and more about soul purpose – what you are here to learn this lifetime.\nIt views your chart as a story of growth: the patterns you carry from the past and what you are meant to evolve toward.",
+                          style:TextStyle(color: Colors.white) ,
+                        ),
+                      ]
+                  ),
+                ),
+                const SizedBox(height: 24),
                 /// ---- INFO CARD ----
                 Container(
                   padding: const EdgeInsets.all(20),

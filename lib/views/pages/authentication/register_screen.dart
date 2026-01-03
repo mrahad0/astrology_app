@@ -75,7 +75,7 @@ class _SignupScreenState extends State<SignupScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () => Get.back(),
+                  onTap:() => Navigator.pop(context),
                   child: Row(
                     children: [
                       Icon(Icons.arrow_back_ios, color: Colors.white),

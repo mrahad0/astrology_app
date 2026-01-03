@@ -10,9 +10,7 @@ class SavedChartsDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: "Saved Chart",leading:IconButton(
-        onPressed: () {
-          Get.back();
-        },
+        onPressed: () => Navigator.pop(context),
         icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
       ),),
       body: SafeArea(
@@ -22,7 +20,7 @@ class SavedChartsDetails extends StatelessWidget {
             children: [
               const SizedBox(height: 32),
 
-              // 🔵 Summary Top Card
+
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -233,7 +231,7 @@ class SavedChartsDetails extends StatelessWidget {
                 color: Colors.white,
                 fontSize: 17,
                 fontWeight: FontWeight.w600,
-              )),
+              ),),
           const SizedBox(height: 10),
 
           Text(description,

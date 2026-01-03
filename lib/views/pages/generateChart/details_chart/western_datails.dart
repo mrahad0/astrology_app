@@ -5,8 +5,6 @@ import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../data/models/chart_models/natal_chart_model.dart';
 import '../../../../data/models/chart_models/transit_chart_model.dart';
 
 class WesternDatails extends StatefulWidget {
@@ -55,6 +53,28 @@ class _WesternDatailsState extends State<WesternDatails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color(0xff262A40)),
+                borderRadius: BorderRadius.circular(14),
+                color: CustomColors.secondbackgroundColor,
+              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(child:
+                Text("About Western Chart",style: TextStyle(color: Colors.white),),),
+                const SizedBox(height: 10),
+                Text("Based on the seasons. Your sign reflects where the Sun was relative to the spring equinox. More focused on personality, psychology, and self-understanding.",
+                     style:TextStyle(color: Colors.white) ,
+                ),
+              ]
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
           /// Info Card
           Container(
             padding: const EdgeInsets.all(20),
@@ -192,6 +212,28 @@ class _WesternDatailsState extends State<WesternDatails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xff262A40)),
+              borderRadius: BorderRadius.circular(14),
+              color: CustomColors.secondbackgroundColor,
+            ),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(child:
+                  Text("About Western Chart",style: TextStyle(color: Colors.white),),),
+                  const SizedBox(height: 10),
+                  Text("Based on the seasons. Your sign reflects where the Sun was relative to the spring equinox. More focused on personality, psychology, and self-understanding.",
+                    style:TextStyle(color: Colors.white) ,
+                  ),
+                ]
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
           /// Info Card
           Container(
             padding: const EdgeInsets.all(20),
@@ -318,7 +360,7 @@ class _WesternDatailsState extends State<WesternDatails> {
           const SizedBox(height: 40),
 
           CustomButton(
-            text: "Generate AI Report",
+            text: "Generate",
             onpress: () {
               Get.toNamed(Routes.aiComprehensive);
             },
@@ -345,6 +387,28 @@ class _WesternDatailsState extends State<WesternDatails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xff262A40)),
+              borderRadius: BorderRadius.circular(14),
+              color: CustomColors.secondbackgroundColor,
+            ),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(child:
+                  Text("About Western Chart",style: TextStyle(color: Colors.white),),),
+                  const SizedBox(height: 10),
+                  Text("Based on the seasons. Your sign reflects where the Sun was relative to the spring equinox. More focused on personality, psychology, and self-understanding.",
+                    style:TextStyle(color: Colors.white) ,
+                  ),
+                ]
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
           /// Info Card
           Container(
             padding: const EdgeInsets.all(20),
@@ -459,7 +523,7 @@ class _WesternDatailsState extends State<WesternDatails> {
           const SizedBox(height: 40),
 
           CustomButton(
-            text: "Generate AI Report",
+            text: "Generate",
             onpress: () {
               Get.toNamed(Routes.aiComprehensive);
             },

@@ -35,7 +35,7 @@ class _TransitChartState extends State<TransitChart> {
       appBar: CustomAppBar(
         title: "Generate Chart",
         leading: IconButton(
-          onPressed: () => Get.back(),
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
         ),
       ),

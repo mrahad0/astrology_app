@@ -31,7 +31,10 @@ class _MyCartScreenState extends State<PaymentCard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Payment",leading: GestureDetector(onTap:(){Get.back();},child: Icon(Icons.arrow_back_ios,color: Colors.white,)),),
+      appBar: CustomAppBar(title: "Payment",
+        leading: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Icon(Icons.arrow_back_ios, color: Colors.white,)),),
       body:Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children:[

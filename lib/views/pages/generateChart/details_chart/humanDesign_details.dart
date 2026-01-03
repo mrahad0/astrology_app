@@ -1,4 +1,3 @@
-// lib/views/pages/generateChart/details_chart/humanDesign_details.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:astrology_app/utils/color.dart';
@@ -21,7 +20,7 @@ class _HumandesignDetails extends State<HumandesignDetails> {
     return Scaffold(
       body: SafeArea(
         child: Obx(() {
-          // Human Design has different structure - needs special handling
+
           var humanDesignData;
 
           if (controller.selectedChartType.value == 'Natal' &&
@@ -39,6 +38,26 @@ class _HumandesignDetails extends State<HumandesignDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xff262A40)),
+                    borderRadius: BorderRadius.circular(14),
+                    color: CustomColors.secondbackgroundColor,
+                  ),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(child:
+                        Text("About Human Design Chart",style: TextStyle(color: Colors.white),),),
+                        const SizedBox(height: 10),
+                        Text("A system that blends astrology with other spiritual frameworks. It identifies your “type” and shows how you are best designed to make decisions and use your energy. Less about prediction, more about understanding how you naturally operate.",
+                          style:TextStyle(color: Colors.white) ,
+                        ),
+                      ]
+                  ),
+                ),
+                const SizedBox(height: 24),
                 /// ---- INFO CARD ----
                 Container(
                   padding: const EdgeInsets.all(20),
@@ -67,7 +86,7 @@ class _HumandesignDetails extends State<HumandesignDetails> {
 
                 /// ---- HUMAN DESIGN CHART ----
                 const Text(
-                  "Human Design Profile",
+                  "Human Design",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,

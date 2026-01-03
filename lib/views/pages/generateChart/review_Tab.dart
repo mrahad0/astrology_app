@@ -19,9 +19,7 @@ class ReviewGeneratePage extends StatelessWidget {
       appBar: CustomAppBar(
         title: "Generate Chart",
         leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
         ),
       ),
@@ -72,14 +70,20 @@ class ReviewGeneratePage extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // 🚀 GENERATE BUTTON WITH API CALL
+              // GENERATE BUTTON API CALL
               Obx(() {
                 if (controller.isLoading.value) {
                   return const Center(
                     child: Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("Generating charts...",style: TextStyle(color: Colors.white,fontSize: 24),),
+                          SizedBox(width: 10,),
+                          CircularProgressIndicator(color: Colors.white,)
+                        ],
+                      )
                     ),
                   );
                 }

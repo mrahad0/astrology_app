@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 class ResetPassController extends GetxController {
   RxBool isLoading = false.obs;
 
-  /// Reset password without Authorization header
   Future<void> resetPassword(
       String email,
       String newPassword,

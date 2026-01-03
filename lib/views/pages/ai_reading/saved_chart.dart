@@ -14,17 +14,23 @@ class SavedChart extends StatefulWidget {
 }
 
 class _SavedChartState extends State<SavedChart> {
+
+  final controller = Get.put(SavedChartController());
+
+  @override
+  void initState() {
+    super.initState();
+    controller.fetchSavedCharts();
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    final controller = Get.put(SavedChartController());
-    controller.fetchSavedCharts();
 
     return Scaffold(
       appBar: CustomAppBar(
         title: "Saved Chart",
         leading: IconButton(
-          onPressed: () => Get.back(),
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
         ),
       ),

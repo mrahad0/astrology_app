@@ -38,7 +38,7 @@ class _SynastryChart extends State<SynastryChart> {
       appBar: CustomAppBar(
         title: "Generate Chart",
         leading: IconButton(
-          onPressed: () => Get.back(),
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
         ),
       ),
@@ -207,7 +207,7 @@ class _SynastryChart extends State<SynastryChart> {
         GestureDetector(
           onTap: onTap,
           child: Container(
-            height: 48, // ✅ fixed height দিয়ে দিন সব field এর জন্য
+            height: 48,
             padding: const EdgeInsets.symmetric(horizontal: 14),
             decoration: BoxDecoration(
               color: const Color(0xFF111424),

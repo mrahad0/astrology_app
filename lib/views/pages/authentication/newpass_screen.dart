@@ -42,7 +42,7 @@ class _NewpassScreenState extends State<NewpassScreen> {
                   IconButton(
                     color: Colors.white,
                     icon: Icon(Icons.arrow_back_ios_new),
-                    onPressed: () => Get.back(),
+                    onPressed: () => Navigator.pop(context),
                   ),
                   SizedBox(width: 10),
                   Text(

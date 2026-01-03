@@ -29,7 +29,11 @@ class _ChartScreenState extends State<ChartScreen> {
         scrolledUnderElevation: 0,
         title: const Text(
           'Chart',
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: Colors.white),
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -37,7 +41,10 @@ class _ChartScreenState extends State<ChartScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Create your chart", style: TextStyle(color: Colors.grey, fontSize: 20)),
+            const Text(
+              "Create your chart",
+              style: TextStyle(color: Colors.grey, fontSize: 20),
+            ),
             const SizedBox(height: 24),
 
             Row(
@@ -64,9 +71,36 @@ class _ChartScreenState extends State<ChartScreen> {
 
             const SizedBox(height: 24),
 
-            const Text(
-              "Recent Charts",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Recent Charts",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+
+                SizedBox(width: 20),
+
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: CustomColors.secondbackgroundColor,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: const Color(0xff2A2F45)),
+                    ),
+                    child: Text(
+                      "Recent charts remove after 7 days",
+                      style: TextStyle(color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
 
@@ -76,7 +110,10 @@ class _ChartScreenState extends State<ChartScreen> {
                 return const Center(child: CircularProgressIndicator());
               }
               if (controller.recentCharts.isEmpty) {
-                return const Text("No recent charts found", style: TextStyle(color: Colors.grey));
+                return const Text(
+                  "No recent charts found",
+                  style: TextStyle(color: Colors.grey),
+                );
               }
               return Column(
                 children: controller.recentCharts.map((chart) {
@@ -121,13 +158,25 @@ class _ChartScreenState extends State<ChartScreen> {
           children: [
             Center(child: Icon(icon, color: Colors.white, size: 40)),
             const SizedBox(height: 12),
-            Text(title,
-                style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
-                textAlign: TextAlign.center),
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: 4),
-            Text(subtitle,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white)),
+            Text(
+              subtitle,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: Colors.white,
+              ),
+            ),
           ],
         ),
       ),
@@ -150,13 +199,29 @@ class _ChartScreenState extends State<ChartScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(type, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
+          Text(
+            type,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
           const SizedBox(height: 6),
-          Text(name, style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8))),
+          Text(
+            name,
+            style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8)),
+          ),
           const SizedBox(height: 6),
-          Text(date, style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8))),
+          Text(
+            date,
+            style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8)),
+          ),
           const SizedBox(height: 6),
-          Text(location, style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8))),
+          Text(
+            location,
+            style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8)),
+          ),
           const SizedBox(height: 18),
           Row(
             children: [
@@ -165,19 +230,41 @@ class _ChartScreenState extends State<ChartScreen> {
                   onTap: () => Get.toNamed(Routes.savedChartDetails),
                   child: Container(
                     height: 46,
-                    decoration: BoxDecoration(color: CustomColors.primaryColor, borderRadius: BorderRadius.circular(8)),
-                    child: const Center(child: Text("View", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
+                    decoration: BoxDecoration(
+                      color: CustomColors.primaryColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "View",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(width: 10),
               Expanded(
                 child: GestureDetector(
-                  onTap: () => Get.toNamed(Routes.aiReading, arguments: {"showBackButton": true}),
+                  onTap: () => Get.toNamed(
+                    Routes.aiReading,
+                    arguments: {"showBackButton": true},
+                  ),
                   child: Container(
                     height: 46,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(color: const Color(0xffA0A4B8))),
-                    child: const Center(child: Text("Reading", style: TextStyle(color: Colors.white))),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: const Color(0xffA0A4B8)),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "Reading",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
                   ),
                 ),
               ),

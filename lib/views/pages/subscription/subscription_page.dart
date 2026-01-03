@@ -1,7 +1,6 @@
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
-import 'package:astrology_app/views/base/custom_alertDialog.dart' show CustomAlertdialog;
-import 'package:astrology_app/views/pages/payment_card/payment_card.dart';
+import 'package:astrology_app/views/base/custom_alertDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -98,18 +97,20 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.all( 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
               Row(
                 children: [
-                  GestureDetector(onTap:(){Get.back();},child: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+                  GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Icon(Icons.arrow_back_ios, color: Colors.white,)),
                   SizedBox(width: 20,),
                   Text(
                     "Subscription",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    style: TextStyle(color: Colors.white, fontSize: 24),
                   ),
                 ],
               ),

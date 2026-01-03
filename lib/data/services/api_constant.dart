@@ -34,4 +34,6 @@ class ApiConstant{
 
   static const String recentCharts = "/user/recent/";
 
+  static const String privacypolicy = "/privacy-policy/";
+
 }

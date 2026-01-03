@@ -25,7 +25,10 @@ class _AddAstroDataScreenState extends State<AddAstroDataScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Add Astro Data",leading: GestureDetector(onTap:(){Get.back();},child: Icon(Icons.arrow_back_ios,color: Colors.white,)),),
+      appBar: CustomAppBar(
+        title: "Add Astro Data",
+        leading: GestureDetector(
+            onTap: () => Navigator.pop(context), child: Icon(Icons.arrow_back_ios, color: Colors.white,)),),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

@@ -29,9 +29,7 @@ class _PaymentType extends State<PaymentType> {
                 Row(
                   children: [
                     GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
+                      onTap: () => Navigator.pop(context),
                       child: Icon(
                         Icons.arrow_back_ios,
                         color: Colors.white,

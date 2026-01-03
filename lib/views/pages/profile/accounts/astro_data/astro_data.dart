@@ -19,14 +19,19 @@ class AstroDataScreenState extends State<AstroDataScreen> {
   final controller = Get.put(SavedChartController());
 
   @override
+  void initState() {
+    super.initState();
+    controller.fetchSavedCharts();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
-    final controller = Get.put(SavedChartController());
-
-    controller.fetchSavedCharts();
-
     return Scaffold(
-      appBar: CustomAppBar(title: "Astro Data",leading: GestureDetector(onTap:(){Get.back();},child: Icon(Icons.arrow_back_ios,color: Colors.white,)),),
+      appBar: CustomAppBar(
+        title: "Astro Data",
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context), child: Icon(Icons.arrow_back_ios, color: Colors.white,)),),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),

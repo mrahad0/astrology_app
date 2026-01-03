@@ -33,7 +33,7 @@ class _NatalChart extends State<NatalChart> {
       appBar: CustomAppBar(
         title: "Generate Chart",
         leading: IconButton(
-          onPressed: () => Get.back(),
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
         ),
       ),

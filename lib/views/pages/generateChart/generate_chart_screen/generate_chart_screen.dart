@@ -15,16 +15,16 @@ class GenerateChart extends StatefulWidget {
 }
 
 class _GenerateChart extends State<GenerateChart> {
+
   final ChartController controller = Get.put(ChartController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
         title: "Generate Chart",
         leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
         ),
       ),

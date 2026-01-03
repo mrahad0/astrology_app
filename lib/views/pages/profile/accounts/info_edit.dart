@@ -21,7 +21,7 @@ class _PersonalInfoEditState extends State<PersonalInfoEdit> {
       appBar: CustomAppBar(
         title: "Edit Personal Info",
         leading: GestureDetector(
-          onTap: () => Get.back(),
+          onTap: () => Navigator.pop(context),
           child: const Icon(Icons.arrow_back_ios, color: Colors.white),
         ),
       ),

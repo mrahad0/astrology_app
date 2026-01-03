@@ -15,12 +15,15 @@ class _AiComprehensiveState extends State<AiComprehensive> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Comprehensive Reading",leading:IconButton(
-        onPressed: () {
-          Get.offAllNamed(Routes.mainScreen);
-        },
-        icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-      ),),
+      appBar: CustomAppBar(
+        title: "Comprehensive Reading",
+        leading: IconButton(
+          onPressed: () {
+            Get.offAllNamed(Routes.mainScreen);
+          },
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -85,8 +88,12 @@ class _AiComprehensiveState extends State<AiComprehensive> {
                               label: const Text('Share'),
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: Colors.white,
-                                side: const BorderSide(color: Color(0xFF2A2F4A)),
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                side: const BorderSide(
+                                  color: Color(0xFF2A2F4A),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -101,8 +108,12 @@ class _AiComprehensiveState extends State<AiComprehensive> {
                               label: const Text('Download'),
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: Colors.white,
-                                side: const BorderSide(color: Color(0xFF2A2F4A)),
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                side: const BorderSide(
+                                  color: Color(0xFF2A2F4A),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -130,9 +141,9 @@ class _AiComprehensiveState extends State<AiComprehensive> {
                       Text(
                         'Info',
                         style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       ),
                       SizedBox(height: 16),
@@ -158,7 +169,7 @@ class _AiComprehensiveState extends State<AiComprehensive> {
                   title: 'Vedic Perspective',
                   wordCount: '200 words',
                   description:
-                  'In the Vedic system, your Taurus Sun places emphasis on stability and material security...',
+                      'In the Vedic system, your Taurus Sun places emphasis on stability and material security...',
                 ),
                 const SizedBox(height: 16),
                 SectionCard(
@@ -166,7 +177,7 @@ class _AiComprehensiveState extends State<AiComprehensive> {
                   title: '13-Signs',
                   wordCount: '200 words',
                   description:
-                  'The 13-sign system reveals nuances often missed in traditional 12-sign astrology. Your adjusted placements show....',
+                      'The 13-sign system reveals nuances often missed in traditional 12-sign astrology. Your adjusted placements show....',
                 ),
                 const SizedBox(height: 16),
                 SectionCard(
@@ -174,7 +185,7 @@ class _AiComprehensiveState extends State<AiComprehensive> {
                   title: 'Human Design',
                   wordCount: '200 words',
                   description:
-                  'The 13-sign system reveals nuances often missed in traditional 12-sign astrology. Your adjusted placements...',
+                      'The 13-sign system reveals nuances often missed in traditional 12-sign astrology. Your adjusted placements...',
                 ),
                 const SizedBox(height: 20),
                 Container(
@@ -185,14 +196,18 @@ class _AiComprehensiveState extends State<AiComprehensive> {
                           onPressed: () {},
                           style: ElevatedButton.styleFrom(
                             backgroundColor: CustomColors.primaryColor,
-                            padding:  EdgeInsets.symmetric(vertical: 16),
+                            padding: EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           child: const Text(
                             'Save Reading',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.white),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -230,11 +245,8 @@ class InfoRow extends StatelessWidget {
   final String label;
   final String value;
 
-  const InfoRow({
-    Key? key,
-    required this.label,
-    required this.value,
-  }) : super(key: key);
+  const InfoRow({Key? key, required this.label, required this.value})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -267,12 +279,12 @@ class SectionCard extends StatelessWidget {
   final String description;
 
   const SectionCard({
-    Key? key,
+    super.key,
     required this.sectionNumber,
     required this.title,
     required this.wordCount,
     required this.description,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -299,10 +311,7 @@ class SectionCard extends StatelessWidget {
               ),
               Text(
                 wordCount,
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 14,
-                ),
+                style: const TextStyle(color: Colors.grey, fontSize: 14),
               ),
             ],
           ),
@@ -310,9 +319,9 @@ class SectionCard extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 8),

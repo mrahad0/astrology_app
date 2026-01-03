@@ -59,7 +59,7 @@ class _OtpForCreate extends State<OtpForCreate> {
                     IconButton(
                       color: Colors.white,
                       icon: const Icon(Icons.arrow_back_ios_new),
-                      onPressed: () => Get.back(),
+                      onPressed: () => Navigator.pop(context),
                     ),
                     const SizedBox(width: 10),
                     const Text(

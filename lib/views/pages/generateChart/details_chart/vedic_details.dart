@@ -32,7 +32,6 @@ class _VedicDetailsState extends State<VedicDetails> {
           } else if (controller.selectedChartType.value == 'Synastry') {
             return _buildSynastryChart();
           }
-
           return const Center(
             child: Text('No data available', style: TextStyle(color: Colors.white)),
           );
@@ -55,6 +54,28 @@ class _VedicDetailsState extends State<VedicDetails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xff262A40)),
+              borderRadius: BorderRadius.circular(14),
+              color: CustomColors.secondbackgroundColor,
+            ),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(child:
+                  Text("About Vedic Chart",style: TextStyle(color: Colors.white),),),
+                  const SizedBox(height: 10),
+                  Text("Based on the actual positions of the stars in the sky. Your sign may shift back by one. More focused on karma, fate, and life events.This means you might be a Leo in Western but a Cancer in Vedic – same birthday, different systems.",
+                    style:TextStyle(color: Colors.white) ,
+                  ),
+                ]
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
           /// Info Card
           Container(
             padding: const EdgeInsets.all(20),
@@ -175,6 +196,28 @@ class _VedicDetailsState extends State<VedicDetails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xff262A40)),
+              borderRadius: BorderRadius.circular(14),
+              color: CustomColors.secondbackgroundColor,
+            ),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(child:
+                  Text("About Vedic Chart",style: TextStyle(color: Colors.white),),),
+                  const SizedBox(height: 10),
+                  Text("Based on the actual positions of the stars in the sky. Your sign may shift back by one. More focused on karma, fate, and life events.This means you might be a Leo in Western but a Cancer in Vedic – same birthday, different systems.",
+                    style:TextStyle(color: Colors.white) ,
+                  ),
+                ]
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
           /// Info Card
           Container(
             padding: const EdgeInsets.all(20),
@@ -300,7 +343,7 @@ class _VedicDetailsState extends State<VedicDetails> {
           const SizedBox(height: 40),
 
           CustomButton(
-            text: "Generate AI Report",
+            text: "Generate",
             onpress: () {
               Get.toNamed(Routes.aiComprehensive);
             },
@@ -327,6 +370,26 @@ class _VedicDetailsState extends State<VedicDetails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xff262A40)),
+              borderRadius: BorderRadius.circular(14),
+              color: CustomColors.secondbackgroundColor,
+            ),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(child:
+                  Text("About Vedic Chart",style: TextStyle(color: Colors.white),),),
+                  const SizedBox(height: 10),
+                  Text("Based on the actual positions of the stars in the sky. Your sign may shift back by one. More focused on karma, fate, and life events.This means you might be a Leo in Western but a Cancer in Vedic – same birthday, different systems.",
+                    style:TextStyle(color: Colors.white) ,
+                  ),
+                ]
+            ),
+          ),
+          const SizedBox(height: 24),
           /// Info Card
           Container(
             padding: const EdgeInsets.all(20),
@@ -441,7 +504,7 @@ class _VedicDetailsState extends State<VedicDetails> {
           const SizedBox(height: 40),
 
           CustomButton(
-            text: "Generate AI Report",
+            text: "Generate",
             onpress: () {
               Get.toNamed(Routes.aiComprehensive);
             },

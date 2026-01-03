@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 10),
 
                   const Text(
-                    "Universal Astrology",
+                    "Universal Astro",
                     style: TextStyle(
                       color: Color(0xFFA855F7),
                       fontSize: 24,

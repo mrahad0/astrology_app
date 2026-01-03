@@ -4,6 +4,7 @@ import 'package:astrology_app/controllers/auth_controller/auth_controller.dart';
 import 'package:astrology_app/data/services/api_checker.dart';
 import 'package:astrology_app/data/services/api_client.dart';
 import 'package:astrology_app/data/services/api_constant.dart';
+import 'package:astrology_app/views/base/custom_snackBar.dart';
 import 'package:get/get.dart';
 
 class ForgetOtpController extends GetxController {
@@ -30,7 +31,6 @@ class ForgetOtpController extends GetxController {
     );
 
     if (response.statusCode == 200) {
-      // Navigate to NewPassScreen with only the email
       Get.toNamed(
         Routes.newPassScreen,
         arguments: {"email": email},
@@ -46,7 +46,7 @@ class ForgetOtpController extends GetxController {
   Future<void> forgetResendOtp(String email) async {
     if (!_authController.enableResend.value) return;
 
-    _authController.startTimer(); // Restart the countdown
+    _authController.startTimer();
     isLoading(true);
 
     final headers = {'Content-Type': 'application/json'};
@@ -59,7 +59,7 @@ class ForgetOtpController extends GetxController {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Get.snackbar("Success", "OTP has been resent.");
+      showCustomSnackBar("Success" "OTP has been resent.");
     } else {
       ApiChecker.checkApi(response);
     }

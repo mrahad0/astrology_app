@@ -3,7 +3,9 @@ import 'package:astrology_app/controllers/auth_controller/auth_controller.dart';
 import 'package:astrology_app/data/services/api_checker.dart';
 import 'package:astrology_app/data/services/api_client.dart';
 import 'package:astrology_app/data/services/api_constant.dart';
+import 'package:astrology_app/views/base/custom_snackBar.dart';
 import 'package:get/get.dart';
+import '../../Routes/routes.dart';
 
 class VerifyEmail extends GetxController {
   RxBool isLoading = false.obs;
@@ -28,8 +30,8 @@ class VerifyEmail extends GetxController {
       headers: headers,
     );
 
-    if (response.statusCode == 200) {
-      Get.toNamed('/mainScreen', arguments: response.body['access']);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Get.toNamed(Routes.mainScreen, arguments: response.body['access']);
     } else {
       ApiChecker.checkApi(response);
     }
@@ -41,13 +43,11 @@ class VerifyEmail extends GetxController {
   Future<void> resendOtp(String email) async {
     if (!_authController.enableResend.value) return;
 
-    _authController.startTimer(); // Restart the countdown
+    _authController.startTimer();
     isLoading(true);
 
     final headers = {'Content-Type': 'application/json'};
     final body = {"email": email.trim()};
-
-    // ✅ Use the correct resend OTP endpoint
     final response = await ApiClient.postData(
       ApiConstant.resendOtp,
       jsonEncode(body),
@@ -55,7 +55,7 @@ class VerifyEmail extends GetxController {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Get.snackbar("Success", "OTP has been resent.");
+      showCustomSnackBar("Success" "OTP has been resent.");
     } else {
       ApiChecker.checkApi(response);
     }

@@ -1,3 +1,4 @@
+import 'package:astrology_app/views/base/custom_snackBar.dart';
 import 'package:get/get.dart';
 import '../../Data/services/api_checker.dart';
 import '../../Data/services/api_client.dart';
@@ -38,7 +39,7 @@ class RecentChartController extends GetxController {
         ApiChecker.checkApi(response);
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString());
+      showCustomSnackBar(e.toString());
     } finally {
       isLoading(false);
     }

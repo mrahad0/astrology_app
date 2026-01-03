@@ -1,5 +1,4 @@
 import 'package:astrology_app/controllers/auth_controller/forgetPass_controller.dart';
-import 'package:astrology_app/routes/routes.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:astrology_app/views/base/custom_textField.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,7 @@ class ForgotpassScreen extends StatefulWidget {
 
 class _ForgotpassScreenState extends State<ForgotpassScreen> {
 
-  TextEditingController _emailCtrl=TextEditingController();
+  final TextEditingController _emailCtrl = TextEditingController();
 
   final ForgetPassController _forgetController = Get.put(ForgetPassController());
 
@@ -36,9 +35,7 @@ class _ForgotpassScreenState extends State<ForgotpassScreen> {
                   IconButton(
                     color: Colors.white,
                     icon: Icon(Icons.arrow_back_ios_new),
-                    onPressed: () {
-                      Get.back();
-                    },
+                    onPressed: () => Navigator.pop(context),
                   ),
 
                   SizedBox(width: 10,),

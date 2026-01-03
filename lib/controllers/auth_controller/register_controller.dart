@@ -26,9 +26,7 @@ class RegisterController extends GetxController {
         showCustomSnackBar("Account created successfully!", isError: false);
         Get.toNamed(Routes.otpForCreate, arguments: body['email'].trim());
       } else {
-        debugPrint("status Text : ${response.hasError}");
         ApiChecker.checkApi(response);
-
       }
     } finally {
       isLoading(false);

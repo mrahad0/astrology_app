@@ -17,7 +17,7 @@ class AiReadingScreen extends StatefulWidget {
 
 class _AiReadingScreenState extends State<AiReadingScreen> {
   bool showBackButton = false;
-  int selectedFilter = 0; // All selected
+  final selectedFilter = 0.obs;
 
   final List<String> filters = [
     "All",
@@ -37,7 +37,10 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
     if (Get.arguments != null && Get.arguments is Map) {
       showBackButton = Get.arguments['showBackButton'] ?? false;
     }
-    controller.fetchRecentCharts();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchRecentCharts();
+    });
   }
 
   @override
@@ -46,13 +49,13 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
       appBar: AppBar(
         leading: showBackButton
             ? IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                  size: 28,
-                ),
-                onPressed: () => Get.back(),
-              )
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+            size: 28,
+          ),
+          onPressed: () => Navigator.pop(context),
+        )
             : null,
         title: const Text(
           "Reading",
@@ -70,22 +73,22 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          // Filter logic
+
           List<RecentChartModel> filteredCharts;
-          if (selectedFilter == 0) {
+          if (selectedFilter.value == 0) {
             filteredCharts = controller.recentCharts;
           } else {
-            final filterName = filters[selectedFilter];
+            final filterName = filters[selectedFilter.value];
             filteredCharts = controller.recentCharts
                 .where(
                   (chart) =>
-                      chart.chartCategory.toLowerCase().contains(
-                        filterName.toLowerCase(),
-                      ) ||
-                      chart.systemType.toLowerCase().contains(
-                        filterName.toLowerCase(),
-                      ),
-                )
+              chart.chartCategory.toLowerCase().contains(
+                filterName.toLowerCase(),
+              ) ||
+                  chart.systemType.toLowerCase().contains(
+                    filterName.toLowerCase(),
+                  ),
+            )
                 .toList();
           }
 
@@ -104,11 +107,11 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: List.generate(filters.length, (index) {
-                      bool isSelected = selectedFilter == index;
+                      bool isSelected = selectedFilter.value == index;
                       return Padding(
                         padding: const EdgeInsets.only(right: 10),
                         child: GestureDetector(
-                          onTap: () => setState(() => selectedFilter = index),
+                          onTap: () => selectedFilter.value = index,
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                               vertical: 10,
@@ -146,9 +149,9 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
                 if (filteredCharts.isEmpty)
                   Center(
                     child: Text(
-                      selectedFilter == 0
+                      selectedFilter.value == 0
                           ? "No charts found"
-                          : "${filters[selectedFilter]} – No charts",
+                          : "${filters[selectedFilter.value]} – No charts",
                       style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 16,

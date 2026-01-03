@@ -27,14 +27,14 @@ class _Astrology_AppState extends State<Astrology_App> {
   }
 
   _jumToNextPage() async {
-      var token = await PrefsHelper.getString(AppConstants.bearerToken);
-      debugPrint("issue token : $token");
-      if (token.isNotEmpty) {
-        Get.offAllNamed(
-            Routes.mainScreen);
-      } else {
-        Get.offAllNamed(Routes.loginScreen);
-      }
+    var token = await PrefsHelper.getString(AppConstants.bearerToken);
+    debugPrint("issue token : $token");
+    if (token.isNotEmpty) {
+      Get.offAllNamed(
+          Routes.mainScreen);
+    } else {
+      Get.offAllNamed(Routes.loginScreen);
+    }
   }
 
   Widget build(BuildContext context) {

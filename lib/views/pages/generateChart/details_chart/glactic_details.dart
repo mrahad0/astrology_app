@@ -41,6 +41,26 @@ class _GalacticDetailsState extends State<GalacticDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xff262A40)),
+                    borderRadius: BorderRadius.circular(14),
+                    color: CustomColors.secondbackgroundColor,
+                  ),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(child:
+                        Text("About Galactic Chart",style: TextStyle(color: Colors.white),),),
+                        const SizedBox(height: 10),
+                        Text("Expands beyond the 12 signs to include stars, galaxies, and cosmic points. Often connected to the concept of “starseeds” – the idea that some souls originated from other star systems like the Pleiades or Sirius, with the chart revealing clues about that origin.",
+                          style:TextStyle(color: Colors.white) ,
+                        ),
+                      ]
+                  ),
+                ),
+                const SizedBox(height: 24),
                 /// ---- INFO CARD ----
                 Container(
                   padding: const EdgeInsets.all(20),
