@@ -74,7 +74,6 @@ class ReviewGeneratePage extends StatelessWidget {
               Obx(() {
                 if (controller.isLoading.value) {
                   return const Center(
-                    child: Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -84,7 +83,6 @@ class ReviewGeneratePage extends StatelessWidget {
                           CircularProgressIndicator(color: Colors.white,)
                         ],
                       )
-                    ),
                   );
                 }
 
@@ -158,7 +156,7 @@ class ReviewGeneratePage extends StatelessWidget {
 
   Widget _buildTransitReview(RxMap<String, dynamic> data) {
     final futureDate = data['futureDate'] as DateTime?;
-    final pastDate = data['pastDate'] as DateTime?;
+    // pastDate removed - was unused
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

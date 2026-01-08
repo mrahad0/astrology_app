@@ -1,7 +1,7 @@
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 
 class AddAstroDataScreen extends StatefulWidget {
   const AddAstroDataScreen({super.key});
@@ -257,28 +257,7 @@ class _AddAstroDataScreenState extends State<AddAstroDataScreen> {
     );
   }
 
-  /// ----------------------------
-  /// DATE BUTTON WIDGET
-  /// ----------------------------
-  Widget _buildDateButton(String label) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14),
-      decoration: BoxDecoration(
-        color: const Color(0xff0F1329),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xff262A40)),
-      ),
-      child: Center(
-        child: Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 15,
-          ),
-        ),
-      ),
-    );
-  }
+  // _buildDateButton removed - was unused
 
   /// ----------------------------
   /// DATE TEXT FIELD WIDGET

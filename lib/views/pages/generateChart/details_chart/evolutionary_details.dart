@@ -1,5 +1,6 @@
 // lib/views/pages/generateChart/details_chart/evolutionary_details.dart
 import 'package:astrology_app/Routes/routes.dart';
+import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
@@ -17,6 +18,7 @@ class EvolutionaryDetails extends StatefulWidget {
 
 class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
   final ChartController controller = Get.find<ChartController>();
+  bool isGenerating = false;
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +176,14 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
 
                 CustomButton(
                   text: "Generate",
-                  onpress: () {
+                  isLoading: isGenerating,
+                  onpress: () async {
+                    setState(() => isGenerating = true);
+                    final interpretationController = Get.put(InterpretationController());
+                    final charts = controller.getChartIdsForInterpretation();
+                    final info = controller.getChartInfo();
+                    await interpretationController.getMultipleInterpretations(charts, info);
+                    setState(() => isGenerating = false);
                     Get.toNamed(Routes.aiComprehensive);
                   },
                 ),

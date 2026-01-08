@@ -146,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Obx(
                         () => CustomButton(
                       text: "Sign In",
-                      isLoading: _authController.isLoading.value,
+                      isLoading: _loginController.isLoading.value,
                       onpress: () {
                         if (_formKey.currentState!.validate()) {
                           _loginController.login(

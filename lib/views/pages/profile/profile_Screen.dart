@@ -1,10 +1,10 @@
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
-import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_bottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -53,16 +53,13 @@ class ProfileScreen extends StatelessWidget {
 
             SizedBox(height: 20,),
 
-            CustomCard(title: "Logout", url: "assets/icons/logout-05.svg",onTap: (){showLogoutBottomSheet();},),
+            CustomCard(title: "Logout", url: "assets/icons/logout-05.svg",onTap: (){showLogoutBottomSheet(context);},),
           ],
         ),
       )
     );
   }
 }
-
-
-
 
 ////====================== Custom Container=========================///
 

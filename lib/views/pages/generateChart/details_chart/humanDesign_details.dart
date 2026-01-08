@@ -1,4 +1,5 @@
 import 'package:astrology_app/Routes/routes.dart';
+import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
@@ -14,6 +15,7 @@ class HumandesignDetails extends StatefulWidget {
 
 class _HumandesignDetails extends State<HumandesignDetails> {
   final ChartController controller = Get.find<ChartController>();
+  bool isGenerating = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class _HumandesignDetails extends State<HumandesignDetails> {
                         Center(child:
                         Text("About Human Design Chart",style: TextStyle(color: Colors.white),),),
                         const SizedBox(height: 10),
-                        Text("A system that blends astrology with other spiritual frameworks. It identifies your “type” and shows how you are best designed to make decisions and use your energy. Less about prediction, more about understanding how you naturally operate.",
+                        Text('A system that blends astrology with other spiritual frameworks. It identifies your "type" and shows how you are best designed to make decisions and use your energy. Less about prediction, more about understanding how you naturally operate.',
                           style:TextStyle(color: Colors.white) ,
                         ),
                       ]
@@ -169,7 +171,14 @@ class _HumandesignDetails extends State<HumandesignDetails> {
 
                 CustomButton(
                   text: "Generate",
-                  onpress: () {
+                  isLoading: isGenerating,
+                  onpress: () async {
+                    setState(() => isGenerating = true);
+                    final interpretationController = Get.put(InterpretationController());
+                    final charts = controller.getChartIdsForInterpretation();
+                    final info = controller.getChartInfo();
+                    await interpretationController.getMultipleInterpretations(charts, info);
+                    setState(() => isGenerating = false);
                     Get.toNamed(Routes.aiComprehensive);
                   },
                 ),

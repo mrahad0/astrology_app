@@ -1,6 +1,6 @@
 class ApiConstant{
 
-  static String baseUrl="http://10.10.12.28:8001/api";
+  static String baseUrl="http://217.196.50.35:9000/api";
 
   static String login="/login/";
 
@@ -35,5 +35,9 @@ class ApiConstant{
   static const String recentCharts = "/user/recent/";
 
   static const String privacypolicy = "/privacy-policy/";
+
+  static String interpret = "/interpret/";
+
+  static String saveCharts = "/save-charts/";
 
 }

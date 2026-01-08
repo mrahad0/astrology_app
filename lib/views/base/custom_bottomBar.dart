@@ -1,6 +1,6 @@
 
-import 'package:astrology_app/utils/color.dart';
 import 'package:flutter/material.dart';
+
 
 class CustomBottomBar extends StatelessWidget {
   final int selectedIndex;
@@ -18,11 +18,9 @@ class CustomBottomBar extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
         color: const Color(0xFF1F2544),
-        //color: CustomColors.secondbackgroundColor,
         borderRadius: BorderRadius.circular(40),
         boxShadow: [
           BoxShadow(
-            //color: Colors.black.withOpacity(0.25),
             blurRadius: 20,
             offset: const Offset(0, 10),
           )
@@ -45,6 +43,7 @@ class CustomBottomBar extends StatelessWidget {
 
     return GestureDetector(
       onTap: () => onItemTapped(index),
+      behavior: HitTestBehavior.translucent,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         padding: isSelected

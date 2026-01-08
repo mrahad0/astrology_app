@@ -4,8 +4,8 @@ import 'package:astrology_app/data/services/api_checker.dart';
 import 'package:astrology_app/data/services/api_client.dart';
 import 'package:astrology_app/data/services/api_constant.dart';
 import 'package:astrology_app/views/base/custom_snackBar.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 
 class RegisterController extends GetxController {
   RxBool isLoading = false.obs;

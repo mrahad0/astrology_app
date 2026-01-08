@@ -211,7 +211,8 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
               ),
             ),
           ),
-          actions: [ TextButton(onPressed: () {
+          actions: [
+            TextButton(onPressed: () {
             Navigator.of(context).pop();
           },
             child: const Text(

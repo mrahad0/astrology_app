@@ -37,7 +37,7 @@ class PersonalInfo extends StatelessWidget {
             );
           }
 
-          final user = controller.userInfo.value!;
+          // user info is accessed via controller directly
 
           return SingleChildScrollView(
             child: Padding(

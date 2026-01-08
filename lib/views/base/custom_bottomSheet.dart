@@ -4,7 +4,7 @@ import 'package:astrology_app/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../Routes/routes.dart';
-void showLogoutBottomSheet() {
+void showLogoutBottomSheet(BuildContext context) {
   Get.bottomSheet(
     SafeArea(
       child: Container(
@@ -58,7 +58,7 @@ void showLogoutBottomSheet() {
                 // Yes, Logout Button
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () => Get.back(),
+                    onPressed:Navigator.of(context).pop,
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.grey),
                       shape: RoundedRectangleBorder(

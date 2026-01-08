@@ -1,13 +1,14 @@
 // lib/views/pages/generateChart/details_chart/vedic_details.dart
 import 'package:astrology_app/Routes/routes.dart';
+import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../data/models/chart_models/natal_chart_model.dart';
 import '../../../../data/models/chart_models/transit_chart_model.dart';
+
 
 class VedicDetails extends StatefulWidget {
   const VedicDetails({super.key});
@@ -18,6 +19,7 @@ class VedicDetails extends StatefulWidget {
 
 class _VedicDetailsState extends State<VedicDetails> {
   final ChartController controller = Get.find<ChartController>();
+  bool isGenerating = false;
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +172,14 @@ class _VedicDetailsState extends State<VedicDetails> {
 
           CustomButton(
             text: "Generate",
-            onpress: () {
+            isLoading: isGenerating,
+            onpress: () async {
+              setState(() => isGenerating = true);
+              final interpretationController = Get.put(InterpretationController());
+              final charts = controller.getChartIdsForInterpretation();
+              final info = controller.getChartInfo();
+              await interpretationController.getMultipleInterpretations(charts, info);
+              setState(() => isGenerating = false);
               Get.toNamed(Routes.aiComprehensive);
             },
           ),
@@ -344,7 +353,14 @@ class _VedicDetailsState extends State<VedicDetails> {
 
           CustomButton(
             text: "Generate",
-            onpress: () {
+            isLoading: isGenerating,
+            onpress: () async {
+              setState(() => isGenerating = true);
+              final interpretationController = Get.put(InterpretationController());
+              final charts = controller.getChartIdsForInterpretation();
+              final info = controller.getChartInfo();
+              await interpretationController.getMultipleInterpretations(charts, info);
+              setState(() => isGenerating = false);
               Get.toNamed(Routes.aiComprehensive);
             },
           ),
@@ -505,7 +521,14 @@ class _VedicDetailsState extends State<VedicDetails> {
 
           CustomButton(
             text: "Generate",
-            onpress: () {
+            isLoading: isGenerating,
+            onpress: () async {
+              setState(() => isGenerating = true);
+              final interpretationController = Get.put(InterpretationController());
+              final charts = controller.getChartIdsForInterpretation();
+              final info = controller.getChartInfo();
+              await interpretationController.getMultipleInterpretations(charts, info);
+              setState(() => isGenerating = false);
               Get.toNamed(Routes.aiComprehensive);
             },
           ),

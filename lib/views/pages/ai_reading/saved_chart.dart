@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/chart_controller/saved_chart_controller.dart';
+import '../../../data/models/chart_models/saved_chart_model.dart';
 import '../../base/custom_appBar.dart';
 import '../../base/custom_button.dart';
 import '../../../utils/color.dart';
@@ -41,30 +42,40 @@ class _SavedChartState extends State<SavedChart> {
             return const Center(child: CircularProgressIndicator());
           }
           if (controller.savedCharts.isEmpty) {
-            return const Center(child: Text("No saved charts"));
+            return RefreshIndicator(
+              onRefresh: () => controller.fetchSavedCharts(),
+              color: const Color(0xFF9A3BFF),
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  child: const Center(child: Text("No saved charts", style: TextStyle(color: Colors.grey))),
+                ),
+              ),
+            );
           }
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 22),
+          return RefreshIndicator(
+            onRefresh: () => controller.fetchSavedCharts(),
+            color: const Color(0xFF9A3BFF),
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 22),
 
-                ...controller.savedCharts.map((chart) {
+                  ...controller.savedCharts.map((chart) {
 
-                  return Padding(
+                    return Padding(
 
-                    padding: const EdgeInsets.only(bottom: 14),
-                    child: chartCard(
-                      type: "${chart?.chartCategory} (${chart.systemType})",
-                      name: chart.name,
-                      date: chart.date,
-                      location: "${chart.city}, ${chart.country}",
-                    ),
-                  );
-                }).toList(),
+                      padding: const EdgeInsets.only(bottom: 14),
+                      child: _chartCard(chart: chart),
+                    );
+                  }).toList(),
 
-                SizedBox(height: MediaQuery.of(context).size.height / 6),
-              ],
+                  SizedBox(height: MediaQuery.of(context).size.height / 6),
+                ],
+              ),
             ),
           );
         }),
@@ -72,12 +83,7 @@ class _SavedChartState extends State<SavedChart> {
     );
   }
 
-  Widget chartCard({
-    required String type,
-    required String name,
-    required String date,
-    required String location,
-  }) {
+  Widget _chartCard({required SavedChartModel chart}) {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -88,20 +94,20 @@ class _SavedChartState extends State<SavedChart> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(type,
+          Text("${chart.chartCategory} (${chart.systemDisplayName})",
               style: const TextStyle(
                   fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
           const SizedBox(height: 4),
-          Text(name, style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8))),
+          Text(chart.name, style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8))),
           const SizedBox(height: 4),
-          Text(date, style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8))),
+          Text(chart.date, style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8))),
           const SizedBox(height: 4),
-          Text(location, style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8))),
+          Text("${chart.city}, ${chart.country}", style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8))),
           const SizedBox(height: 18),
           CustomButton(
             text: "View",
             onpress: () {
-              Get.to(SavedChartsDetails());
+              Get.to(() => SavedChartsDetails(savedChart: chart));
             },
           )
         ],

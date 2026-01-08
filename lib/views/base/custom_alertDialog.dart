@@ -1,7 +1,6 @@
-import 'package:astrology_app/Routes/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
+
 
 class CustomAlertdialog {
   final String title;

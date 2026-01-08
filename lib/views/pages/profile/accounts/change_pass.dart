@@ -1,8 +1,8 @@
-import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:astrology_app/views/base/custom_password_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 
 import '../../../../controllers/profile_controller/change_pass_controller.dart';
 

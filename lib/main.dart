@@ -5,7 +5,6 @@ import 'package:astrology_app/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controllers/chart_controller/chart_controller.dart';
-import 'controllers/chart_controller/saved_chart_controller.dart';
 import 'helpers/di.dart' as di;
 
 void main() async {

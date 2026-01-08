@@ -1,4 +1,3 @@
-import 'package:astrology_app/routes/routes.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:astrology_app/views/pages/ai_reading/saved_charts_details.dart';
 import 'package:flutter/material.dart';
@@ -164,12 +163,7 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
                     children: filteredCharts.map((chart) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 14),
-                        child: chartCard(
-                          type: "${chart.chartCategory} (${chart.systemType})",
-                          name: chart.name,
-                          date: chart.date,
-                          location: "${chart.city}, ${chart.country}",
-                        ),
+                        child: _chartCard(chart: chart),
                       );
                     }).toList(),
                   ),
@@ -184,12 +178,7 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
   }
 
   // ---------------------- CARD WIDGET ------------------------
-  Widget chartCard({
-    required String type,
-    required String name,
-    required String date,
-    required String location,
-  }) {
+  Widget _chartCard({required RecentChartModel chart}) {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -201,7 +190,7 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            type,
+            "${chart.chartCategory} (${chart.systemDisplayName})",
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -210,23 +199,25 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
           ),
           const SizedBox(height: 4),
           Text(
-            name,
+            chart.name,
             style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8)),
           ),
           const SizedBox(height: 4),
           Text(
-            date,
+            chart.date,
             style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8)),
           ),
           const SizedBox(height: 4),
           Text(
-            location,
+            "${chart.city}, ${chart.country}",
             style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8)),
           ),
           const SizedBox(height: 18),
           CustomButton(
             text: "View",
-            onpress: () => Get.to(SavedChartsDetails()),
+            onpress: () {
+              Get.to(() => SavedChartsDetails(recentChart: chart));
+            },
           ),
         ],
       ),

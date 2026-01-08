@@ -2,8 +2,8 @@ import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
 
 class PaymentType extends StatefulWidget {
   const PaymentType({super.key});

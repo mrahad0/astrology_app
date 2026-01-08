@@ -53,7 +53,7 @@ class SubscriptionPage extends StatefulWidget {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                final screenWidth = MediaQuery.of(context).size.width;
+                // screenWidth removed - was unused
                 CustomAlertdialog(
                   onPressed: (){
                     Get.toNamed(Routes.paymentCard);

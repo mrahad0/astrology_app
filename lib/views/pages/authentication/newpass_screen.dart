@@ -1,10 +1,9 @@
 import 'package:astrology_app/controllers/auth_controller/resetPass_controller.dart';
-import 'package:astrology_app/routes/routes.dart';
-import 'package:astrology_app/views/base/custom_PopUp.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:astrology_app/views/base/custom_password_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 
 class NewpassScreen extends StatefulWidget {
   const NewpassScreen({super.key});

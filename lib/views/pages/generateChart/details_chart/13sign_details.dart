@@ -1,3 +1,4 @@
+import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
@@ -141,7 +142,11 @@ class Sign13Details extends StatelessWidget {
 
                 CustomButton(
                   text: "Generate",
-                  onpress: () {
+                  onpress: () async {
+                    final interpretationController = Get.put(InterpretationController());
+                    final charts = controller.getChartIdsForInterpretation();
+                    final info = controller.getChartInfo();
+                    await interpretationController.getMultipleInterpretations(charts, info);
                     Get.toNamed(Routes.aiComprehensive);
                   },
                 ),

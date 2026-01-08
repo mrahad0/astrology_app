@@ -1,109 +1,43 @@
-// lib/data/models/ai_interpretation_model.dart
+class InterpretationModel {
+  final String? chartId;
+  final String? chartType;
+  final String? system;
+  final String? rawInterpretation;
+  final int? wordLimit;
+  final bool? saved;
 
-class AIInterpretationModel {
-  final String chartId;
-  final String chartType;
-  final String system;
-  final String interpretation;
-  final int wordLimit;
-  final bool usageCounted;
-  final bool saved;
-
-  AIInterpretationModel({
-    required this.chartId,
-    required this.chartType,
-    required this.system,
-    required this.interpretation,
-    required this.wordLimit,
-    required this.usageCounted,
-    required this.saved,
+  InterpretationModel({
+    this.chartId,
+    this.chartType,
+    this.system,
+    this.rawInterpretation,
+    this.wordLimit,
+    this.saved,
   });
 
-  factory AIInterpretationModel.fromJson(Map<String, dynamic> json) {
-    return AIInterpretationModel(
-      chartId: json['chart_id'] ?? '',
-      chartType: json['chart_type'] ?? '',
-      system: json['system'] ?? '',
-      interpretation: json['interpretation'] ?? '',
-      wordLimit: json['word_limit_applied'] ?? 0,
-      usageCounted: json['usage_counted'] ?? false,
-      saved: json['saved'] ?? false,
+  factory InterpretationModel.fromJson(Map<String, dynamic> json) {
+    return InterpretationModel(
+      chartId: json['chart_id'],
+      chartType: json['chart_type'],
+      system: json['system'],
+      rawInterpretation: json['interpretation'],
+      wordLimit: json['word_limit_applied'],
+      saved: json['saved'],
     );
   }
 
-  int get wordCount {
-    if (interpretation.isEmpty) return 0;
-    return interpretation.split(RegExp(r'\s+')).length;
-  }
-
-  // Extract sections from interpretation (markdown based)
-  List<InterpretationSection> get sections {
-    List<InterpretationSection> sectionList = [];
-
-    // Split by markdown headers (##)
-    final RegExp headerPattern = RegExp(r'##\s+(.+?)(?=\n|$)');
-    final matches = headerPattern.allMatches(interpretation);
-
-    int sectionNumber = 1;
-    for (var match in matches) {
-      final title = match.group(1) ?? '';
-      final startIndex = match.end;
-
-      // Find next header or end of text
-      final nextMatch = headerPattern.firstMatch(
-          interpretation.substring(startIndex)
-      );
-
-      final endIndex = nextMatch != null
-          ? startIndex + nextMatch.start
-          : interpretation.length;
-
-      final content = interpretation
-          .substring(startIndex, endIndex)
-          .trim();
-
-      if (title.isNotEmpty && content.isNotEmpty) {
-        sectionList.add(InterpretationSection(
-          number: sectionNumber++,
-          title: title,
-          content: content,
-          wordCount: content.split(RegExp(r'\s+')).length,
-        ));
+  // Helper to split the interpretation into clean sections if needed
+  Map<String, String> get formattedSections {
+    if (rawInterpretation == null) return {};
+    Map<String, String> sections = {};
+    final parts = rawInterpretation!.split('\n\n');
+    for (var part in parts) {
+      if (part.contains('**')) {
+        final title = part.split('**')[1];
+        final content = part.split('**').last.trim();
+        sections[title] = content;
       }
     }
-
-    return sectionList;
-  }
-}
-
-class InterpretationSection {
-  final int number;
-  final String title;
-  final String content;
-  final int wordCount;
-
-  InterpretationSection({
-    required this.number,
-    required this.title,
-    required this.content,
-    required this.wordCount,
-  });
-}
-
-class AIInterpretationResponse {
-  final List<AIInterpretationModel> results;
-
-  AIInterpretationResponse({required this.results});
-
-  factory AIInterpretationResponse.fromJson(Map<String, dynamic> json) {
-    List<AIInterpretationModel> resultsList = [];
-
-    if (json['results'] != null && json['results'] is List) {
-      resultsList = (json['results'] as List)
-          .map((item) => AIInterpretationModel.fromJson(item))
-          .toList();
-    }
-
-    return AIInterpretationResponse(results: resultsList);
+    return sections;
   }
 }

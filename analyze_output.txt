@@ -1,0 +1,81 @@
+Analyzing astrology_app...                                      
+
+   info - The file name 'forgetPass_controller.dart' isn't a lower_case_with_underscores identifier - lib\controllers\auth_controller\forgetPass_controller.dart:1:1 - file_names
+   info - The file name 'resetPass_controller.dart' isn't a lower_case_with_underscores identifier - lib\controllers\auth_controller\resetPass_controller.dart:1:1 - file_names
+   info - Don't invoke 'print' in production code - lib\controllers\notification_controller\notification_controller.dart:61:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\controllers\notification_controller\notification_controller.dart:75:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\controllers\notification_controller\notification_controller.dart:101:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\controllers\notification_controller\notification_controller.dart:136:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\controllers\privacy_controller\privacy_controller.dart:31:7 - avoid_print
+   info - Statements in an if should be enclosed in a block - lib\controllers\profile_controller\personal_info_edit_controller.dart:96:9 - curly_braces_in_flow_control_structures
+   info - The imported package 'http' isn't a dependency of the importing package - lib\data\services\api_client.dart:6:8 - depend_on_referenced_packages
+   info - The local variable '_response' starts with an underscore - lib\data\services\api_client.dart:101:21 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_response' starts with an underscore - lib\data\services\api_client.dart:136:21 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_response' starts with an underscore - lib\data\services\api_client.dart:172:21 - no_leading_underscores_for_local_identifiers
+   info - Unnecessary braces in a string interpolation - lib\data\services\api_client.dart:216:48 - unnecessary_brace_in_string_interps
+   info - The imported package 'http' isn't a dependency of the importing package - lib\data\services\network_caller.dart:4:8 - depend_on_referenced_packages
+   info - Constructors for public widgets should have a named 'key' parameter - lib\main.dart:16:7 - use_key_in_widget_constructors
+   info - The type name 'Astrology_App' isn't an UpperCamelCase identifier - lib\main.dart:16:7 - camel_case_types
+   info - The type name '_Astrology_AppState' isn't an UpperCamelCase identifier - lib\main.dart:21:7 - camel_case_types
+   info - The member 'build' overrides an inherited member but isn't annotated with '@override' - lib\main.dart:39:10 - annotate_overrides
+   info - 'background' is deprecated and shouldn't be used. Use surface instead. This feature was deprecated after v3.18.0-0.1.pre - lib\main.dart:49:11 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\utils\color.dart:6:58 - deprecated_member_use
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\base\chart_card.dart:8:9 - use_key_in_widget_constructors
+   info - The file name 'custom_PopUp.dart' isn't a lower_case_with_underscores identifier - lib\views\base\custom_PopUp.dart:1:1 - file_names
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\base\custom_PopUp.dart:16:7 - use_key_in_widget_constructors
+   info - The file name 'custom_alertDialog.dart' isn't a lower_case_with_underscores identifier - lib\views\base\custom_alertDialog.dart:1:1 - file_names
+   info - The file name 'custom_appBar.dart' isn't a lower_case_with_underscores identifier - lib\views\base\custom_appBar.dart:1:1 - file_names
+   info - The file name 'custom_bottomBar.dart' isn't a lower_case_with_underscores identifier - lib\views\base\custom_bottomBar.dart:1:1 - file_names
+   info - The file name 'custom_bottomSheet.dart' isn't a lower_case_with_underscores identifier - lib\views\base\custom_bottomSheet.dart:1:1 - file_names
+   info - Constructors in '@immutable' classes should be declared as 'const' - lib\views\base\custom_button.dart:5:2 - prefer_const_constructors_in_immutables
+   info - The file name 'custom_snackBar.dart' isn't a lower_case_with_underscores identifier - lib\views\base\custom_snackBar.dart:1:1 - file_names
+   info - The file name 'custom_textField.dart' isn't a lower_case_with_underscores identifier - lib\views\base\custom_textField.dart:1:1 - file_names
+warning - This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: CustomTextFromField.obscureText, CustomTextFromField.onTap, CustomTextFromField.suffixIcon, CustomTextFromField.readOnly - lib\views\base\custom_textField.dart:4:7 - must_be_immutable
+   info - Unnecessary use of 'toList' in a spread - lib\views\pages\ai_reading\ai_comprehensive.dart:89:26 - unnecessary_to_list_in_spreads
+   info - Unnecessary use of 'toList' in a spread - lib\views\pages\ai_reading\ai_comprehensive.dart:171:16 - unnecessary_to_list_in_spreads
+   info - 'Share' is deprecated and shouldn't be used. Use SharePlus instead - lib\views\pages\ai_reading\ai_comprehensive.dart:236:15 - deprecated_member_use
+   info - 'share' is deprecated and shouldn't be used. Use SharePlus.instance.share() instead - lib\views\pages\ai_reading\ai_comprehensive.dart:236:21 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\views\pages\ai_reading\chart_reading_page.dart:83:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\views\pages\ai_reading\chart_reading_page.dart:151:54 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\views\pages\ai_reading\chart_reading_page.dart:177:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\views\pages\ai_reading\chart_reading_page.dart:194:36 - deprecated_member_use
+   info - Unnecessary use of 'toList' in a spread - lib\views\pages\ai_reading\saved_chart.dart:74:22 - unnecessary_to_list_in_spreads
+   info - 'Share' is deprecated and shouldn't be used. Use SharePlus instead - lib\views\pages\ai_reading\saved_charts_details.dart:362:11 - deprecated_member_use
+   info - 'share' is deprecated and shouldn't be used. Use SharePlus.instance.share() instead - lib\views\pages\ai_reading\saved_charts_details.dart:362:17 - deprecated_member_use
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\pages\authentication\register_screen.dart:8:7 - use_key_in_widget_constructors
+   info - The file name 'chart_Screen.dart' isn't a lower_case_with_underscores identifier - lib\views\pages\chartPage\chart_Screen.dart:1:1 - file_names
+   info - The file name 'astrologySystem_Tab.dart' isn't a lower_case_with_underscores identifier - lib\views\pages\generateChart\astrologySystem_Tab.dart:1:1 - file_names
+   info - The file name 'chartTypeTab.dart' isn't a lower_case_with_underscores identifier - lib\views\pages\generateChart\chartTypeTab.dart:1:1 - file_names
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\views\pages\generateChart\chartTypeTab.dart:76:58 - deprecated_member_use
+   info - The file name '13sign_details.dart' isn't a lower_case_with_underscores identifier - lib\views\pages\generateChart\details_chart\13sign_details.dart:1:1 - file_names
+   info - Use a 'SizedBox' to add whitespace to a layout - lib\views\pages\generateChart\details_chart\evolutionary_details.dart:105:26 - sized_box_for_whitespace
+   info - Use a 'SizedBox' to add whitespace to a layout - lib\views\pages\generateChart\details_chart\glactic_details.dart:106:26 - sized_box_for_whitespace
+   info - The file name 'humanDesign_details.dart' isn't a lower_case_with_underscores identifier - lib\views\pages\generateChart\details_chart\humanDesign_details.dart:1:1 - file_names
+   info - An uninitialized variable should have an explicit type annotation - lib\views\pages\generateChart\details_chart\humanDesign_details.dart:26:15 - prefer_typing_uninitialized_variables
+   info - Use a 'SizedBox' to add whitespace to a layout - lib\views\pages\generateChart\details_chart\humanDesign_details.dart:100:26 - sized_box_for_whitespace
+   info - The file name 'mainDetail_chart.dart' isn't a lower_case_with_underscores identifier - lib\views\pages\generateChart\details_chart\mainDetail_chart\mainDetail_chart.dart:1:1 - file_names
+   info - The file name 'review_Tab.dart' isn't a lower_case_with_underscores identifier - lib\views\pages\generateChart\review_Tab.dart:1:1 - file_names
+warning - The value of the local variable 'pastDate' isn't used - lib\views\pages\generateChart\review_Tab.dart:159:11 - unused_local_variable
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\views\pages\generateChart\review_Tab.dart:272:37 - deprecated_member_use
+   info - The file name 'main_Screen.dart' isn't a lower_case_with_underscores identifier - lib\views\pages\main_screen\main_Screen.dart:1:1 - file_names
+   info - Constructors in '@immutable' classes should be declared as 'const' - lib\views\pages\main_screen\main_Screen.dart:10:3 - prefer_const_constructors_in_immutables
+   info - The file name 'notification_Screen.dart' isn't a lower_case_with_underscores identifier - lib\views\pages\notification\notification_Screen.dart:1:1 - file_names
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\views\pages\notification\notification_Screen.dart:123:34 - deprecated_member_use
+   info - Use a 'SizedBox' to add whitespace to a layout - lib\views\pages\notification\notification_Screen.dart:134:13 - sized_box_for_whitespace
+   info - The import of 'package:get/get_core/src/get_main.dart' is unnecessary because all of the used elements are also provided by the import of 'package:get/get.dart' - lib\views\pages\payment_card\payment_card.dart:6:8 - unnecessary_import
+   info - Don't invoke 'print' in production code - lib\views\pages\payment_card\payment_card.dart:161:7 - avoid_print
+   info - Unnecessary instance of 'Container' - lib\views\pages\payment_card\payment_type.dart:21:13 - avoid_unnecessary_containers
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\views\pages\payment_card\payment_type.dart:98:36 - deprecated_member_use
+warning - The declaration '_buildDateButton' isn't referenced - lib\views\pages\profile\accounts\astro_data\add_astro_data.dart:263:10 - unused_element
+   info - Unnecessary use of 'toList' in a spread - lib\views\pages\profile\accounts\astro_data\astro_data.dart:60:16 - unnecessary_to_list_in_spreads
+   info - Parameter 'key' could be a super parameter - lib\views\pages\profile\accounts\info_edit.dart:8:9 - use_super_parameters
+   info - Parameter 'key' could be a super parameter - lib\views\pages\profile\accounts\personal_info.dart:9:3 - use_super_parameters
+warning - The value of the local variable 'user' isn't used - lib\views\pages\profile\accounts\personal_info.dart:40:17 - unused_local_variable
+   info - Parameter 'key' could be a super parameter - lib\views\pages\profile\accounts\personal_info.dart:144:9 - use_super_parameters
+   info - The file name 'profile_Screen.dart' isn't a lower_case_with_underscores identifier - lib\views\pages\profile\profile_Screen.dart:1:1 - file_names
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\views\pages\subscription\single_info.dart:48:62 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\views\pages\subscription\single_info.dart:173:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\views\pages\subscription\single_info.dart:209:44 - deprecated_member_use
+warning - The value of the local variable 'screenWidth' isn't used - lib\views\pages\subscription\subscription_page.dart:56:23 - unused_local_variable
+
+77 issues found. (ran in 3.2s)

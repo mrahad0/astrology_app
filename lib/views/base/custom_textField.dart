@@ -2,7 +2,7 @@ import 'package:astrology_app/utils/color.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFromField extends StatelessWidget {
-  CustomTextFromField({
+  const CustomTextFromField({
     super.key,
     this.controller,
     this.hintText,
@@ -11,17 +11,18 @@ class CustomTextFromField extends StatelessWidget {
     this.keyboardType,
     this.onTap,
     this.suffixIcon,
-    this.readOnly
+    this.readOnly,
   });
 
   final TextEditingController? controller;
   final String? hintText;
-  bool obscureText;
+  final bool obscureText;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
-  Function()? onTap;
-  Widget? suffixIcon;
-  bool? readOnly;
+  final VoidCallback? onTap;
+  final Widget? suffixIcon;
+  final bool? readOnly;
+
 
 
 
