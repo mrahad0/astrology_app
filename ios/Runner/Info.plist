@@ -6,6 +6,11 @@
     <string>We need camera access to take profile pictures</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>We need photo library access to select profile pictures</string>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

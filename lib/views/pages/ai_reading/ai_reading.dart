@@ -72,13 +72,17 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
+          // Only show charts that have interpretations generated
+          final chartsWithInterpretation = controller.recentCharts
+              .where((chart) => chart.interpretation.isNotEmpty)
+              .toList();
 
           List<RecentChartModel> filteredCharts;
           if (selectedFilter.value == 0) {
-            filteredCharts = controller.recentCharts;
+            filteredCharts = chartsWithInterpretation;
           } else {
             final filterName = filters[selectedFilter.value];
-            filteredCharts = controller.recentCharts
+            filteredCharts = chartsWithInterpretation
                 .where(
                   (chart) =>
               chart.chartCategory.toLowerCase().contains(
@@ -149,8 +153,8 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
                   Center(
                     child: Text(
                       selectedFilter.value == 0
-                          ? "No charts found"
-                          : "${filters[selectedFilter.value]} – No charts",
+                          ? "No chart interpretations generated yet"
+                          : "${filters[selectedFilter.value]} – No interpretations",
                       style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 16,
