@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:astrology_app/Routes/routes.dart';
+import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_snackBar.dart';
@@ -7,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:share_plus/share_plus.dart';
 import '../../../controllers/ai_compresive/ai_compresive_controller.dart';
 
@@ -200,7 +204,7 @@ class AiComprehensive extends StatelessWidget {
         Expanded(
           child: OutlinedButton(
             onPressed: () {
-              Get.toNamed(Routes.savedChart);
+              Get.toNamed(Routes.aiReading, arguments: {'showBackButton': true});
             },
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
@@ -215,25 +219,12 @@ class AiComprehensive extends StatelessWidget {
     );
   }
 
-  /// Share button - shares interpretation as text
+  /// Share button - shares interpretation as PDF
   Widget _buildShareButton(InterpretationController controller) {
     return OutlinedButton.icon(
       onPressed: () async {
-        String shareText = "My Astrology Reading\n\n";
-        
-        // Add user info
-        controller.userInfo.forEach((key, value) {
-          shareText += "$key: $value\n";
-        });
-        shareText += "\n";
-        
-        // Add interpretations
-        for (var interpretation in controller.interpretations) {
-          shareText += "${interpretation.chartType ?? 'Chart'} - ${interpretation.system ?? 'System'}\n";
-          shareText += "${interpretation.rawInterpretation ?? ''}\n\n";
-        }
-        
-        await Share.share(shareText, subject: 'My Astrology Reading');
+        // Reuse the download logic which generates PDF and shares
+        await _downloadAsTextFile(controller);
       },
       icon: const Icon(Icons.share, size: 18),
       label: const Text('Share'),
@@ -247,63 +238,195 @@ class AiComprehensive extends StatelessWidget {
   }
 
   /// Download button - saves as text file
+  /// Download button - saves as PDF file
   Widget _buildDownloadButton(InterpretationController controller) {
-    return OutlinedButton.icon(
-      onPressed: () async {
-        await _downloadAsTextFile(controller);
-      },
-      icon: const Icon(Icons.download, size: 18),
-      label: const Text('Download'),
+    return OutlinedButton(
+      onPressed: controller.isDownloading
+          ? null
+          : () async {
+              await _downloadAsTextFile(controller);
+            },
       style: OutlinedButton.styleFrom(
         foregroundColor: Colors.white,
         side: const BorderSide(color: Color(0xFF2A2F4A)),
         padding: const EdgeInsets.symmetric(vertical: 12),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
+      child: controller.isDownloading
+          ? const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 2,
+              ),
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.download, size: 18),
+                SizedBox(width: 8),
+                Text('Download'),
+              ],
+            ),
     );
   }
 
-  /// Downloads the reading as a text file
+  /// Downloads the reading as a PDF file with chart images
   Future<void> _downloadAsTextFile(InterpretationController controller) async {
+    controller.setDownloading(true);
     try {
-      // Build content
-      StringBuffer content = StringBuffer();
-      content.writeln("=".padRight(50, '='));
-      content.writeln("          ASTROLOGY READING");
-      content.writeln("=".padRight(50, '='));
-      content.writeln();
-      
-      // User Info
-      content.writeln("--- USER INFORMATION ---");
-      controller.userInfo.forEach((key, value) {
-        content.writeln("$key: $value");
-      });
-      content.writeln();
-      
-      // Interpretations
-      for (var interpretation in controller.interpretations) {
-        content.writeln("-".padRight(50, '-'));
-        content.writeln("${interpretation.chartType?.toUpperCase() ?? 'CHART'} - ${interpretation.system?.toUpperCase() ?? 'SYSTEM'}");
-        content.writeln("-".padRight(50, '-'));
-        content.writeln();
-        content.writeln(interpretation.rawInterpretation ?? '');
-        content.writeln();
+      // Create PDF document
+      final pdf = pw.Document();
+
+      // Get chart images from ChartController if available
+      Map<String, pw.MemoryImage> chartImages = {};
+      if (Get.isRegistered<ChartController>()) {
+        final chartController = Get.find<ChartController>();
+        final natalResponse = chartController.natalResponse.value;
+        
+        // Download natal chart images
+        if (natalResponse != null) {
+          for (var entry in natalResponse.images.entries) {
+            try {
+              final response = await HttpClient().getUrl(Uri.parse(entry.value));
+              final httpResponse = await response.close();
+              final bytes = await consolidateHttpClientResponseBytes(httpResponse);
+              chartImages[entry.key] = pw.MemoryImage(bytes);
+            } catch (e) {
+              // Skip if image fails to load
+            }
+          }
+        }
       }
-      
-      content.writeln("=".padRight(50, '='));
-      content.writeln("Generated on: ${DateTime.now().toString().substring(0, 19)}");
-      content.writeln("=".padRight(50, '='));
 
-      // Save file
-      final output = await getApplicationDocumentsDirectory();
-      final fileName = 'astrology_reading_${DateTime.now().millisecondsSinceEpoch}.txt';
-      final file = File('${output.path}/$fileName');
-      await file.writeAsString(content.toString());
+      // Add pages to PDF
+      pdf.addPage(
+        pw.MultiPage(
+          pageFormat: PdfPageFormat.a4,
+          margin: const pw.EdgeInsets.all(40),
+          build: (pw.Context context) {
+            return [
+              // Title
+              pw.Center(
+                child: pw.Text(
+                  'ASTROLOGY READING',
+                  style: pw.TextStyle(
+                    fontSize: 24,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Divider(thickness: 2),
+              pw.SizedBox(height: 20),
 
-      showCustomSnackBar('Reading saved to: $fileName', isError: false);
+              // User Info Section
+              pw.Text(
+                'USER INFORMATION',
+                style: pw.TextStyle(
+                  fontSize: 16,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+              pw.SizedBox(height: 10),
+              ...controller.userInfo.entries.map((entry) => pw.Padding(
+                padding: const pw.EdgeInsets.only(bottom: 4),
+                child: pw.Text('${entry.key}: ${entry.value}'),
+              )),
+              pw.SizedBox(height: 20),
+              pw.Divider(),
+              pw.SizedBox(height: 20),
+
+              // Interpretations with chart images
+              ...controller.interpretations.map((interpretation) {
+                final systemKey = interpretation.system?.toLowerCase().replaceAll(' ', '_') ?? '';
+                final hasImage = chartImages.containsKey(systemKey);
+                
+                return pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Container(
+                      padding: const pw.EdgeInsets.all(10),
+                      decoration: pw.BoxDecoration(
+                        color: PdfColors.purple50,
+                        borderRadius: pw.BorderRadius.circular(8),
+                      ),
+                      child: pw.Text(
+                        '${interpretation.chartType?.toUpperCase() ?? 'CHART'} - ${interpretation.system?.toUpperCase() ?? 'SYSTEM'}',
+                        style: pw.TextStyle(
+                          fontSize: 14,
+                          fontWeight: pw.FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    pw.SizedBox(height: 10),
+                    // Add chart image if available
+                    if (hasImage)
+                      pw.Center(
+                        child: pw.Container(
+                          width: 300,
+                          height: 300,
+                          child: pw.Image(chartImages[systemKey]!),
+                        ),
+                      ),
+                    if (hasImage)
+                      pw.SizedBox(height: 15),
+                    pw.Text(
+                      (interpretation.rawInterpretation ?? '').replaceAll('**', ''),
+                      style: const pw.TextStyle(fontSize: 11),
+                    ),
+                    pw.SizedBox(height: 20),
+                  ],
+                );
+              }),
+
+              // Footer
+              pw.Divider(thickness: 2),
+              pw.SizedBox(height: 10),
+              pw.Center(
+                child: pw.Text(
+                  'Generated on: ${DateTime.now().toString().substring(0, 19)}',
+                  style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey700),
+                ),
+              ),
+            ];
+          },
+        ),
+      );
+
+      // Save to temp directory first, then share
+      final tempDir = await getTemporaryDirectory();
+      final fileName = 'astrology_reading_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      final file = File('${tempDir.path}/$fileName');
+      await file.writeAsBytes(await pdf.save());
+
+      // Open share dialog so user can save to Downloads or any location
+      await Share.shareXFiles(
+        [XFile(file.path)],
+        subject: 'Astrology Reading PDF',
+      );
     } catch (e) {
-      showCustomSnackBar('Failed to save: $e');
+      showCustomSnackBar('Failed to save PDF: $e');
+    } finally {
+      controller.setDownloading(false);
     }
+  }
+
+  /// Helper to consolidate HTTP response bytes
+  Future<Uint8List> consolidateHttpClientResponseBytes(HttpClientResponse response) async {
+    final chunks = <List<int>>[];
+    await for (var chunk in response) {
+      chunks.add(chunk);
+    }
+    final totalLength = chunks.fold<int>(0, (sum, chunk) => sum + chunk.length);
+    final result = Uint8List(totalLength);
+    var offset = 0;
+    for (var chunk in chunks) {
+      result.setRange(offset, offset + chunk.length, chunk);
+      offset += chunk.length;
+    }
+    return result;
   }
 }
 

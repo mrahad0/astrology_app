@@ -8,7 +8,7 @@ import '../../views/base/custom_snackBar.dart';
 class ChangePassController extends GetxController {
   RxBool isLoading = false.obs;
 
-  Future<void> changePassword(
+  Future<bool> changePassword(
       String oldPassword,
       String newPassword,
       String confirmPassword,
@@ -27,14 +27,16 @@ class ChangePassController extends GetxController {
       body,
     );
 
+    isLoading(false);
+
     if (response.statusCode == 200) {
       showCustomSnackBar(
           response.body["message"] ?? "Password changed successfully!", isError: false);
+      return true;
     } else {
       ApiChecker.checkApi(response);
+      return false;
     }
-
-    isLoading(false);
   }
 }
 

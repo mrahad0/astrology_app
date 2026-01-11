@@ -7,13 +7,19 @@ import 'package:get/get.dart';
 
 import '../../../../Routes/routes.dart';
 
-class Sign13Details extends StatelessWidget {
+class Sign13Details extends StatefulWidget {
   const Sign13Details({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final ChartController controller = Get.find<ChartController>();
+  State<Sign13Details> createState() => _Sign13DetailsState();
+}
 
+class _Sign13DetailsState extends State<Sign13Details> {
+  final ChartController controller = Get.find<ChartController>();
+  bool isGenerating = false;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Obx(() {
@@ -82,13 +88,27 @@ class Sign13Details extends StatelessWidget {
                   ),
                   child: sign13.imageUrl.isNotEmpty
                       ? Image.network(
-                    sign13.imageUrl,
-                    fit: BoxFit.contain,
-                  )
+                          sign13.imageUrl,
+                          fit: BoxFit.contain,
+                          loadingBuilder: (context, child, progress) {
+                            if (progress == null) return child;
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                color: Color(0xFF9A3BFF),
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                              child: Icon(Icons.error,
+                                  color: Colors.red, size: 50),
+                            );
+                          },
+                        )
                       : Image.asset(
-                    "assets/images/chartimage.png",
-                    fit: BoxFit.contain,
-                  ),
+                          "assets/images/chartimage.png",
+                          fit: BoxFit.contain,
+                        ),
                 ),
 
                 const SizedBox(height: 24),
@@ -142,11 +162,14 @@ class Sign13Details extends StatelessWidget {
 
                 CustomButton(
                   text: "Generate",
+                  isLoading: isGenerating,
                   onpress: () async {
+                    setState(() => isGenerating = true);
                     final interpretationController = Get.put(InterpretationController());
                     final charts = controller.getChartIdsForInterpretation();
                     final info = controller.getChartInfo();
                     await interpretationController.getMultipleInterpretations(charts, info);
+                    setState(() => isGenerating = false);
                     Get.toNamed(Routes.aiComprehensive);
                   },
                 ),

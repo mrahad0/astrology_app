@@ -3,6 +3,8 @@ import 'package:astrology_app/controllers/auth_controller/auth_controller.dart';
 import 'package:astrology_app/data/services/api_checker.dart';
 import 'package:astrology_app/data/services/api_client.dart';
 import 'package:astrology_app/data/services/api_constant.dart';
+import 'package:astrology_app/data/utils/app_constants.dart';
+import 'package:astrology_app/helpers/prefs_helpers.dart';
 import 'package:astrology_app/views/base/custom_snackBar.dart';
 import 'package:get/get.dart';
 import '../../Routes/routes.dart';
@@ -31,7 +33,12 @@ class VerifyEmail extends GetxController {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Get.toNamed(Routes.mainScreen, arguments: response.body['access']);
+      // Save the access token before navigating
+      await PrefsHelper.setString(
+        AppConstants.bearerToken,
+        response.body["tokens"]["access"],
+      );
+      Get.offAllNamed(Routes.mainScreen);
     } else {
       ApiChecker.checkApi(response);
     }

@@ -13,16 +13,21 @@ class InterpretationController extends GetxController {
   bool _isSaving = false;
   bool get isSaving => _isSaving;
 
+  bool _isDownloading = false;
+  bool get isDownloading => _isDownloading;
+
+  void setDownloading(bool value) {
+    _isDownloading = value;
+    update();
+  }
+
   InterpretationModel? _interpretationData;
   InterpretationModel? get interpretationData => _interpretationData;
 
-  // Store user info passed from chart screen
   Map<String, dynamic> userInfo = {};
 
-  // Store chart data for saving (chart_id, chart_type, system, profile_id)
   List<Map<String, String>> chartDataForSaving = [];
 
-  // Store multiple interpretation results (one per chart/system)
   List<InterpretationModel> interpretations = [];
 
   Future<void> getAiInterpretation(Map<String, dynamic> body) async {
@@ -51,7 +56,7 @@ class InterpretationController extends GetxController {
     Map<String, dynamic> info,
   ) async {
     userInfo = info;
-    chartDataForSaving = charts; // Store for later saving
+    chartDataForSaving = charts;
     interpretations.clear();
     _isLoading = true;
     update();

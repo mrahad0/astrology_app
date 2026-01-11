@@ -136,11 +136,14 @@ class _ChangePassState extends State<ChangePass> {
                   isLoading: _changePassController.isLoading.value,
                   onpress: () async {
                     if (_formKey.currentState!.validate()) {
-                      await _changePassController.changePassword(
+                      final success = await _changePassController.changePassword(
                         currentPasswordController.text.trim(),
                         newPasswordController.text.trim(),
                         confirmPasswordController.text.trim(),
                       );
+                      if (success && context.mounted) {
+                        Navigator.pop(context);
+                      }
                     }
                   },
                 ),

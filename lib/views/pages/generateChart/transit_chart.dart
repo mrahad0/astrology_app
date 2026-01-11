@@ -3,6 +3,7 @@ import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
+import 'package:astrology_app/views/base/custom_snackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -119,16 +120,18 @@ class _TransitChartState extends State<TransitChart> {
               CustomButton(
                 text: "Next",
                 onpress: () {
-                  controller.setChartData({
-                    'type': 'Transit',
-                    'name': nameController.text,
-                    'dateOfBirth': birthDate,
-                    'birthTime': birthTime,
-                    'birthCity': cityController.text,
-                    'birthCountry': countryController.text,
-                    'futureDate': futureDate,
-                  });
-                  Get.toNamed(Routes.chartType);
+                  if (_validateInputs()) {
+                    controller.setChartData({
+                      'type': 'Transit',
+                      'name': nameController.text,
+                      'dateOfBirth': birthDate,
+                      'birthTime': birthTime,
+                      'birthCity': cityController.text,
+                      'birthCountry': countryController.text,
+                      'futureDate': futureDate,
+                    });
+                    Get.toNamed(Routes.chartType);
+                  }
                 },
               ),
               const SizedBox(height: 20),
@@ -137,6 +140,19 @@ class _TransitChartState extends State<TransitChart> {
         ),
       ),
     );
+  }
+
+  bool _validateInputs() {
+    if (nameController.text.isEmpty ||
+        cityController.text.isEmpty ||
+        countryController.text.isEmpty ||
+        birthDate == null ||
+        birthTime == null ||
+        futureDate == null) {
+      showCustomSnackBar("All fields are required.");
+      return false;
+    }
+    return true;
   }
 
   Widget _inputField(String title, String hint,

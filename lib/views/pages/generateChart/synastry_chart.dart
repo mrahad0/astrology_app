@@ -3,6 +3,7 @@ import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
+import 'package:astrology_app/views/base/custom_snackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -129,24 +130,26 @@ class _SynastryChart extends State<SynastryChart> {
               CustomButton(
                 text: "Next",
                 onpress: () {
-                  controller.setChartData({
-                    'type': 'Synastry',
-                    'partner1': {
-                      'name': name1Controller.text,
-                      'dateOfBirth': selectedDate1,
-                      'birthCity': city1Controller.text,
-                      'birthCountry': country1Controller.text,
-                      'birthTime': selectedTime1,
-                    },
-                    'partner2': {
-                      'name': name2Controller.text,
-                      'dateOfBirth': selectedDate2,
-                      'birthCity': city2Controller.text,
-                      'birthCountry': country2Controller.text,
-                      'birthTime': selectedTime2,
-                    },
-                  });
-                  Get.toNamed(Routes.chartType);
+                  if (_validateInputs()) {
+                    controller.setChartData({
+                      'type': 'Synastry',
+                      'partner1': {
+                        'name': name1Controller.text,
+                        'dateOfBirth': selectedDate1,
+                        'birthCity': city1Controller.text,
+                        'birthCountry': country1Controller.text,
+                        'birthTime': selectedTime1,
+                      },
+                      'partner2': {
+                        'name': name2Controller.text,
+                        'dateOfBirth': selectedDate2,
+                        'birthCity': city2Controller.text,
+                        'birthCountry': country2Controller.text,
+                        'birthTime': selectedTime2,
+                      },
+                    });
+                    Get.toNamed(Routes.chartType);
+                  }
                 },
               ),
 
@@ -156,6 +159,23 @@ class _SynastryChart extends State<SynastryChart> {
         ),
       ),
     );
+  }
+
+  bool _validateInputs() {
+    if (name1Controller.text.isEmpty ||
+        city1Controller.text.isEmpty ||
+        country1Controller.text.isEmpty ||
+        selectedDate1 == null ||
+        selectedTime1 == null ||
+        name2Controller.text.isEmpty ||
+        city2Controller.text.isEmpty ||
+        country2Controller.text.isEmpty ||
+        selectedDate2 == null ||
+        selectedTime2 == null) {
+      showCustomSnackBar("All fields are required.");
+      return false;
+    }
+    return true;
   }
 
   Future<void> pickDate(int partner) async {

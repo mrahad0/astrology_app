@@ -1,5 +1,6 @@
 import 'package:astrology_app/controllers/auth_controller/register_controller.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
+import 'package:astrology_app/views/base/custom_snackBar.dart';
 import 'package:astrology_app/views/base/custom_textField.dart';
 import 'package:astrology_app/views/base/custom_password_field.dart';
 import 'package:flutter/material.dart';
@@ -39,25 +40,30 @@ class _SignupScreenState extends State<SignupScreen> {
 
   // ------------------ SUBMIT --------------------
   void _submit() {
-
-    if(_formKey.currentState!.validate()&&isChecked==true){
-      _registerController.register(
-          {
-            "name": nameController.text,
-            "email": emailController.text.trim(),
-            "i_agree": isChecked,
-            "password":  passwordController.text,
-            "confirm_password":  rePasswordController.text,
-            "profile": {
-              "date_of_birth":dobController.text ,
-              "time_of_birth": timeOfBirthController.text,
-              "birth_country": countryController.text.trim(),
-              "birth_city": cityController.text.trim(),
-            }
-          }
-      );
+    if (!_formKey.currentState!.validate()) {
+      return;
     }
 
+    if (!isChecked) {
+      showCustomSnackBar("Please agree to the privacy & policy to continue.");
+      return;
+    }
+
+    _registerController.register(
+      {
+        "name": nameController.text,
+        "email": emailController.text.trim(),
+        "i_agree": isChecked,
+        "password": passwordController.text,
+        "confirm_password": rePasswordController.text,
+        "profile": {
+          "date_of_birth": dobController.text,
+          "time_of_birth": timeOfBirthController.text,
+          "birth_country": countryController.text.trim(),
+          "birth_city": cityController.text.trim(),
+        }
+      },
+    );
   }
 
   final GlobalKey<FormState> _formKey= GlobalKey<FormState>();

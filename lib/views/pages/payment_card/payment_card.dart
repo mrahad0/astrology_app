@@ -75,6 +75,10 @@ class _MyCartScreenState extends State<PaymentCard> {
 
                     expiryDate: expiryDate,
                     inputConfiguration: InputConfiguration(
+                      cardHolderTextStyle: const TextStyle(color: Colors.white),
+                      cardNumberTextStyle: const TextStyle(color: Colors.white),
+                      expiryDateTextStyle: const TextStyle(color: Colors.white),
+                      cvvCodeTextStyle: const TextStyle(color: Colors.white),
                       cardHolderDecoration: InputDecoration(
                         labelText: 'Card Holder Name',
                         labelStyle: TextStyle(color: Colors.white),
@@ -91,7 +95,7 @@ class _MyCartScreenState extends State<PaymentCard> {
                         labelText: 'Number',
                         labelStyle: TextStyle(color: Colors.white),
                         hintText: 'XXXX XXXX XXXX XXXX',
-                        hintStyle: TextStyle(color: Colors.white),
+                        hintStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(color: Colors.grey, width: 2),
@@ -105,7 +109,7 @@ class _MyCartScreenState extends State<PaymentCard> {
                         labelText: 'Expired Date',
                         labelStyle: TextStyle(color: Colors.white),
                         hintText: 'XX/XX',
-                        hintStyle: TextStyle(color: Colors.white),
+                        hintStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(color: Colors.grey, width: 2),
@@ -118,7 +122,7 @@ class _MyCartScreenState extends State<PaymentCard> {
                       cvvCodeDecoration:  InputDecoration(
                         labelText: 'CVV',
                         labelStyle: TextStyle(color: Colors.white),
-                        hintStyle: TextStyle(color: Colors.white),
+                        hintStyle: TextStyle(color: Colors.grey),
                         hintText: 'XXX',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),

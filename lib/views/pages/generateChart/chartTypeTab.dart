@@ -48,7 +48,7 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
         title: "Generate Chart",
         leading: IconButton(
           onPressed: () {
-            Get.back();
+            Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
         ),

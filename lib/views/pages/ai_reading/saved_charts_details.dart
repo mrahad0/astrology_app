@@ -1,17 +1,20 @@
 // lib/views/pages/ai_reading/saved_charts_details.dart
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_snackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:share_plus/share_plus.dart';
 import '../../../data/models/chart_models/saved_chart_model.dart';
 import '../../../data/models/chart_models/recent_chart_model.dart';
 
 /// A unified details page that can display either SavedChartModel or RecentChartModel
-class SavedChartsDetails extends StatelessWidget {
+class SavedChartsDetails extends StatefulWidget {
   final SavedChartModel? savedChart;
   final RecentChartModel? recentChart;
 
@@ -21,19 +24,26 @@ class SavedChartsDetails extends StatelessWidget {
     this.recentChart,
   }) : assert(savedChart != null || recentChart != null, 'Either savedChart or recentChart must be provided');
 
+  @override
+  State<SavedChartsDetails> createState() => _SavedChartsDetailsState();
+}
+
+class _SavedChartsDetailsState extends State<SavedChartsDetails> {
+  bool _isDownloading = false;
+
   // Getters to access data from either model
-  String get chartCategory => savedChart?.chartCategory ?? recentChart!.chartCategory;
-  String get systemDisplayName => savedChart?.systemDisplayName ?? recentChart!.systemDisplayName;
-  String get name => savedChart?.name ?? recentChart!.name;
-  String get date => savedChart?.date ?? recentChart!.date;
-  String get birthTime => savedChart?.birthTime ?? recentChart!.birthTime;
-  String get city => savedChart?.city ?? recentChart!.city;
-  String get country => savedChart?.country ?? recentChart!.country;
-  String get chartImageUrl => savedChart?.chartImageUrl ?? recentChart!.chartImageUrl;
-  String get interpretation => savedChart?.interpretation ?? recentChart!.interpretation;
-  String get formattedDate => savedChart?.formattedDate ?? recentChart!.formattedDate;
-  int get wordCount => savedChart?.wordCount ?? recentChart!.wordCount;
-  String get systemType => savedChart?.systemType ?? recentChart!.systemType;
+  String get chartCategory => widget.savedChart?.chartCategory ?? widget.recentChart!.chartCategory;
+  String get systemDisplayName => widget.savedChart?.systemDisplayName ?? widget.recentChart!.systemDisplayName;
+  String get name => widget.savedChart?.name ?? widget.recentChart!.name;
+  String get date => widget.savedChart?.date ?? widget.recentChart!.date;
+  String get birthTime => widget.savedChart?.birthTime ?? widget.recentChart!.birthTime;
+  String get city => widget.savedChart?.city ?? widget.recentChart!.city;
+  String get country => widget.savedChart?.country ?? widget.recentChart!.country;
+  String get chartImageUrl => widget.savedChart?.chartImageUrl ?? widget.recentChart!.chartImageUrl;
+  String get interpretation => widget.savedChart?.interpretation ?? widget.recentChart!.interpretation;
+  String get formattedDate => widget.savedChart?.formattedDate ?? widget.recentChart!.formattedDate;
+  int get wordCount => widget.savedChart?.wordCount ?? widget.recentChart!.wordCount;
+  String get systemType => widget.savedChart?.systemType ?? widget.recentChart!.systemType;
 
   @override
   Widget build(BuildContext context) {
@@ -152,23 +162,32 @@ class SavedChartsDetails extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: GestureDetector(
-                  onTap: () => _downloadChart(),
+                  onTap: _isDownloading ? null : () => _downloadChart(),
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: Colors.white24),
                     ),
-                    child: const Center(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.download, color: Colors.white, size: 18),
-                          SizedBox(width: 6),
-                          Text("Download",
-                              style: TextStyle(color: Colors.white)),
-                        ],
-                      ),
+                    child: Center(
+                      child: _isDownloading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.download, color: Colors.white, size: 18),
+                                SizedBox(width: 6),
+                                Text("Download",
+                                    style: TextStyle(color: Colors.white)),
+                              ],
+                            ),
                     ),
                   ),
                 ),
@@ -349,57 +368,289 @@ class SavedChartsDetails extends StatelessWidget {
     );
   }
 
-  // Share functionality
+  // Share functionality - generates PDF and shares
   Future<void> _shareChart() async {
-    String shareText = "$chartCategory - $systemDisplayName\n\n";
-    shareText += "Name: $name\n";
-    shareText += "Date of Birth: $date\n";
-    shareText += "Birth Time: $birthTime\n";
-    shareText += "Location: $city, $country\n\n";
-    shareText += "--- Interpretation ---\n\n";
-    shareText += interpretation;
+    try {
+      // Create PDF document
+      final pdf = pw.Document();
 
-    await Share.share(shareText, subject: 'My Astrology Chart Reading');
+      // Try to download chart image if available
+      pw.MemoryImage? chartImage;
+      if (chartImageUrl.isNotEmpty) {
+        try {
+          final response = await HttpClient().getUrl(Uri.parse(chartImageUrl));
+          final httpResponse = await response.close();
+          final bytes = await _consolidateHttpClientResponseBytes(httpResponse);
+          chartImage = pw.MemoryImage(bytes);
+        } catch (e) {
+          // Skip if image fails to load
+        }
+      }
+
+      // Add pages to PDF
+      pdf.addPage(
+        pw.MultiPage(
+          pageFormat: PdfPageFormat.a4,
+          margin: const pw.EdgeInsets.all(40),
+          build: (pw.Context context) {
+            return [
+              // Title
+              pw.Center(
+                child: pw.Text(
+                  '${chartCategory.toUpperCase()} - ${systemDisplayName.toUpperCase()}',
+                  style: pw.TextStyle(
+                    fontSize: 24,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Divider(thickness: 2),
+              pw.SizedBox(height: 20),
+
+              // User Info Section
+              pw.Text(
+                'USER INFORMATION',
+                style: pw.TextStyle(
+                  fontSize: 16,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Text('Name: $name'),
+              pw.Text('Date of Birth: $date'),
+              pw.Text('Birth Time: $birthTime'),
+              pw.Text('City: $city'),
+              pw.Text('Country: $country'),
+              pw.Text('System: $systemDisplayName'),
+              pw.SizedBox(height: 20),
+              pw.Divider(),
+              pw.SizedBox(height: 20),
+
+              // Chart Image if available
+              if (chartImage != null) ...[
+                pw.Text(
+                  '$systemDisplayName CHART',
+                  style: pw.TextStyle(
+                    fontSize: 14,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+                pw.SizedBox(height: 10),
+                pw.Center(
+                  child: pw.Container(
+                    width: 300,
+                    height: 300,
+                    child: pw.Image(chartImage),
+                  ),
+                ),
+                pw.SizedBox(height: 20),
+                pw.Divider(),
+                pw.SizedBox(height: 20),
+              ],
+
+              // Interpretation Section
+              pw.Container(
+                padding: const pw.EdgeInsets.all(10),
+                decoration: pw.BoxDecoration(
+                  color: PdfColors.purple50,
+                  borderRadius: pw.BorderRadius.circular(8),
+                ),
+                child: pw.Text(
+                  'INTERPRETATION',
+                  style: pw.TextStyle(
+                    fontSize: 14,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Text(
+                interpretation.replaceAll('**', ''),
+                style: const pw.TextStyle(fontSize: 11),
+              ),
+              pw.SizedBox(height: 20),
+
+              // Footer
+              pw.Divider(thickness: 2),
+              pw.SizedBox(height: 10),
+              pw.Center(
+                child: pw.Text(
+                  'Generated on: ${DateTime.now().toString().substring(0, 19)}',
+                  style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey700),
+                ),
+              ),
+            ];
+          },
+        ),
+      );
+
+      // Save to temp directory first, then share
+      final tempDir = await getTemporaryDirectory();
+      final fileName = 'chart_${systemType}_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      final file = File('${tempDir.path}/$fileName');
+      await file.writeAsBytes(await pdf.save());
+
+      // Share the PDF file
+      await Share.shareXFiles(
+        [XFile(file.path)],
+        subject: 'My Astrology Chart Reading',
+      );
+    } catch (e) {
+      showCustomSnackBar('Failed to share: $e');
+    }
   }
 
-  // Download functionality
+  // Download functionality - generates PDF with share dialog
   Future<void> _downloadChart() async {
+    setState(() => _isDownloading = true);
     try {
-      StringBuffer content = StringBuffer();
-      content.writeln("=".padRight(50, '='));
-      content.writeln("          ${chartCategory.toUpperCase()} - ${systemDisplayName.toUpperCase()}");
-      content.writeln("=".padRight(50, '='));
-      content.writeln();
+      // Create PDF document
+      final pdf = pw.Document();
 
-      content.writeln("--- USER INFORMATION ---");
-      content.writeln("Name: $name");
-      content.writeln("Date of Birth: $date");
-      content.writeln("Birth Time: $birthTime");
-      content.writeln("City: $city");
-      content.writeln("Country: $country");
-      content.writeln();
+      // Try to download chart image if available
+      pw.MemoryImage? chartImage;
+      if (chartImageUrl.isNotEmpty) {
+        try {
+          final response = await HttpClient().getUrl(Uri.parse(chartImageUrl));
+          final httpResponse = await response.close();
+          final bytes = await _consolidateHttpClientResponseBytes(httpResponse);
+          chartImage = pw.MemoryImage(bytes);
+        } catch (e) {
+          // Skip if image fails to load
+        }
+      }
 
-      content.writeln("-".padRight(50, '-'));
-      content.writeln("INTERPRETATION");
-      content.writeln("-".padRight(50, '-'));
-      content.writeln();
-      content.writeln(interpretation);
-      content.writeln();
+      // Add pages to PDF
+      pdf.addPage(
+        pw.MultiPage(
+          pageFormat: PdfPageFormat.a4,
+          margin: const pw.EdgeInsets.all(40),
+          build: (pw.Context context) {
+            return [
+              // Title
+              pw.Center(
+                child: pw.Text(
+                  '${chartCategory.toUpperCase()} - ${systemDisplayName.toUpperCase()}',
+                  style: pw.TextStyle(
+                    fontSize: 24,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Divider(thickness: 2),
+              pw.SizedBox(height: 20),
 
-      content.writeln("=".padRight(50, '='));
-      content.writeln("Generated on: ${DateTime.now().toString().substring(0, 19)}");
-      content.writeln("=".padRight(50, '='));
+              // User Info Section
+              pw.Text(
+                'USER INFORMATION',
+                style: pw.TextStyle(
+                  fontSize: 16,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Text('Name: $name'),
+              pw.Text('Date of Birth: $date'),
+              pw.Text('Birth Time: $birthTime'),
+              pw.Text('City: $city'),
+              pw.Text('Country: $country'),
+              pw.Text('System: $systemDisplayName'),
+              pw.SizedBox(height: 20),
+              pw.Divider(),
+              pw.SizedBox(height: 20),
 
-      final output = await getApplicationDocumentsDirectory();
-      final fileName =
-          'chart_${systemType}_${DateTime.now().millisecondsSinceEpoch}.txt';
-      final file = File('${output.path}/$fileName');
-      await file.writeAsString(content.toString());
+              // Chart Image if available
+              if (chartImage != null) ...[
+                pw.Text(
+                  '$systemDisplayName CHART',
+                  style: pw.TextStyle(
+                    fontSize: 14,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+                pw.SizedBox(height: 10),
+                pw.Center(
+                  child: pw.Container(
+                    width: 300,
+                    height: 300,
+                    child: pw.Image(chartImage),
+                  ),
+                ),
+                pw.SizedBox(height: 20),
+                pw.Divider(),
+                pw.SizedBox(height: 20),
+              ],
 
-      showCustomSnackBar('Reading saved to: $fileName', isError: false);
+              // Interpretation Section
+              pw.Container(
+                padding: const pw.EdgeInsets.all(10),
+                decoration: pw.BoxDecoration(
+                  color: PdfColors.purple50,
+                  borderRadius: pw.BorderRadius.circular(8),
+                ),
+                child: pw.Text(
+                  'INTERPRETATION',
+                  style: pw.TextStyle(
+                    fontSize: 14,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Text(
+                interpretation.replaceAll('**', ''),
+                style: const pw.TextStyle(fontSize: 11),
+              ),
+              pw.SizedBox(height: 20),
+
+              // Footer
+              pw.Divider(thickness: 2),
+              pw.SizedBox(height: 10),
+              pw.Center(
+                child: pw.Text(
+                  'Generated on: ${DateTime.now().toString().substring(0, 19)}',
+                  style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey700),
+                ),
+              ),
+            ];
+          },
+        ),
+      );
+
+      // Save to temp directory first, then share
+      final tempDir = await getTemporaryDirectory();
+      final fileName = 'chart_${systemType}_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      final file = File('${tempDir.path}/$fileName');
+      await file.writeAsBytes(await pdf.save());
+
+      // Open share dialog so user can save to Downloads or any location
+      await Share.shareXFiles(
+        [XFile(file.path)],
+        subject: 'Astrology Chart Reading PDF',
+      );
     } catch (e) {
-      showCustomSnackBar('Failed to save: $e');
+      showCustomSnackBar('Failed to save PDF: $e');
+    } finally {
+      setState(() => _isDownloading = false);
     }
+  }
+
+  /// Helper to consolidate HTTP response bytes
+  Future<Uint8List> _consolidateHttpClientResponseBytes(HttpClientResponse response) async {
+    final chunks = <List<int>>[];
+    await for (var chunk in response) {
+      chunks.add(chunk);
+    }
+    final totalLength = chunks.fold<int>(0, (sum, chunk) => sum + chunk.length);
+    final result = Uint8List(totalLength);
+    var offset = 0;
+    for (var chunk in chunks) {
+      result.setRange(offset, offset + chunk.length, chunk);
+      offset += chunk.length;
+    }
+    return result;
   }
 }
 
