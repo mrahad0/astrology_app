@@ -18,7 +18,6 @@ class EvolutionaryDetails extends StatefulWidget {
 
 class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
   final ChartController controller = Get.find<ChartController>();
-  bool isGenerating = false;
 
   @override
   Widget build(BuildContext context) {
@@ -174,19 +173,19 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
 
                 const SizedBox(height: 40),
 
-                CustomButton(
+                Obx(() => CustomButton(
                   text: "Generate",
-                  isLoading: isGenerating,
+                  isLoading: controller.isGeneratingInterpretation.value,
                   onpress: () async {
-                    setState(() => isGenerating = true);
-                    final interpretationController = Get.put(InterpretationController());
+                    controller.isGeneratingInterpretation.value = true;
+                    final interpretationController = Get.find<InterpretationController>();
                     final charts = controller.getChartIdsForInterpretation();
                     final info = controller.getChartInfo();
                     await interpretationController.getMultipleInterpretations(charts, info);
-                    setState(() => isGenerating = false);
+                    controller.isGeneratingInterpretation.value = false;
                     Get.toNamed(Routes.aiComprehensive);
                   },
-                ),
+                )),
 
                 const SizedBox(height: 20),
               ],

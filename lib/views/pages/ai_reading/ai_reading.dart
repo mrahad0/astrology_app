@@ -1,4 +1,5 @@
 import 'package:astrology_app/views/base/custom_button.dart';
+import 'package:astrology_app/views/base/pagination_widget.dart';
 import 'package:astrology_app/views/pages/ai_reading/saved_charts_details.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,17 +21,22 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
   bool showBackButton = false;
   final selectedFilter = 0.obs;
 
+  // Pagination variables
+  final currentPage = 1.obs;
+  final int itemsPerPage = 10;
+
   final List<String> filters = [
     "All",
     "Western",
     "Vedic",
-    "13-Signs",
+    "13-Sign",
     "Evolutionary",
     "Galactic",
-    "Human Design Profile",
+    "Human Design",
   ];
 
-  final RecentChartController controller = Get.put(RecentChartController());
+  // Use Get.find() since RecentChartController is now registered as permanent in main.dart
+  final RecentChartController controller = Get.find<RecentChartController>();
   InterpretationController? interpretationController;
 
   @override
@@ -40,13 +46,15 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
       showBackButton = Get.arguments['showBackButton'] ?? false;
     }
 
-    // Try to get existing InterpretationController if available
-    if (Get.isRegistered<InterpretationController>()) {
-      interpretationController = Get.find<InterpretationController>();
-    }
+    // Get the permanent InterpretationController
+    interpretationController = Get.find<InterpretationController>();
 
+    // Fetch recent charts - always refresh when coming from save (showBackButton = true)
+    // or if we don't have cached data
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.fetchRecentCharts();
+      if (showBackButton || controller.recentCharts.isEmpty) {
+        controller.fetchRecentCharts();
+      }
     });
   }
 
@@ -56,13 +64,13 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
       appBar: AppBar(
         leading: showBackButton
             ? IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.white,
-            size: 28,
-          ),
-          onPressed: () => Navigator.pop(context),
-        )
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                  size: 28,
+                ),
+                onPressed: () => Navigator.pop(context),
+              )
             : null,
         title: const Text(
           "Reading",
@@ -72,12 +80,6 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
             fontWeight: FontWeight.w600,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.white),
-            onPressed: () => controller.fetchRecentCharts(),
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -95,19 +97,30 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
           if (selectedFilter.value == 0) {
             filteredCharts = chartsWithInterpretation;
           } else {
-            final filterName = filters[selectedFilter.value];
+            final filterName = filters[selectedFilter.value].toLowerCase();
+            
             filteredCharts = chartsWithInterpretation
                 .where(
-                  (chart) =>
-              chart.chartCategory.toLowerCase().contains(
-                filterName.toLowerCase(),
-              ) ||
-                  chart.systemType.toLowerCase().contains(
-                    filterName.toLowerCase(),
-                  ),
-            )
+                  (chart) {
+                    final category = chart.chartCategory.toLowerCase();
+                    final displayName = chart.systemDisplayName.toLowerCase();
+                    
+                    // Simple matching: check if category or display name contains the filter text
+                    return category.contains(filterName) ||
+                        displayName.contains(filterName);
+                  },
+                )
                 .toList();
           }
+
+          // Pagination logic for filtered charts
+          final totalPages = (filteredCharts.length / itemsPerPage).ceil();
+          final startIndex = (currentPage.value - 1) * itemsPerPage;
+          final endIndex = startIndex + itemsPerPage;
+          final paginatedCharts = filteredCharts.sublist(
+            startIndex,
+            endIndex > filteredCharts.length ? filteredCharts.length : endIndex,
+          );
 
           return RefreshIndicator(
             onRefresh: () async {
@@ -121,115 +134,130 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
             color: Colors.purple,
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Your chart collection",
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
-                const SizedBox(height: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Your chart collection",
+                    style: TextStyle(color: Colors.grey, fontSize: 15),
+                  ),
+                  const SizedBox(height: 20),
 
-                // ------------------ FILTER BUTTONS ---------------------
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(filters.length, (index) {
-                      bool isSelected = selectedFilter.value == index;
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: GestureDetector(
-                          onTap: () => selectedFilter.value = index,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 18,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? Colors.purple
-                                  : CustomColors.secondbackgroundColor,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
+                  // ------------------ FILTER BUTTONS ---------------------
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: List.generate(filters.length, (index) {
+                        bool isSelected = selectedFilter.value == index;
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: GestureDetector(
+                            onTap: () {
+                              selectedFilter.value = index;
+                              currentPage.value =
+                                  1; // Reset to first page on filter change
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 18,
+                              ),
+                              decoration: BoxDecoration(
                                 color: isSelected
                                     ? Colors.purple
-                                    : const Color(0xff2A2F45),
+                                    : CustomColors.secondbackgroundColor,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? Colors.purple
+                                      : const Color(0xff2A2F45),
+                                ),
                               ),
-                            ),
-                            child: Text(
-                              filters[index],
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
+                              child: Text(
+                                filters[index],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    }),
-                  ),
-                ),
-
-                const SizedBox(height: 22),
-
-                // ------------------ CURRENT SESSION INTERPRETATIONS ---------------------
-                if (interpretationController != null &&
-                    interpretationController!.interpretations.isNotEmpty)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Current Session",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      _currentSessionCard(),
-                      const SizedBox(height: 24),
-                      const Text(
-                        "Saved Readings",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                    ],
-                  ),
-
-                // ------------------ CHART LIST OR EMPTY STATE ---------------------
-                if (filteredCharts.isEmpty)
-                  Center(
-                    child: Text(
-                      selectedFilter.value == 0
-                          ? "No chart interpretations generated yet"
-                          : "${filters[selectedFilter.value]} – No interpretations",
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+                        );
+                      }),
                     ),
-                  )
-                else
-                  Column(
-                    children: filteredCharts.map((chart) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 14),
-                        child: _chartCard(chart: chart),
-                      );
-                    }).toList(),
                   ),
 
-                SizedBox(height: MediaQuery.of(context).size.height / 6),
-              ],
+                  const SizedBox(height: 22),
+
+                  // ------------------ CURRENT SESSION INTERPRETATIONS ---------------------
+                  if (interpretationController != null &&
+                      interpretationController!.interpretations.isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Current Session",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        _currentSessionCard(),
+                        const SizedBox(height: 24),
+                        const Text(
+                          "Saved Readings",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                    ),
+
+                  // ------------------ CHART LIST OR EMPTY STATE ---------------------
+                  if (filteredCharts.isEmpty)
+                    Center(
+                      child: Text(
+                        selectedFilter.value == 0
+                            ? "No chart interpretations generated yet"
+                            : "${filters[selectedFilter.value]} – No interpretations",
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )
+                  else
+                    Column(
+                      children: [
+                        // Chart cards for current page
+                        ...paginatedCharts.map((chart) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 14),
+                            child: _chartCard(chart: chart),
+                          );
+                        }),
+
+                        // Pagination widget
+                        if (totalPages > 1)
+                          PaginationWidget(
+                            currentPage: currentPage.value,
+                            totalPages: totalPages,
+                            onPageChanged: (page) => currentPage.value = page,
+                          ),
+                      ],
+                    ),
+
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                ],
+              ),
             ),
-          ),
           );
         }),
       ),

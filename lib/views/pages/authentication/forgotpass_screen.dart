@@ -95,7 +95,7 @@ class _ForgotpassScreenState extends State<ForgotpassScreen> {
                   },))
             ],
           ),
-                  ),
+          ),
         ),
       ),
     );

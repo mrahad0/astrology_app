@@ -5,10 +5,16 @@ import 'package:astrology_app/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controllers/chart_controller/chart_controller.dart';
+import 'controllers/chart_controller/recent_chart_controller.dart';
+import 'controllers/ai_compresive/ai_compresive_controller.dart';
 import 'helpers/di.dart' as di;
 
 void main() async {
-  Get.put(ChartController(),permanent: true);
+  WidgetsFlutterBinding.ensureInitialized();
+  // Initialize permanent controllers to keep data alive during app session
+  Get.put(ChartController(), permanent: true);
+  Get.put(InterpretationController(), permanent: true);
+  Get.put(RecentChartController(), permanent: true);
   await di.init();
   runApp(Astrology_App());
 }

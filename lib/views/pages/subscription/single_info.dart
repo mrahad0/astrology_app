@@ -30,129 +30,132 @@ class _SingleInfo extends State<SingleInfo> {
         ),
       ),
       body: SafeArea(
-          child: Column(
-            children: [
-              /// ---- SCROLLABLE FORM ----
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: CustomColors.secondbackgroundColor,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: const Color(0xFF262A40).withOpacity(0.5),
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              /// Title
-                              const Text(
-                                "Birth Information",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 24),
-
-                              /// Name
-                              const Text(
-                                "Name",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              _buildTextField(
-                                controller: nameController,
-                                hint: "Enter accurate your name",
-                              ),
-                              const SizedBox(height: 20),
-
-                              /// Date of Birth
-                              const Text(
-                                "Date of Birth",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              _buildDateField(
-                                controller: dateController,
-                                hint: "mm/dd/yyyy",
-                              ),
-                              const SizedBox(height: 20),
-
-                              /// Birth City
-                              const Text(
-                                "Birth City",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              _buildTextField(
-                                controller: cityController,
-                                hint: "Enter accurate birth city name",
-                              ),
-                              const SizedBox(height: 20),
-
-                              /// Birth Country
-                              const Text(
-                                "Birth Country",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              _buildTextField(
-                                controller: countryController,
-                                hint: "Enter accurate birth country",
-                              ),
-                              const SizedBox(height: 20),
-
-                              /// Birth Time
-                              const Text(
-                                "Birth Time",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              _buildTextField(
-                                controller: timeController,
-                                hint: "Enter accurate birth time",
-                              ),
-                            ],
+        child: Column(
+          children: [
+            /// ---- SCROLLABLE FORM ----
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: CustomColors.secondbackgroundColor,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: const Color(0xFF262A40).withOpacity(0.5),
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            /// Title
+                            const Text(
+                              "Birth Information",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
 
-                        CustomButton(text: "Generate",onpress: (){Get.toNamed(Routes.singleReport);},),
-                      ],
-                    ),
+                            /// Name
+                            const Text(
+                              "Name",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            _buildTextField(
+                              controller: nameController,
+                              hint: "Enter accurate your name",
+                            ),
+                            const SizedBox(height: 20),
 
+                            /// Date of Birth
+                            const Text(
+                              "Date of Birth",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            _buildDateField(
+                              controller: dateController,
+                              hint: "mm/dd/yyyy",
+                            ),
+                            const SizedBox(height: 20),
+
+                            /// Birth City
+                            const Text(
+                              "Birth City",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            _buildTextField(
+                              controller: cityController,
+                              hint: "Enter accurate birth city name",
+                            ),
+                            const SizedBox(height: 20),
+
+                            /// Birth Country
+                            const Text(
+                              "Birth Country",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            _buildTextField(
+                              controller: countryController,
+                              hint: "Enter accurate birth country",
+                            ),
+                            const SizedBox(height: 20),
+
+                            /// Birth Time
+                            const Text(
+                              "Birth Time",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            _buildTextField(
+                              controller: timeController,
+                              hint: "Enter accurate birth time",
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      CustomButton(
+                        text: "Generate",
+                        onpress: () {
+                          Get.toNamed(Routes.singleReport);
+                        },
+                      ),
+                    ],
                   ),
-
                 ),
               ),
+            ),
 
-              /// ---- GENERATE BUTTON ----
-            ],
-          ),
+            /// ---- GENERATE BUTTON ----
+          ],
         ),
+      ),
     );
   }
 
@@ -251,7 +254,7 @@ class _SingleInfo extends State<SingleInfo> {
         if (picked != null) {
           setState(() {
             controller.text =
-            "${picked.month.toString().padLeft(2, '0')}/${picked.day.toString().padLeft(2, '0')}/${picked.year}";
+                "${picked.month.toString().padLeft(2, '0')}/${picked.day.toString().padLeft(2, '0')}/${picked.year}";
           });
         }
       },

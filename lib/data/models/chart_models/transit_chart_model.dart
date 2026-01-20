@@ -67,20 +67,22 @@ class TransitChartData {
           .toList();
     }
 
-    // 🆕 Extract chartId from natal_data
-    String extractedChartId = '';
+    // Extract chartId - first from result level, then from natal_data
+    String extractedChartId = json['chart_id']?.toString() ?? '';
     Map<String, dynamic>? natalDataMap;
 
     if (json['natal_data'] != null) {
       natalDataMap = json['natal_data'] as Map<String, dynamic>;
 
-      // Try to get chart_id from natal_data
-      extractedChartId = natalDataMap['chart_id'] ??
-          natalDataMap['id'] ??
-          '';
+      // Fallback: Try to get chart_id from natal_data if not at result level
+      if (extractedChartId.isEmpty) {
+        extractedChartId = natalDataMap['chart_id']?.toString() ??
+            natalDataMap['id']?.toString() ??
+            '';
+      }
     }
 
-    // If still empty, create from profile name
+    // Last resort: create from profile name (should rarely happen now)
     if (extractedChartId.isEmpty) {
       final profileName = json['profile_name'] ?? 'user';
       final system = json['system'] ?? 'western';

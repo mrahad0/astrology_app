@@ -133,7 +133,6 @@ class _MyCartScreenState extends State<PaymentCard> {
                           borderSide: const BorderSide(color: Colors.grey, width: 2),
                         ),
                       ),
-
                     ),
                     onCreditCardModelChange: onCreditCardModelChange,
                   ),

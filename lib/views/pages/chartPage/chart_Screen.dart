@@ -3,6 +3,7 @@ import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/data/models/chart_models/recent_chart_model.dart';
 import 'package:astrology_app/views/pages/ai_reading/saved_charts_details.dart';
 import 'package:astrology_app/views/pages/ai_reading/chart_reading_page.dart';
+import 'package:astrology_app/views/base/pagination_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:astrology_app/controllers/chart_controller/recent_chart_controller.dart';
@@ -94,11 +95,16 @@ class _ChartScreenState extends State<ChartScreen> {
 
                   IconButton(
                     onPressed: () {
-                      _showDescriptionDialog("Recent charts remove after 7 days");
+                      _showDescriptionDialog(
+                        "Recent charts remove after 7 days",
+                      );
                     },
-                    icon: Icon(Icons.info_outline,
-                      color: CustomColors.primaryColor, size: 18,),
-                  )
+                    icon: Icon(
+                      Icons.info_outline,
+                      color: CustomColors.primaryColor,
+                      size: 18,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -115,16 +121,27 @@ class _ChartScreenState extends State<ChartScreen> {
                   );
                 }
                 return Column(
-                  children: controller.recentCharts.map((chart) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: _chartCard(chart: chart),
-                    );
-                  }).toList(),
+                  children: [
+                    // Chart cards for current page
+                    ...controller.paginatedCharts.map((chart) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: _chartCard(chart: chart),
+                      );
+                    }),
+
+                    // Pagination widget
+                    if (controller.totalPages > 1)
+                      PaginationWidget(
+                        currentPage: controller.currentPage.value,
+                        totalPages: controller.totalPages,
+                        onPageChanged: (page) => controller.changePage(page),
+                      ),
+                  ],
                 );
               }),
 
-              SizedBox(height: MediaQuery.of(context).size.height / 6),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             ],
           ),
         ),
@@ -217,7 +234,8 @@ class _ChartScreenState extends State<ChartScreen> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: () => Get.to(() => SavedChartsDetails(recentChart: chart)),
+                  onTap: () =>
+                      Get.to(() => SavedChartsDetails(recentChart: chart)),
                   child: Container(
                     height: 46,
                     decoration: BoxDecoration(
@@ -239,7 +257,8 @@ class _ChartScreenState extends State<ChartScreen> {
               const SizedBox(width: 10),
               Expanded(
                 child: GestureDetector(
-                  onTap: () => Get.to(() => ChartReadingPage(recentChart: chart)),
+                  onTap: () =>
+                      Get.to(() => ChartReadingPage(recentChart: chart)),
                   child: Container(
                     height: 46,
                     decoration: BoxDecoration(
@@ -262,42 +281,40 @@ class _ChartScreenState extends State<ChartScreen> {
     );
   }
 
-
- void _showDescriptionDialog(String content) {
-  showDialog(
-    context: context,
-    barrierDismissible: true,
-    builder: (_) {
-      return AlertDialog(
-        backgroundColor:Colors.black,
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(color: Colors.white),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        content: SingleChildScrollView(
-          child: Text(
-            content,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-            ),
+  void _showDescriptionDialog(String content) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (_) {
+        return AlertDialog(
+          backgroundColor: Colors.black,
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(color: Colors.white),
+            borderRadius: BorderRadius.circular(16),
           ),
-        ),
-        actions: [
-          TextButton(onPressed: () {
-            Navigator.of(context).pop();
-          },
-            child: const Text(
-              "Close",
-              style: TextStyle(
-                  color: Colors.deepPurple
+          content: SingleChildScrollView(
+            child: Text(
+              content,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
               ),
             ),
           ),
-        ],
-      );
-    },
-  );
-}
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                "Close",
+                style: TextStyle(color: Colors.deepPurple),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

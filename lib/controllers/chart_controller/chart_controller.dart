@@ -20,6 +20,7 @@ class ChartController extends GetxController {
 
   // Loading & Error States
   RxBool isLoading = false.obs;
+  RxBool isGeneratingInterpretation = false.obs; // Loading state for interpretation generation
   RxString errorMessage = ''.obs;
 
   List<String> get availableSystems {
@@ -56,6 +57,7 @@ class ChartController extends GetxController {
     transitResponse.value = null;
     synastryResponse.value = null;
     errorMessage.value = '';
+    isGeneratingInterpretation.value = false;
   }
 
   String _formatDate(DateTime date) {
@@ -66,7 +68,6 @@ class ChartController extends GetxController {
     return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}:00';
   }
 
-  // 🆕 Get chart IDs for AI interpretation - SIMPLIFIED
   List<Map<String, String>> getChartIdsForInterpretation() {
     List<Map<String, String>> charts = [];
     final type = selectedChartType.value.toLowerCase();
@@ -107,7 +108,6 @@ class ChartController extends GetxController {
     return charts;
   }
 
-  // 🆕 Get chart info for display
   Map<String, dynamic> getChartInfo() {
     final type = selectedChartType.value;
 

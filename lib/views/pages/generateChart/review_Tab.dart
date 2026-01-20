@@ -174,9 +174,6 @@ class ReviewGeneratePage extends StatelessWidget {
         _infoRow("Transit Date:", futureDate != null
             ? "${futureDate.day}/${futureDate.month}/${futureDate.year}"
             : '-'),
-        // _infoRow("Past Date:", pastDate != null
-        //     ? "${pastDate.day}/${pastDate.month}/${pastDate.year}"
-        //     : '-'),
       ],
     );
   }

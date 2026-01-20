@@ -5,6 +5,7 @@ import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_snackBar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -30,6 +31,7 @@ class SavedChartsDetails extends StatefulWidget {
 
 class _SavedChartsDetailsState extends State<SavedChartsDetails> {
   bool _isDownloading = false;
+  bool _isSharing = false;
 
   // Getters to access data from either model
   String get chartCategory => widget.savedChart?.chartCategory ?? widget.recentChart!.chartCategory;
@@ -138,23 +140,32 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: () => _shareChart(),
+                  onTap: _isSharing ? null : () => _shareChart(),
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: Colors.white24),
                     ),
-                    child: const Center(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.share, color: Colors.white, size: 18),
-                          SizedBox(width: 6),
-                          Text("Share",
-                              style: TextStyle(color: Colors.white)),
-                        ],
-                      ),
+                    child: Center(
+                      child: _isSharing
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.share, color: Colors.white, size: 18),
+                                SizedBox(width: 6),
+                                Text("Share",
+                                    style: TextStyle(color: Colors.white)),
+                              ],
+                            ),
                     ),
                   ),
                 ),
@@ -264,6 +275,35 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
 
   // Info Card
   Widget _buildInfoCard() {
+    // Check if this is a Synastry chart with two profiles
+    final isSynastry = chartCategory == 'Synastry';
+    
+    // Get person 2 data from models if available
+    final savedChart = widget.savedChart;
+    final recentChart = widget.recentChart;
+    
+    // Person 2 data for Synastry
+    String? person2Name;
+    String? person2Date;
+    String? person2BirthTime;
+    String? person2City;
+    String? person2Country;
+    
+    if (isSynastry) {
+      // Use the model's person2 fields
+      person2Name = savedChart?.name2 ?? recentChart?.name2;
+      person2Date = savedChart?.date2 ?? recentChart?.date2;
+      person2BirthTime = savedChart?.birthTime2 ?? recentChart?.birthTime2;
+      person2City = savedChart?.city2 ?? recentChart?.city2;
+      person2Country = savedChart?.country2 ?? recentChart?.country2;
+    }
+    
+    // Extract person 1 name from combined name for display
+    String person1Name = name;
+    if (isSynastry && name.contains(' & ')) {
+      person1Name = name.split(' & ')[0];
+    }
+    
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
@@ -281,11 +321,49 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
                   fontSize: 18,
                   fontWeight: FontWeight.w600)),
           const SizedBox(height: 16),
-          _infoRow("Name:", name.isNotEmpty ? name : "-"),
-          _infoRow("Date of Birth:", date.isNotEmpty ? date : "-"),
-          _infoRow("Birth Time:", birthTime.isNotEmpty ? birthTime : "-"),
-          _infoRow("City:", city.isNotEmpty ? city : "-"),
-          _infoRow("Country:", country.isNotEmpty ? country : "-"),
+          
+          if (isSynastry && person2Name != null) ...[
+            // Synastry: Show both profiles
+            const Text("Person 1",
+                style: TextStyle(
+                    color: Color(0xFF9A3BFF),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
+            _infoRow("Name:", person1Name.isNotEmpty ? person1Name : '-'),
+            _infoRow("Date of Birth:", date.isNotEmpty ? date : "-"),
+            _infoRow("Birth Time:", birthTime.isNotEmpty ? birthTime : "-"),
+            _infoRow("City:", city.isNotEmpty ? city : "-"),
+            _infoRow("Country:", country.isNotEmpty ? country : "-"),
+            
+            const SizedBox(height: 16),
+            const Divider(color: Colors.grey),
+            const SizedBox(height: 8),
+            
+            const Text("Person 2",
+                style: TextStyle(
+                    color: Color(0xFF9A3BFF),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
+            _infoRow("Name:", person2Name.isNotEmpty ? person2Name : '-'),
+            _infoRow("Date of Birth:", person2Date?.isNotEmpty == true ? person2Date! : "-"),
+            _infoRow("Birth Time:", person2BirthTime?.isNotEmpty == true ? person2BirthTime! : "-"),
+            _infoRow("City:", person2City?.isNotEmpty == true ? person2City! : "-"),
+            _infoRow("Country:", person2Country?.isNotEmpty == true ? person2Country! : "-"),
+            
+            const SizedBox(height: 16),
+            const Divider(color: Colors.grey),
+            const SizedBox(height: 8),
+          ] else ...[
+            // Standard: Single person info
+            _infoRow("Name:", name.isNotEmpty ? name : "-"),
+            _infoRow("Date of Birth:", date.isNotEmpty ? date : "-"),
+            _infoRow("Birth Time:", birthTime.isNotEmpty ? birthTime : "-"),
+            _infoRow("City:", city.isNotEmpty ? city : "-"),
+            _infoRow("Country:", country.isNotEmpty ? country : "-"),
+          ],
+          
           _infoRow("System:", systemDisplayName),
           _infoRow("Chart Type:", chartCategory),
         ],
@@ -327,18 +405,11 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("$systemDisplayName Interpretation",
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600)),
-              Text("$wordCount words",
-                  style: const TextStyle(color: Colors.grey, fontSize: 13)),
-            ],
-          ),
+          Text("$systemDisplayName Interpretation",
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600)),
           const SizedBox(height: 16),
           MarkdownBody(
             data: interpretation,
@@ -370,9 +441,31 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
 
   // Share functionality - generates PDF and shares
   Future<void> _shareChart() async {
+    setState(() => _isSharing = true);
+    
+    // Allow UI to update before heavy operations
+    await Future.delayed(const Duration(milliseconds: 50));
+    
     try {
-      // Create PDF document
-      final pdf = pw.Document();
+      // Load custom font for Unicode support
+      pw.Font? customFont;
+      pw.Font? customBoldFont;
+      try {
+        final regularData = await rootBundle.load('assets/fonts/Manrope-Regular.ttf');
+        final boldData = await rootBundle.load('assets/fonts/Manrope-Bold.ttf');
+        // Check if font files are valid (real TTF files are typically > 10KB)
+        if (regularData.lengthInBytes > 10000 && boldData.lengthInBytes > 10000) {
+          customFont = pw.Font.ttf(regularData);
+          customBoldFont = pw.Font.ttf(boldData);
+        }
+      } catch (e) {
+        // Fallback to default fonts
+      }
+      
+      // Create PDF document with theme
+      final pdf = customFont != null
+          ? pw.Document(theme: pw.ThemeData.withFont(base: customFont, bold: customBoldFont ?? customFont))
+          : pw.Document();
 
       // Try to download chart image if available
       pw.MemoryImage? chartImage;
@@ -498,6 +591,8 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
       );
     } catch (e) {
       showCustomSnackBar('Failed to share: $e');
+    } finally {
+      setState(() => _isSharing = false);
     }
   }
 
@@ -505,8 +600,25 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
   Future<void> _downloadChart() async {
     setState(() => _isDownloading = true);
     try {
-      // Create PDF document
-      final pdf = pw.Document();
+      // Load custom font for Unicode support
+      pw.Font? customFont;
+      pw.Font? customBoldFont;
+      try {
+        final regularData = await rootBundle.load('assets/fonts/Manrope-Regular.ttf');
+        final boldData = await rootBundle.load('assets/fonts/Manrope-Bold.ttf');
+        // Check if font files are valid (real TTF files are typically > 10KB)
+        if (regularData.lengthInBytes > 10000 && boldData.lengthInBytes > 10000) {
+          customFont = pw.Font.ttf(regularData);
+          customBoldFont = pw.Font.ttf(boldData);
+        }
+      } catch (e) {
+        // Fallback to default fonts
+      }
+      
+      // Create PDF document with theme
+      final pdf = customFont != null
+          ? pw.Document(theme: pw.ThemeData.withFont(base: customFont, bold: customBoldFont ?? customFont))
+          : pw.Document();
 
       // Try to download chart image if available
       pw.MemoryImage? chartImage;

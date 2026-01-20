@@ -1,12 +1,11 @@
-class ApiConstant{
+class ApiConstant {
+  static String baseUrl = "https://universalastroexpert.com/api";
 
-  static String baseUrl="http://217.196.50.35:9000/api";
+  static String login = "/login/";
 
-  static String login="/login/";
+  static String register = "/register/";
 
-  static String register="/register/";
-
-  static String verifyEmail="/otp/verify/";
+  static String verifyEmail = "/otp/verify/";
 
   static String resendOtp = "/otp/resend/";
 
@@ -39,5 +38,4 @@ class ApiConstant{
   static String interpret = "/interpret/";
 
   static String saveCharts = "/save-charts/";
-
 }

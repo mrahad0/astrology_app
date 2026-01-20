@@ -16,8 +16,20 @@ class InterpretationController extends GetxController {
   bool _isDownloading = false;
   bool get isDownloading => _isDownloading;
 
+  bool _isSharing = false;
+  bool get isSharing => _isSharing;
+
+  // Track if current session has been saved
+  bool _isSaved = false;
+  bool get isSaved => _isSaved;
+
   void setDownloading(bool value) {
     _isDownloading = value;
+    update();
+  }
+
+  void setSharing(bool value) {
+    _isSharing = value;
     update();
   }
 
@@ -33,6 +45,7 @@ class InterpretationController extends GetxController {
   Future<void> getAiInterpretation(Map<String, dynamic> body) async {
     _isLoading = true;
     _interpretationData = null;
+    _isSaved = false; // Reset saved state for new interpretation
     update();
 
     Response response = await ApiClient.postData(
@@ -59,6 +72,7 @@ class InterpretationController extends GetxController {
     chartDataForSaving = charts;
     interpretations.clear();
     _isLoading = true;
+    _isSaved = false; // Reset saved state for new interpretations
     update();
 
     for (var chart in charts) {
@@ -104,12 +118,19 @@ class InterpretationController extends GetxController {
     );
 
     _isSaving = false;
-    update();
 
     if (response.statusCode == 200 || response.statusCode == 201) {
+      _isSaved = true;
+      // Clear the current session data since it's now saved
+      // This will hide the "Current Session" card
+      interpretations.clear();
+      userInfo.clear();
+      chartDataForSaving.clear();
+      update();
       showCustomSnackBar("Charts saved successfully!", isError: false);
       return true;
     } else {
+      update();
       ApiChecker.checkApi(response);
       return false;
     }
@@ -121,6 +142,7 @@ class InterpretationController extends GetxController {
     chartDataForSaving.clear();
     interpretations.clear();
     _interpretationData = null;
+    _isSaved = false;
     update();
   }
 }

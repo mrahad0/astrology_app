@@ -9,9 +9,39 @@ class RecentChartController extends GetxController {
   var recentCharts = <RecentChartModel>[].obs;
   var isLoading = false.obs;
 
+  // Pagination variables
+  var currentPage = 1.obs;
+  final int itemsPerPage = 10;
+
+  /// Returns the total number of pages based on the total charts and items per page
+  int get totalPages => (recentCharts.length / itemsPerPage).ceil();
+
+  /// Returns the list of charts for the current page
+  List<RecentChartModel> get paginatedCharts {
+    if (recentCharts.isEmpty) return [];
+    
+    final startIndex = (currentPage.value - 1) * itemsPerPage;
+    final endIndex = startIndex + itemsPerPage;
+    
+    if (startIndex >= recentCharts.length) return [];
+    
+    return recentCharts.sublist(
+      startIndex,
+      endIndex > recentCharts.length ? recentCharts.length : endIndex,
+    );
+  }
+
+  /// Changes to the specified page
+  void changePage(int page) {
+    if (page >= 1 && page <= totalPages) {
+      currentPage.value = page;
+    }
+  }
+
   Future<void> fetchRecentCharts() async {
     try {
       isLoading(true);
+      currentPage.value = 1; // Reset to first page on fetch
       final response = await ApiClient.getData(ApiConstant.recentCharts);
 
       if (response.statusCode == 200) {
@@ -19,17 +49,18 @@ class RecentChartController extends GetxController {
 
         if (body is Map) {
           final List natalData = body['natal'] ?? [];
-          final List transitData = body['transit'] ?? [];
+          // Check both 'transit' and 'transits' keys
+          final List transitData = body['transit'] ?? body['transits'] ?? [];
           final List synastryData = body['synastry'] ?? [];
 
           final List<RecentChartModel> allCharts = [];
 
           allCharts.addAll(
-              natalData.map((e) => RecentChartModel.fromJson(e, "Natal")));
+              natalData.map((e) => RecentChartModel.fromJson(Map<String, dynamic>.from(e as Map), "Natal")));
           allCharts.addAll(
-              transitData.map((e) => RecentChartModel.fromJson(e, "Transit")));
+              transitData.map((e) => RecentChartModel.fromJson(Map<String, dynamic>.from(e as Map), "Transit")));
           allCharts.addAll(
-              synastryData.map((e) => RecentChartModel.fromJson(e, "Synastry")));
+              synastryData.map((e) => RecentChartModel.fromJson(Map<String, dynamic>.from(e as Map), "Synastry")));
 
           recentCharts.value = allCharts;
         } else {

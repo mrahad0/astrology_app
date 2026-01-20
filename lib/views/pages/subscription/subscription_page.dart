@@ -101,7 +101,6 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
               Row(
                 children: [
                   GestureDetector(

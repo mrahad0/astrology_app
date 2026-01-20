@@ -1,6 +1,7 @@
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
+import 'package:astrology_app/views/base/pagination_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../controllers/chart_controller/saved_chart_controller.dart';
@@ -16,7 +17,6 @@ class AstroDataScreen extends StatefulWidget {
 }
 
 class AstroDataScreenState extends State<AstroDataScreen> {
-
   final controller = Get.put(SavedChartController());
 
   @override
@@ -27,41 +27,58 @@ class AstroDataScreenState extends State<AstroDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: CustomAppBar(
         title: "Astro Data",
         leading: GestureDetector(
-          onTap: () => Navigator.pop(context), child: Icon(Icons.arrow_back_ios, color: Colors.white,)),),
+          onTap: () => Navigator.pop(context),
+          child: Icon(Icons.arrow_back_ios, color: Colors.white),
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Obx((){
-            if(controller.isLoading.value){
+          child: Obx(() {
+            if (controller.isLoading.value) {
               return const Center(child: CircularProgressIndicator());
             }
-            if(controller.savedCharts.isEmpty){
-              return const Center(child: Text("No saved charts", style: TextStyle(color: Colors.grey)));
+            if (controller.savedCharts.isEmpty) {
+              return const Center(
+                child: Text(
+                  "No saved charts",
+                  style: TextStyle(color: Colors.grey),
+                ),
+              );
             }
             return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 22),
 
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                    const SizedBox(height: 22),
+                  // Chart cards for current page
+                  ...controller.paginatedCharts.map((chart) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 14),
+                      child: _chartCard(chart: chart),
+                    );
+                  }),
 
-                ...controller.savedCharts.map((chart) {
+                  // Pagination widget
+                  if (controller.totalPages > 1)
+                    PaginationWidget(
+                      currentPage: controller.currentPage.value,
+                      totalPages: controller.totalPages,
+                      onPageChanged: (page) => controller.changePage(page),
+                    ),
 
-              return Padding(
-
-                padding: const EdgeInsets.only(bottom: 14),
-                child: _chartCard(chart: chart),
-              );
-            }).toList(),
-              ])
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                ],
+              ),
             );
-          }),),),
-
+          }),
+        ),
+      ),
 
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -81,7 +98,6 @@ class AstroDataScreenState extends State<AstroDataScreen> {
     );
   }
 
-
   Widget _chartCard({required SavedChartModel chart}) {
     return Container(
       padding: const EdgeInsets.all(18),
@@ -93,22 +109,36 @@ class AstroDataScreenState extends State<AstroDataScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("${chart.chartCategory} (${chart.systemDisplayName})",
-              style: const TextStyle(
-                  fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
+          Text(
+            "${chart.chartCategory} (${chart.systemDisplayName})",
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
           const SizedBox(height: 4),
-          Text(chart.name, style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8))),
+          Text(
+            chart.name,
+            style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8)),
+          ),
           const SizedBox(height: 4),
-          Text(chart.date, style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8))),
+          Text(
+            chart.date,
+            style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8)),
+          ),
           const SizedBox(height: 4),
-          Text("${chart.city}, ${chart.country}", style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8))),
+          Text(
+            "${chart.city}, ${chart.country}",
+            style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8)),
+          ),
           const SizedBox(height: 18),
           CustomButton(
             text: "View",
             onpress: () {
               Get.to(() => SavedChartsDetails(savedChart: chart));
             },
-          )
+          ),
         ],
       ),
     );
