@@ -4,6 +4,8 @@ import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:astrology_app/views/base/custom_snackBar.dart';
+import 'package:astrology_app/views/base/autocomplete_location_field.dart';
+import 'package:astrology_app/data/services/location_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -82,9 +84,31 @@ class _SynastryChart extends State<SynastryChart> {
                     _inputField("Date of Birth", selectedDate1 == null ? "mm/dd/yyyy" : "${selectedDate1!.month}/${selectedDate1!.day}/${selectedDate1!.year}",
                         icon: Icons.calendar_today, onTap: () => pickDate(1)),
                     const SizedBox(height: 15),
-                    _inputField("Birth City", "Enter accurate birth city name", controller: city1Controller),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Birth Country", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                        const SizedBox(height: 8),
+                        AutocompleteLocationField(
+                          controller: country1Controller,
+                          hintText: "Enter accurate birth country name",
+                          getSuggestions: LocationService.searchCountries,
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 15),
-                    _inputField("Birth Country", "Enter accurate birth country name", controller: country1Controller),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Birth City", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                        const SizedBox(height: 8),
+                        AutocompleteLocationField(
+                          controller: city1Controller,
+                          hintText: "Enter accurate birth city name",
+                          getSuggestions: (q) => LocationService.searchCities(country1Controller.text, q),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 15),
                     _inputField("Birth Time", selectedTime1 == null ? "Enter accurate birth time" : "${selectedTime1!.hour}:${selectedTime1!.minute.toString().padLeft(2, '0')}",
                         icon: Icons.access_time, onTap: () => pickTime(1)),
@@ -115,9 +139,31 @@ class _SynastryChart extends State<SynastryChart> {
                     _inputField("Date of Birth", selectedDate2 == null ? "mm/dd/yyyy" : "${selectedDate2!.month}/${selectedDate2!.day}/${selectedDate2!.year}",
                         icon: Icons.calendar_today, onTap: () => pickDate(2)),
                     const SizedBox(height: 15),
-                    _inputField("Birth City", "Enter accurate birth city name", controller: city2Controller),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Birth Country", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                        const SizedBox(height: 8),
+                        AutocompleteLocationField(
+                          controller: country2Controller,
+                          hintText: "Enter accurate birth country name",
+                          getSuggestions: LocationService.searchCountries,
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 15),
-                    _inputField("Birth Country", "Enter accurate birth country name", controller: country2Controller),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Birth City", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                        const SizedBox(height: 8),
+                        AutocompleteLocationField(
+                          controller: city2Controller,
+                          hintText: "Enter accurate birth city name",
+                          getSuggestions: (q) => LocationService.searchCities(country2Controller.text, q),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 15),
                     _inputField("Birth Time", selectedTime2 == null ? "Enter accurate birth time" : "${selectedTime2!.hour}:${selectedTime2!.minute.toString().padLeft(2, '0')}",
                         icon: Icons.access_time, onTap: () => pickTime(2)),

@@ -12,6 +12,9 @@ class CustomTextFromField extends StatelessWidget {
     this.onTap,
     this.suffixIcon,
     this.readOnly,
+    this.focusNode,
+    this.onChanged,
+    this.onFieldSubmitted,
   });
 
   final TextEditingController? controller;
@@ -22,6 +25,9 @@ class CustomTextFromField extends StatelessWidget {
   final VoidCallback? onTap;
   final Widget? suffixIcon;
   final bool? readOnly;
+  final FocusNode? focusNode;
+  final void Function(String)? onChanged;
+  final void Function(String)? onFieldSubmitted;
 
 
 
@@ -35,6 +41,9 @@ class CustomTextFromField extends StatelessWidget {
       keyboardType: keyboardType,
       obscureText: obscureText,
       validator: validator,
+      focusNode: focusNode,
+      onChanged: onChanged,
+      onFieldSubmitted: onFieldSubmitted,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         hintText: hintText,

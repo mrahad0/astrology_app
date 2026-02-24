@@ -4,6 +4,8 @@ import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:astrology_app/views/base/custom_snackBar.dart';
+import 'package:astrology_app/views/base/autocomplete_location_field.dart';
+import 'package:astrology_app/data/services/location_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -76,9 +78,31 @@ class _NatalChart extends State<NatalChart> {
                     _inputField("Date of Birth", selectedDate == null ? "mm/dd/yyyy" : "${selectedDate!.month}/${selectedDate!.day}/${selectedDate!.year}",
                         icon: Icons.calendar_today, onTap: pickDate),
                     const SizedBox(height: 15),
-                    _inputField("Birth City", "Enter accurate birth city name", controller: cityController),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Birth Country", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                        const SizedBox(height: 8),
+                        AutocompleteLocationField(
+                          controller: countryController,
+                          hintText: "Enter accurate birth country name",
+                          getSuggestions: LocationService.searchCountries,
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 15),
-                    _inputField("Birth Country", "Enter accurate birth country name", controller: countryController),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Birth City", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                        const SizedBox(height: 8),
+                        AutocompleteLocationField(
+                          controller: cityController,
+                          hintText: "Enter accurate birth city name",
+                          getSuggestions: (q) => LocationService.searchCities(countryController.text, q),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 15),
                     _inputField("Birth Time", selectedTime == null ? "Enter accurate birth time" : "${selectedTime!.hour}:${selectedTime!.minute.toString().padLeft(2, '0')}",
                         icon: Icons.access_time, onTap: pickTime),

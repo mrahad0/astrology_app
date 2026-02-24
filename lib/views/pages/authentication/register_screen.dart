@@ -3,6 +3,8 @@ import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:astrology_app/views/base/custom_snackBar.dart';
 import 'package:astrology_app/views/base/custom_textField.dart';
 import 'package:astrology_app/views/base/custom_password_field.dart';
+import 'package:astrology_app/views/base/autocomplete_location_field.dart';
+import 'package:astrology_app/data/services/location_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -187,11 +189,12 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
 
                 _label("Birth Country"),
-                CustomTextFromField(
+                AutocompleteLocationField(
                   controller: countryController,
                   hintText: "Enter country",
+                  getSuggestions: LocationService.searchCountries,
                   validator: (value){
-                    if(value!.isEmpty){
+                    if(value == null || value.isEmpty){
                       return "Country is required";
                     }
                     return null;
@@ -200,11 +203,12 @@ class _SignupScreenState extends State<SignupScreen> {
 
 
                 _label("Birth City"),
-                CustomTextFromField(
+                AutocompleteLocationField(
                   controller: cityController,
                   hintText: "Enter city",
+                  getSuggestions: (query) => LocationService.searchCities(countryController.text, query),
                   validator: (value){
-                    if(value!.isEmpty){
+                    if(value == null || value.isEmpty){
                       return "City is required";
                     }
                     return null;

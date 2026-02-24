@@ -1,6 +1,8 @@
 import 'package:astrology_app/controllers/profile_controller/personal_info_edit_controller.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
+import 'package:astrology_app/views/base/autocomplete_location_field.dart';
+import 'package:astrology_app/data/services/location_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -135,14 +137,30 @@ class _PersonalInfoEditState extends State<PersonalInfoEdit> {
                     controller: controller.timeController,
                   ),
                   const SizedBox(height: 20),
-                  CustomTextField(
-                    label: "Birth Country",
-                    controller: controller.countryController,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Birth Country", style: TextStyle(fontSize: 14, color: Colors.white)),
+                      const SizedBox(height: 8),
+                      AutocompleteLocationField(
+                        controller: controller.countryController,
+                        hintText: "Enter birth country",
+                        getSuggestions: LocationService.searchCountries,
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 20),
-                  CustomTextField(
-                    label: "Birth City",
-                    controller: controller.cityController,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Birth City", style: TextStyle(fontSize: 14, color: Colors.white)),
+                      const SizedBox(height: 8),
+                      AutocompleteLocationField(
+                        controller: controller.cityController,
+                        hintText: "Enter birth city",
+                        getSuggestions: (q) => LocationService.searchCities(controller.countryController.text, q),
+                      ),
+                    ],
                   ),
                 ],
               ),
