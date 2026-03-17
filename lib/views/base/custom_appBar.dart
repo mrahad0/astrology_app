@@ -1,3 +1,4 @@
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -11,7 +12,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(
         title,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18)),
       ),
       leading: leading,
       automaticallyImplyLeading: false,

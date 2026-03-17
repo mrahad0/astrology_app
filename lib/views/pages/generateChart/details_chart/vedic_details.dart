@@ -3,6 +3,7 @@ import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,8 +34,11 @@ class _VedicDetailsState extends State<VedicDetails> {
           } else if (controller.selectedChartType.value == 'Synastry') {
             return _buildSynastryChart();
           }
-          return const Center(
-            child: Text('No data available', style: TextStyle(color: Colors.white)),
+          return Center(
+            child: Text(
+              'No data available',
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(16)),
+            ),
           );
         }),
       ),
@@ -46,8 +50,11 @@ class _VedicDetailsState extends State<VedicDetails> {
     final vedicData = controller.natalResponse.value?.charts['vedic'];
 
     if (vedicData == null) {
-      return const Center(
-        child: CircularProgressIndicator(color: Color(0xFF9A3BFF)),
+      return Center(
+        child: CircularProgressIndicator(
+          color: const Color(0xFF9A3BFF),
+          strokeWidth: ResponsiveHelper.width(4),
+        ),
       );
     }
 
@@ -56,44 +63,56 @@ class _VedicDetailsState extends State<VedicDetails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
               color: CustomColors.secondbackgroundColor,
             ),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(child:
-                  Text("About Vedic Chart",style: TextStyle(color: Colors.white),),),
-                  const SizedBox(height: 10),
-                  Text("Based on the actual positions of the stars in the sky. Your sign may shift back by one. More focused on karma, fate, and life events.This means you might be a Leo in Western but a Cancer in Vedic – same birthday, different systems.",
-                    style:TextStyle(color: Colors.white) ,
+                  Center(
+                    child: Text(
+                      "About Vedic Chart",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: ResponsiveHelper.fontSize(16),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: ResponsiveHelper.space(10)),
+                  Text(
+                    "Based on the actual positions of the stars in the sky. Your sign may shift back by one. More focused on karma, fate, and life events.This means you might be a Leo in Western but a Cancer in Vedic – same birthday, different systems.",
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
                   ),
                 ]
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Info Card
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
               color: CustomColors.secondbackgroundColor,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Info",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600)),
-                const SizedBox(height: 20),
+                const Text(
+                  "Info",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: ResponsiveHelper.space(20)),
                 _infoRow("Name:", vedicData.name),
                 _infoRow("Date of Birth:", vedicData.birthDate),
                 _infoRow("Birth Time:", vedicData.birthTime),
@@ -104,21 +123,22 @@ class _VedicDetailsState extends State<VedicDetails> {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Vedic Chart Wheel
-          const Text(
+          Text(
             "Vedic Chart Wheel",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.w600),
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: ResponsiveHelper.space(16)),
 
           Center(
             child: SizedBox(
-              height: 350,
+              height: ResponsiveHelper.height(350),
               width: MediaQuery.of(context).size.width,
               child: vedicData.imageUrl.isNotEmpty
                   ? Image.network(
@@ -126,37 +146,38 @@ class _VedicDetailsState extends State<VedicDetails> {
                 fit: BoxFit.contain,
                 loadingBuilder: (context, child, progress) {
                   if (progress == null) return child;
-                  return const Center(
+                  return Center(
                     child: CircularProgressIndicator(
-                      color: Color(0xFF9A3BFF),
+                      color: const Color(0xFF9A3BFF),
+                      strokeWidth: ResponsiveHelper.width(4),
                     ),
                   );
                 },
                 errorBuilder: (context, error, stackTrace) {
-                  return const Center(
-                    child: Icon(Icons.error,
-                        color: Colors.red, size: 50),
+                  return Center(
+                    child: Icon(Icons.error, color: Colors.red, size: ResponsiveHelper.iconSize(50)),
                   );
                 },
               )
                   : Image.asset(
                 "assets/images/chartimage.png",
-                fit: BoxFit.fill,
+                fit: BoxFit.contain,
               ),
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Sidereal Positions
-          const Text(
+          Text(
             "Sidereal Positions",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.w600),
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: ResponsiveHelper.space(10)),
 
           ...vedicData.planets.entries.take(10).map((entry) {
             final planet = entry.value;
@@ -167,7 +188,7 @@ class _VedicDetailsState extends State<VedicDetails> {
             );
           }),
 
-          const SizedBox(height: 40),
+          SizedBox(height: ResponsiveHelper.space(40)),
 
           Obx(() => CustomButton(
             text: "Generate",
@@ -182,7 +203,7 @@ class _VedicDetailsState extends State<VedicDetails> {
               Get.toNamed(Routes.aiComprehensive);
             },
           )),
-          const SizedBox(height: 20),
+          SizedBox(height: ResponsiveHelper.space(20)),
         ],
       ),
     );
@@ -193,8 +214,11 @@ class _VedicDetailsState extends State<VedicDetails> {
     final transitData = controller.transitResponse.value?.results['vedic'];
 
     if (transitData == null) {
-      return const Center(
-        child: CircularProgressIndicator(color: Color(0xFF9A3BFF)),
+      return Center(
+        child: CircularProgressIndicator(
+          color: const Color(0xFF9A3BFF),
+          strokeWidth: ResponsiveHelper.width(4),
+        ),
       );
     }
 
@@ -205,44 +229,56 @@ class _VedicDetailsState extends State<VedicDetails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
               color: CustomColors.secondbackgroundColor,
             ),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(child:
-                  Text("About Vedic Chart",style: TextStyle(color: Colors.white),),),
-                  const SizedBox(height: 10),
-                  Text("Based on the actual positions of the stars in the sky. Your sign may shift back by one. More focused on karma, fate, and life events.This means you might be a Leo in Western but a Cancer in Vedic – same birthday, different systems.",
-                    style:TextStyle(color: Colors.white) ,
+                  Center(
+                    child: Text(
+                      "About Vedic Chart",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: ResponsiveHelper.fontSize(16),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: ResponsiveHelper.space(10)),
+                  Text(
+                    "Based on the actual positions of the stars in the sky. Your sign may shift back by one. More focused on karma, fate, and life events.This means you might be a Leo in Western but a Cancer in Vedic – same birthday, different systems.",
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
                   ),
                 ]
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Info Card
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
               color: CustomColors.secondbackgroundColor,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Vedic Transit Info",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600)),
-                const SizedBox(height: 20),
+                Text(
+                  "Vedic Transit Info",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ResponsiveHelper.fontSize(18),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: ResponsiveHelper.space(20)),
                 _infoRow("Name:", transitData.profileName),
                 _infoRow("Transit Date:", transitData.transitDate),
                 _infoRow("Quality:", transitData.overallQuality),
@@ -250,21 +286,22 @@ class _VedicDetailsState extends State<VedicDetails> {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Chart Image
-          const Text(
+          Text(
             "Vedic Transit Chart",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.w600),
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: ResponsiveHelper.space(16)),
 
           Center(
             child: SizedBox(
-              height: 350,
+              height: ResponsiveHelper.height(350),
               width: MediaQuery.of(context).size.width,
               child: imageUrl.isNotEmpty
                   ? Image.network(
@@ -272,48 +309,49 @@ class _VedicDetailsState extends State<VedicDetails> {
                 fit: BoxFit.contain,
                 loadingBuilder: (context, child, progress) {
                   if (progress == null) return child;
-                  return const Center(
+                  return Center(
                     child: CircularProgressIndicator(
-                      color: Color(0xFF9A3BFF),
+                      color: const Color(0xFF9A3BFF),
+                      strokeWidth: ResponsiveHelper.width(4),
                     ),
                   );
                 },
                 errorBuilder: (context, error, stackTrace) {
-                  return const Center(
-                    child: Icon(Icons.error,
-                        color: Colors.red, size: 50),
+                  return Center(
+                    child: Icon(Icons.error, color: Colors.red, size: ResponsiveHelper.iconSize(50)),
                   );
                 },
               )
                   : Image.asset(
                 "assets/images/chartimage.png",
-                fit: BoxFit.fill,
+                fit: BoxFit.contain,
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Gochara (Active Transits)
-          const Text(
+          Text(
             "Gochara (Active Transits)",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.w600),
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: ResponsiveHelper.space(10)),
 
           if (transitData.transits.isEmpty)
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
               decoration: BoxDecoration(
                 color: CustomColors.secondbackgroundColor,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
                 border: Border.all(color: const Color(0xff2B2F45)),
               ),
-              child: const Text(
+              child: Text(
                 "No significant transits at this time",
-                style: TextStyle(color: Colors.white70),
+                style: TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(14)),
               ),
             )
           else
@@ -321,34 +359,37 @@ class _VedicDetailsState extends State<VedicDetails> {
               return _transitTile(transit);
             }),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Interpretation
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
               color: CustomColors.secondbackgroundColor,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Interpretation",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600)),
-                const SizedBox(height: 12),
+                Text(
+                  "Interpretation",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ResponsiveHelper.fontSize(18),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: ResponsiveHelper.space(12)),
                 Text(
                   transitData.interpretation,
-                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  style: TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(14)),
                 ),
               ],
             ),
           ),
 
-          const SizedBox(height: 40),
+          SizedBox(height: ResponsiveHelper.space(40)),
 
           Obx(() => CustomButton(
             text: "Generate",
@@ -363,7 +404,7 @@ class _VedicDetailsState extends State<VedicDetails> {
               Get.toNamed(Routes.aiComprehensive);
             },
           )),
-          const SizedBox(height: 20),
+          SizedBox(height: ResponsiveHelper.space(20)),
         ],
       ),
     );
@@ -374,8 +415,11 @@ class _VedicDetailsState extends State<VedicDetails> {
     final synastryData = controller.synastryResponse.value?.results['vedic'];
 
     if (synastryData == null) {
-      return const Center(
-        child: CircularProgressIndicator(color: Color(0xFF9A3BFF)),
+      return Center(
+        child: CircularProgressIndicator(
+          color: const Color(0xFF9A3BFF),
+          strokeWidth: ResponsiveHelper.width(4),
+        ),
       );
     }
 
@@ -386,42 +430,54 @@ class _VedicDetailsState extends State<VedicDetails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
               color: CustomColors.secondbackgroundColor,
             ),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(child:
-                  Text("About Vedic Chart",style: TextStyle(color: Colors.white),),),
-                  const SizedBox(height: 10),
-                  Text("Based on the actual positions of the stars in the sky. Your sign may shift back by one. More focused on karma, fate, and life events.This means you might be a Leo in Western but a Cancer in Vedic – same birthday, different systems.",
-                    style:TextStyle(color: Colors.white) ,
+                  Center(
+                    child: Text(
+                      "About Vedic Chart",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: ResponsiveHelper.fontSize(16),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: ResponsiveHelper.space(10)),
+                  Text(
+                    "Based on the actual positions of the stars in the sky. Your sign may shift back by one. More focused on karma, fate, and life events.This means you might be a Leo in Western but a Cancer in Vedic – same birthday, different systems.",
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
                   ),
                 ]
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
           /// Info Card
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
               color: CustomColors.secondbackgroundColor,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Vedic Synastry Info",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600)),
-                const SizedBox(height: 20),
+                Text(
+                  "Vedic Synastry Info",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ResponsiveHelper.fontSize(18),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: ResponsiveHelper.space(20)),
                 _infoRow("Partner 1:", synastryData.profile1Name),
                 _infoRow("Partner 2:", synastryData.profile2Name),
                 _infoRow("Compatibility:", "${synastryData.compatibilityScore.toStringAsFixed(1)}%"),
@@ -429,21 +485,22 @@ class _VedicDetailsState extends State<VedicDetails> {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Chart Image
-          const Text(
+          Text(
             "Vedic Synastry Chart",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.w600),
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: ResponsiveHelper.space(16)),
 
           Center(
             child: SizedBox(
-              height: 350,
+              height: ResponsiveHelper.height(350),
               width: MediaQuery.of(context).size.width,
               child: imageUrl.isNotEmpty
                   ? Image.network(
@@ -451,36 +508,37 @@ class _VedicDetailsState extends State<VedicDetails> {
                 fit: BoxFit.contain,
                 loadingBuilder: (context, child, progress) {
                   if (progress == null) return child;
-                  return const Center(
+                  return Center(
                     child: CircularProgressIndicator(
-                      color: Color(0xFF9A3BFF),
+                      color: const Color(0xFF9A3BFF),
+                      strokeWidth: ResponsiveHelper.width(4),
                     ),
                   );
                 },
                 errorBuilder: (context, error, stackTrace) {
-                  return const Center(
-                    child: Icon(Icons.error,
-                        color: Colors.red, size: 50),
+                  return Center(
+                    child: Icon(Icons.error, color: Colors.red, size: ResponsiveHelper.iconSize(50)),
                   );
                 },
               )
                   : Image.asset(
                 "assets/images/chartimage.png",
-                fit: BoxFit.fill,
+                fit: BoxFit.contain,
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Relationship Aspects
-          const Text(
+          Text(
             "Relationship Aspects",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.w600),
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: ResponsiveHelper.space(10)),
 
           ...synastryData.aspects.take(10).map((aspect) {
             return _aspectTile(
@@ -489,34 +547,37 @@ class _VedicDetailsState extends State<VedicDetails> {
             );
           }),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Interpretation
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
               color: CustomColors.secondbackgroundColor,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Interpretation",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600)),
-                const SizedBox(height: 12),
+                Text(
+                  "Interpretation",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ResponsiveHelper.fontSize(18),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: ResponsiveHelper.space(12)),
                 Text(
                   synastryData.interpretation,
-                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  style: TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(14)),
                 ),
               ],
             ),
           ),
 
-          const SizedBox(height: 40),
+          SizedBox(height: ResponsiveHelper.space(40)),
 
           Obx(() => CustomButton(
             text: "Generate",
@@ -531,7 +592,7 @@ class _VedicDetailsState extends State<VedicDetails> {
               Get.toNamed(Routes.aiComprehensive);
             },
           )),
-          const SizedBox(height: 20),
+          SizedBox(height: ResponsiveHelper.space(20)),
         ],
       ),
     );
@@ -541,17 +602,21 @@ class _VedicDetailsState extends State<VedicDetails> {
 
   Widget _infoRow(String key, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(12)),
       child: Row(
         children: [
           SizedBox(
-            width: 110,
-            child: Text(key,
-                style: const TextStyle(color: Colors.grey, fontSize: 14)),
+            width: ResponsiveHelper.width(110),
+            child: Text(
+              key,
+              style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
+            ),
           ),
           Expanded(
-            child: Text(value,
-                style: const TextStyle(color: Colors.white, fontSize: 14)),
+            child: Text(
+              value,
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
+            ),
           ),
         ],
       ),
@@ -561,11 +626,11 @@ class _VedicDetailsState extends State<VedicDetails> {
   Widget _siderealTile(String planet, String sign, String nakshatra) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
         border: Border.all(color: const Color(0xff2B2F45)),
       ),
       child: RichText(
@@ -573,24 +638,24 @@ class _VedicDetailsState extends State<VedicDetails> {
           children: [
             TextSpan(
               text: '$planet ',
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white70,
-                fontSize: 14,
+                fontSize: ResponsiveHelper.fontSize(14),
               ),
             ),
             TextSpan(
               text: sign,
-              style: const TextStyle(
-                color: Color(0xffA855F7),
-                fontSize: 14,
+              style: TextStyle(
+                color: const Color(0xffA855F7),
+                fontSize: ResponsiveHelper.fontSize(14),
                 fontWeight: FontWeight.w600,
               ),
             ),
             TextSpan(
               text: ' $nakshatra',
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 14,
+                fontSize: ResponsiveHelper.fontSize(14),
               ),
             ),
           ],
@@ -601,22 +666,30 @@ class _VedicDetailsState extends State<VedicDetails> {
 
   Widget _aspectTile(String title, String subtitle) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
         border: Border.all(color: const Color(0xff2B2F45)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: Text(title,
-                style: const TextStyle(
-                    color: Color(0xffFF6B9D), fontWeight: FontWeight.w600)),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: const Color(0xffFF6B9D),
+                fontSize: ResponsiveHelper.fontSize(14),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
-          Text(subtitle, style: const TextStyle(color: Colors.white70)),
+          Text(
+            subtitle,
+            style: TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(14)),
+          ),
         ],
       ),
     );
@@ -624,11 +697,11 @@ class _VedicDetailsState extends State<VedicDetails> {
 
   Widget _transitTile(TransitModel transit) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
         border: Border.all(color: const Color(0xff2B2F45)),
       ),
       child: Column(
@@ -639,24 +712,27 @@ class _VedicDetailsState extends State<VedicDetails> {
             children: [
               Text(
                 "${transit.planet} ${transit.aspect}",
-                style: const TextStyle(
-                    color: Color(0xffFF6B9D), fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  color: const Color(0xffFF6B9D),
+                  fontSize: ResponsiveHelper.fontSize(14),
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               Text(
                 "orb: ${transit.orb.toStringAsFixed(1)}°",
-                style: const TextStyle(color: Colors.white70, fontSize: 12),
+                style: TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(12)),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: ResponsiveHelper.space(8)),
           Text(
             "Natal: ${transit.natalPosition} → Transit: ${transit.transitPosition}",
-            style: const TextStyle(color: Color(0xffA4A9C1), fontSize: 13),
+            style: TextStyle(color: const Color(0xffA4A9C1), fontSize: ResponsiveHelper.fontSize(13)),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: ResponsiveHelper.space(6)),
           Text(
             transit.interpretation,
-            style: const TextStyle(color: Colors.white70, fontSize: 13),
+            style: TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(13)),
           ),
         ],
       ),

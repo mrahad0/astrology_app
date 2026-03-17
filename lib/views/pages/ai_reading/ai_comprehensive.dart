@@ -1,6 +1,8 @@
+// lib/views/pages/ai_reading/ai_comprehensive.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/data/utils/pdf_generator.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -19,7 +21,7 @@ class AiComprehensive extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
         ),
       ),
       body: SafeArea(
@@ -28,8 +30,11 @@ class AiComprehensive extends StatelessWidget {
           builder: (controller) {
             // 1. Show Loading State while fetching data
             if (controller.isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(color: Colors.white),
+              return Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: ResponsiveHelper.width(4),
+                ),
               );
             }
 
@@ -41,26 +46,26 @@ class AiComprehensive extends StatelessWidget {
 
             return SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // --- Word Count Card ---
                     _buildWordCountCard(totalWords, controller),
-                    const SizedBox(height: 20),
+                    SizedBox(height: ResponsiveHelper.space(20)),
 
                     // --- Dynamic Info Card ---
                     _buildInfoCard(controller.userInfo),
-                    const SizedBox(height: 20),
+                    SizedBox(height: ResponsiveHelper.space(20)),
 
                     // --- Dynamic AI Sections from multiple interpretations ---
                     if (controller.interpretations.isEmpty)
-                      const Center(
+                      Center(
                         child: Padding(
-                          padding: EdgeInsets.only(top: 40),
+                          padding: EdgeInsets.only(top: ResponsiveHelper.space(40)),
                           child: Text(
                             "No interpretation results available.",
-                            style: TextStyle(color: Colors.grey),
+                            style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
                           ),
                         ),
                       )
@@ -75,7 +80,7 @@ class AiComprehensive extends StatelessWidget {
                         final content = interpretation.rawInterpretation ?? '';
 
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
+                          padding: EdgeInsets.only(bottom: ResponsiveHelper.space(16)),
                           child: _SectionCard(
                             sectionNumber: index,
                             title: title,
@@ -84,9 +89,9 @@ class AiComprehensive extends StatelessWidget {
                         );
                       }),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: ResponsiveHelper.space(20)),
                     _buildBottomActionButtons(controller),
-                    const SizedBox(height: 20),
+                    SizedBox(height: ResponsiveHelper.space(20)),
                   ],
                 ),
               ),
@@ -104,56 +109,56 @@ class AiComprehensive extends StatelessWidget {
     InterpretationController controller,
   ) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
         border: Border.all(color: const Color(0xFF2D3554)),
       ),
       child: Column(
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 'Word Count',
-                style: TextStyle(color: Colors.grey, fontSize: 14),
+                style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
               ),
-              SizedBox(width: 40),
+              SizedBox(width: ResponsiveHelper.space(40)),
               Text(
                 'Generated',
-                style: TextStyle(color: Colors.grey, fontSize: 14),
+                style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: ResponsiveHelper.space(8)),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 '$wordLimit words',
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
-                  fontSize: 16,
+                  fontSize: ResponsiveHelper.fontSize(16),
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(width: 40),
-              const Text(
+              SizedBox(width: ResponsiveHelper.space(40)),
+              Text(
                 'Just Now',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 16,
+                  fontSize: ResponsiveHelper.fontSize(16),
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: ResponsiveHelper.space(20)),
           Row(
             children: [
               Expanded(child: _buildShareButton(controller)),
-              const SizedBox(width: 12),
+              SizedBox(width: ResponsiveHelper.space(12)),
               Expanded(child: _buildDownloadButton(controller)),
             ],
           ),
@@ -164,34 +169,34 @@ class AiComprehensive extends StatelessWidget {
 
   Widget _buildInfoCard(Map<String, dynamic> userInfo) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
         border: Border.all(color: const Color(0xFF2A2F4A)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Info',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: ResponsiveHelper.fontSize(16),
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: ResponsiveHelper.space(16)),
           if (userInfo.isEmpty)
-            const Text(
+            Text(
               'No user information available.',
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
             )
           else
             ...userInfo.entries
                 .map(
                   (entry) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
+                    padding: EdgeInsets.only(bottom: ResponsiveHelper.space(12)),
                     child: InfoRow(
                       label: '${entry.key}:',
                       value: '${entry.value}',
@@ -223,30 +228,31 @@ class AiComprehensive extends StatelessWidget {
                   },
             style: ElevatedButton.styleFrom(
               backgroundColor: CustomColors.primaryColor,
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
               ),
             ),
             child: controller.isSaving
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
+                ? SizedBox(
+                    height: ResponsiveHelper.height(20),
+                    width: ResponsiveHelper.width(20),
                     child: CircularProgressIndicator(
                       color: Colors.white,
-                      strokeWidth: 2,
+                      strokeWidth: ResponsiveHelper.width(2),
                     ),
                   )
-                : const Text(
+                : Text(
                     'Save Reading',
                     style: TextStyle(
                       color: Colors.white,
+                      fontSize: ResponsiveHelper.fontSize(14),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
           ),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: ResponsiveHelper.space(12)),
         Expanded(
           child: OutlinedButton(
             onPressed: () {
@@ -258,12 +264,18 @@ class AiComprehensive extends StatelessWidget {
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
               side: const BorderSide(color: Color(0xFF2A2F4A)),
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
               ),
             ),
-            child: const Text('View Reading'),
+            child: Text(
+              'View Reading',
+              style: TextStyle(
+                fontSize: ResponsiveHelper.fontSize(14),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
       ],
@@ -285,24 +297,27 @@ class AiComprehensive extends StatelessWidget {
       style: OutlinedButton.styleFrom(
         foregroundColor: Colors.white,
         side: const BorderSide(color: Color(0xFF2A2F4A)),
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8))),
       ),
       child: controller.isSharing
-          ? const SizedBox(
-              height: 20,
-              width: 20,
+          ? SizedBox(
+              height: ResponsiveHelper.height(20),
+              width: ResponsiveHelper.width(20),
               child: CircularProgressIndicator(
                 color: Colors.white,
-                strokeWidth: 2,
+                strokeWidth: ResponsiveHelper.width(2),
               ),
             )
-          : const Row(
+          : Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.share, size: 18),
-                SizedBox(width: 8),
-                Text('Share'),
+                Icon(Icons.share, size: ResponsiveHelper.iconSize(18)),
+                SizedBox(width: ResponsiveHelper.space(8)),
+                Text(
+                  'Share',
+                  style: TextStyle(fontSize: ResponsiveHelper.fontSize(14)),
+                ),
               ],
             ),
     );
@@ -323,24 +338,27 @@ class AiComprehensive extends StatelessWidget {
       style: OutlinedButton.styleFrom(
         foregroundColor: Colors.white,
         side: const BorderSide(color: Color(0xFF2A2F4A)),
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8))),
       ),
       child: controller.isDownloading
-          ? const SizedBox(
-              height: 20,
-              width: 20,
+          ? SizedBox(
+              height: ResponsiveHelper.height(20),
+              width: ResponsiveHelper.width(20),
               child: CircularProgressIndicator(
                 color: Colors.white,
-                strokeWidth: 2,
+                strokeWidth: ResponsiveHelper.width(2),
               ),
             )
-          : const Row(
+          : Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.download, size: 18),
-                SizedBox(width: 8),
-                Text('Download'),
+                Icon(Icons.download, size: ResponsiveHelper.iconSize(18)),
+                SizedBox(width: ResponsiveHelper.space(8)),
+                Text(
+                  'Download',
+                  style: TextStyle(fontSize: ResponsiveHelper.fontSize(14)),
+                ),
               ],
             ),
     );
@@ -376,10 +394,10 @@ class _SectionCardState extends State<_SectionCard> {
         : widget.description;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
         border: Border.all(color: const Color(0xFF2A2F4A)),
       ),
       child: Column(
@@ -387,56 +405,59 @@ class _SectionCardState extends State<_SectionCard> {
         children: [
           Text(
             'Section ${widget.sectionNumber}',
-            style: const TextStyle(color: Color(0xFF9726f2), fontSize: 14),
+            style: TextStyle(color: const Color(0xFF9726f2), fontSize: ResponsiveHelper.fontSize(14)),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: ResponsiveHelper.space(8)),
           Text(
             widget.title,
-            style: const TextStyle(
-              fontSize: 18,
+            style: TextStyle(
+              fontSize: ResponsiveHelper.fontSize(18),
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: ResponsiveHelper.space(8)),
           MarkdownBody(
             data: isExpanded ? widget.description : previewText,
             styleSheet: MarkdownStyleSheet(
-              p: const TextStyle(color: Colors.grey, fontSize: 14, height: 1.5),
-              strong: const TextStyle(
+              p: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14), height: 1.5),
+              strong: TextStyle(
                 color: Colors.white,
+                fontSize: ResponsiveHelper.fontSize(14),
                 fontWeight: FontWeight.bold,
               ),
-              em: const TextStyle(
+              em: TextStyle(
                 color: Colors.white70,
+                fontSize: ResponsiveHelper.fontSize(14),
                 fontStyle: FontStyle.italic,
               ),
-              h1: const TextStyle(
+              h1: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: ResponsiveHelper.fontSize(20),
                 fontWeight: FontWeight.bold,
               ),
-              h2: const TextStyle(
+              h2: TextStyle(
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: ResponsiveHelper.fontSize(18),
                 fontWeight: FontWeight.bold,
               ),
-              h3: const TextStyle(
+              h3: TextStyle(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: ResponsiveHelper.fontSize(16),
                 fontWeight: FontWeight.bold,
               ),
-              listBullet: const TextStyle(color: Colors.grey),
+              listBullet: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
             ),
           ),
           if (needsTruncation) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: ResponsiveHelper.space(12)),
             GestureDetector(
               onTap: () => setState(() => isExpanded = !isExpanded),
               child: Text(
                 isExpanded ? "Read Less" : "Read More",
                 style: TextStyle(
                   color: CustomColors.primaryColor,
+                  fontSize: ResponsiveHelper.fontSize(14),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -458,18 +479,18 @@ class InfoRow extends StatelessWidget {
     return Row(
       children: [
         SizedBox(
-          width: 120,
+          width: ResponsiveHelper.width(120),
           child: Text(
             label,
-            style: const TextStyle(color: Colors.grey, fontSize: 14),
+            style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
           ),
         ),
         Expanded(
           child: Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white,
-              fontSize: 14,
+              fontSize: ResponsiveHelper.fontSize(14),
               fontWeight: FontWeight.w500,
             ),
           ),

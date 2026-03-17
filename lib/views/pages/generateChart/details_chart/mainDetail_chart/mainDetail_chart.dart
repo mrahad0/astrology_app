@@ -1,4 +1,5 @@
 // lib/views/pages/generateChart/details_chart/mainDetail_chart/mainDetail_chart.dart
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/pages/generateChart/details_chart/evolutionary_details.dart';
 import 'package:astrology_app/views/pages/generateChart/details_chart/glactic_details.dart';
 import 'package:astrology_app/views/pages/generateChart/details_chart/humanDesign_details.dart';
@@ -43,7 +44,7 @@ class _MainDetailChart extends State<MainDetailChart> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(ResponsiveHelper.padding(10)),
           child: Obx(() {
             List<String> displayedTabs = [];
 
@@ -71,8 +72,11 @@ class _MainDetailChart extends State<MainDetailChart> {
             }
 
             if (displayedTabs.isEmpty) {
-              return const Center(
-                child: CircularProgressIndicator(color: Color(0xFF9A3BFF)),
+              return Center(
+                child: CircularProgressIndicator(
+                  color: const Color(0xFF9A3BFF),
+                  strokeWidth: ResponsiveHelper.width(4),
+                ),
               );
             }
 
@@ -85,35 +89,35 @@ class _MainDetailChart extends State<MainDetailChart> {
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_back_ios_new,
                         color: Colors.white,
-                        size: 20,
+                        size: ResponsiveHelper.iconSize(20),
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    const Text(
+                    SizedBox(width: ResponsiveHelper.space(10)),
+                    Text(
                       "Generated Chart",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: ResponsiveHelper.fontSize(20),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: ResponsiveHelper.space(30)),
                 Container(
-                  height: 60,
+                  height: ResponsiveHelper.height(60),
                   decoration: BoxDecoration(
                     color: const Color(0xFF1E1C3A),
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
                   ),
                   child: displayedTabs.length == 1
                       ? _buildSingleTab(displayedTabs[0])
                       : _buildMultipleTabs(displayedTabs),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: ResponsiveHelper.space(20)),
                 Expanded(
                   child: systemPages[displayedTabs[selected]] ?? const SizedBox.shrink(),
                 ),
@@ -127,17 +131,17 @@ class _MainDetailChart extends State<MainDetailChart> {
 
   Widget _buildSingleTab(String systemKey) {
     return Container(
-      margin: const EdgeInsets.all(10),
+      margin: EdgeInsets.all(ResponsiveHelper.padding(10)),
       decoration: BoxDecoration(
         color: const Color(0xFF9A3BFF),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
       ),
       child: Center(
         child: Text(
           systemLabels[systemKey] ?? systemKey,
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.white,
-            fontSize: 16,
+            fontSize: ResponsiveHelper.fontSize(16),
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -146,10 +150,9 @@ class _MainDetailChart extends State<MainDetailChart> {
   }
 
   Widget _buildMultipleTabs(List<String> tabs) {
-    // If tabs are 3 or less, use Row with Expanded
     if (tabs.length <= 3) {
       return Padding(
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.all(ResponsiveHelper.padding(10)),
         child: Row(
           children: List.generate(tabs.length, (index) {
             final isSelected = selected == index;
@@ -160,17 +163,17 @@ class _MainDetailChart extends State<MainDetailChart> {
                   setState(() => selected = index);
                 },
                 child: Container(
-                  margin: EdgeInsets.only(right: index < tabs.length - 1 ? 8 : 0),
+                  margin: EdgeInsets.only(right: index < tabs.length - 1 ? ResponsiveHelper.space(8) : 0),
                   decoration: BoxDecoration(
                     color: isSelected ? const Color(0xFF9A3BFF) : Colors.transparent,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
                   ),
                   child: Center(
                     child: Text(
                       systemLabels[systemKey] ?? systemKey,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: ResponsiveHelper.fontSize(16),
                         fontWeight: FontWeight.w400,
                       ),
                       textAlign: TextAlign.center,
@@ -183,15 +186,14 @@ class _MainDetailChart extends State<MainDetailChart> {
         ),
       );
     } else {
-      // If more than 3 tabs, make it scrollable
       return SizedBox(
-        height: 60,
+        height: ResponsiveHelper.height(60),
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(ResponsiveHelper.padding(10)),
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: tabs.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 8),
+            separatorBuilder: (_, __) => SizedBox(width: ResponsiveHelper.space(8)),
             itemBuilder: (context, index) {
               final isSelected = selected == index;
               final systemKey = tabs[index];
@@ -200,17 +202,17 @@ class _MainDetailChart extends State<MainDetailChart> {
                   setState(() => selected = index);
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(16)),
                   decoration: BoxDecoration(
                     color: isSelected ? const Color(0xFF9A3BFF) : Colors.transparent,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
                   ),
                   child: Center(
                     child: Text(
                       systemLabels[systemKey] ?? systemKey,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: ResponsiveHelper.fontSize(16),
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -224,5 +226,3 @@ class _MainDetailChart extends State<MainDetailChart> {
     }
   }
 }
-
-

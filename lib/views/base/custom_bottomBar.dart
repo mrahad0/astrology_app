@@ -1,4 +1,5 @@
 
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:flutter/material.dart';
 
 
@@ -15,10 +16,10 @@ class CustomBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(10)),
       decoration: BoxDecoration(
         color: const Color(0xFF1F2544),
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(40)),
         boxShadow: [
           BoxShadow(
             blurRadius: 20,
@@ -47,28 +48,29 @@ class CustomBottomBar extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         padding: isSelected
-            ? const EdgeInsets.symmetric(horizontal: 18, vertical: 10)
-            : const EdgeInsets.all(10),
+            ? EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(18), vertical: ResponsiveHelper.padding(10))
+            : EdgeInsets.all(ResponsiveHelper.padding(10)),
         decoration: isSelected
             ? BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(30)),
         )
             : null,
         child: Row(
           children: [
             Icon(
               icon,
-              size: 22,
+              size: ResponsiveHelper.iconSize(22),
               color: isSelected ? Colors.black : Colors.white,
             ),
             if (isSelected) ...[
-              const SizedBox(width: 8),
+              SizedBox(width: ResponsiveHelper.space(8)),
               Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w600,
+                  fontSize: ResponsiveHelper.fontSize(14),
                 ),
               )
             ]
@@ -78,6 +80,3 @@ class CustomBottomBar extends StatelessWidget {
     );
   }
 }
-
-
-

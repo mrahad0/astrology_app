@@ -1,5 +1,7 @@
+// lib/views/pages/profile/accounts/info_edit.dart
 import 'package:astrology_app/controllers/profile_controller/personal_info_edit_controller.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/autocomplete_location_field.dart';
 import 'package:astrology_app/data/services/location_service.dart';
@@ -24,22 +26,27 @@ class _PersonalInfoEditState extends State<PersonalInfoEdit> {
         title: "Edit Personal Info",
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          child: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
         ),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: CircularProgressIndicator(
+              color: const Color(0xFF9A3BFF),
+              strokeWidth: ResponsiveHelper.width(4),
+            ),
+          );
         }
 
         return SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(10),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(10)),
             child: Container(
-              padding: const EdgeInsets.all(15),
+              padding: EdgeInsets.all(ResponsiveHelper.padding(15)),
               decoration: BoxDecoration(
                 color: CustomColors.secondbackgroundColor,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
                 border: Border.all(color: const Color(0xFF2A2F4A)),
               ),
               child: Column(
@@ -49,10 +56,10 @@ class _PersonalInfoEditState extends State<PersonalInfoEdit> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Edit Personal Info',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: ResponsiveHelper.fontSize(16),
                           fontWeight: FontWeight.w500,
                           color: Colors.white,
                         ),
@@ -62,30 +69,30 @@ class _PersonalInfoEditState extends State<PersonalInfoEdit> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF2A2F4A),
                           foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: ResponsiveHelper.padding(20), vertical: ResponsiveHelper.padding(10)),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8)),
                           ),
                           elevation: 0,
                         ),
-                        child: const Text('Save'),
+                        child: Text('Save', style: TextStyle(fontSize: ResponsiveHelper.fontSize(14))),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: ResponsiveHelper.space(24)),
 
                   /// ---------- PROFILE IMAGE ----------
                   Center(
                     child: Stack(
                       children: [
                         CircleAvatar(
-                          radius: 50,
+                          radius: ResponsiveHelper.radius(50),
                           backgroundColor: const Color(0xFF3A3F5A),
                           backgroundImage: _buildProfileImage(),
                           child: _showPlaceholderIcon()
-                              ? const Icon(Icons.person,
-                              size: 50, color: Colors.grey)
+                              ? Icon(Icons.person,
+                              size: ResponsiveHelper.iconSize(50), color: Colors.grey)
                               : null,
                         ),
                         Positioned(
@@ -94,8 +101,8 @@ class _PersonalInfoEditState extends State<PersonalInfoEdit> {
                           child: GestureDetector(
                             onTap: () => controller.pickImage(context),
                             child: Container(
-                              width: 32,
-                              height: 32,
+                              width: ResponsiveHelper.width(32),
+                              height: ResponsiveHelper.height(32),
                               decoration: BoxDecoration(
                                 color: const Color(0xFF3A3F5A),
                                 shape: BoxShape.circle,
@@ -104,44 +111,44 @@ class _PersonalInfoEditState extends State<PersonalInfoEdit> {
                                   width: 2,
                                 ),
                               ),
-                              child: const Icon(Icons.add,
-                                  size: 18, color: Colors.white),
+                              child: Icon(Icons.add,
+                                  size: ResponsiveHelper.iconSize(18), color: Colors.white),
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 32),
+                  SizedBox(height: ResponsiveHelper.space(32)),
 
                   /// ---------- FORM ----------
                   CustomTextField(
                     label: "Name",
                     controller: controller.nameController,
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: ResponsiveHelper.space(20)),
                   CustomTextField(
                     label: "Email",
                     controller: controller.emailController,
                     keyboardType: TextInputType.emailAddress,
                     enabled: false, // read-only
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: ResponsiveHelper.space(20)),
                   CustomTextField(
                     label: "Date of Birth",
                     controller: controller.dobController,
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: ResponsiveHelper.space(20)),
                   CustomTextField(
                     label: "Time of Birth",
                     controller: controller.timeController,
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: ResponsiveHelper.space(20)),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Birth Country", style: TextStyle(fontSize: 14, color: Colors.white)),
-                      const SizedBox(height: 8),
+                      Text("Birth Country", style: TextStyle(fontSize: ResponsiveHelper.fontSize(14), color: Colors.white)),
+                      SizedBox(height: ResponsiveHelper.space(8)),
                       AutocompleteLocationField(
                         controller: controller.countryController,
                         hintText: "Enter birth country",
@@ -149,12 +156,12 @@ class _PersonalInfoEditState extends State<PersonalInfoEdit> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: ResponsiveHelper.space(20)),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Birth City", style: TextStyle(fontSize: 14, color: Colors.white)),
-                      const SizedBox(height: 8),
+                      Text("Birth City", style: TextStyle(fontSize: ResponsiveHelper.fontSize(14), color: Colors.white)),
+                      SizedBox(height: ResponsiveHelper.space(8)),
                       AutocompleteLocationField(
                         controller: controller.cityController,
                         hintText: "Enter birth city",
@@ -208,25 +215,32 @@ class CustomTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label,
-            style: const TextStyle(fontSize: 14, color: Colors.white)),
-        const SizedBox(height: 8),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(14), color: Colors.white)),
+        SizedBox(height: ResponsiveHelper.space(8)),
         TextField(
           controller: controller,
           keyboardType: keyboardType,
           enabled: enabled,
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
           decoration: InputDecoration(
             filled: true,
             fillColor: const Color(0xFF0F1329),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8)),
+              borderSide: const BorderSide(color: Color(0xFF2A2F4A)),
             ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8)),
+              borderSide: const BorderSide(color: Color(0xFF2A2F4A)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8)),
+              borderSide: const BorderSide(color: Color(0xFF3A3F5A)),
+            ),
+            contentPadding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(16), vertical: ResponsiveHelper.padding(14)),
           ),
         ),
       ],
     );
   }
 }
-
-
-

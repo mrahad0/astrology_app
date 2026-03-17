@@ -1,6 +1,7 @@
 // lib/views/pages/generateChart/transit_chart.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:astrology_app/views/base/custom_snackBar.dart';
@@ -39,12 +40,12 @@ class _TransitChartState extends State<TransitChart> {
         title: "Generate Chart",
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(24)),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -56,40 +57,40 @@ class _TransitChartState extends State<TransitChart> {
                   _stepBar(false),
                 ],
               ),
-              const SizedBox(height: 25),
+              SizedBox(height: ResponsiveHelper.space(25)),
 
-              const Text(
+              Text(
                 "Birth Information (For Natal Chart)",
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: ResponsiveHelper.fontSize(18),
                     fontWeight: FontWeight.w600),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: ResponsiveHelper.space(20)),
 
               // Birth Info Container
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
                   color: CustomColors.secondbackgroundColor,
                   border: Border.all(color: const Color(0xFF2F3448)),
                 ),
                 child: Column(
                   children: [
                     _inputField("Name", "enter your name", controller: nameController),
-                    const SizedBox(height: 15),
+                    SizedBox(height: ResponsiveHelper.space(15)),
                     _inputField("Date of Birth", birthDate == null ? "mm/dd/yyyy" : "${birthDate!.month}/${birthDate!.day}/${birthDate!.year}",
                         icon: Icons.calendar_today, onTap: pickBirthDate),
-                    const SizedBox(height: 15),
+                    SizedBox(height: ResponsiveHelper.space(15)),
                     _inputField("Birth Time", birthTime == null ? "enter birth time" : "${birthTime!.hour}:${birthTime!.minute.toString().padLeft(2, '0')}",
                         icon: Icons.access_time, onTap: pickBirthTime),
-                    const SizedBox(height: 15),
+                    SizedBox(height: ResponsiveHelper.space(15)),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Birth Country", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
-                        const SizedBox(height: 8),
+                        Text("Birth Country", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
+                        SizedBox(height: ResponsiveHelper.space(8)),
                         AutocompleteLocationField(
                           controller: countryController,
                           hintText: "Enter accurate birth country name",
@@ -97,12 +98,12 @@ class _TransitChartState extends State<TransitChart> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 15),
+                    SizedBox(height: ResponsiveHelper.space(15)),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Birth City", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
-                        const SizedBox(height: 8),
+                        Text("Birth City", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
+                        SizedBox(height: ResponsiveHelper.space(8)),
                         AutocompleteLocationField(
                           controller: cityController,
                           hintText: "Enter accurate birth city name",
@@ -114,22 +115,22 @@ class _TransitChartState extends State<TransitChart> {
                 ),
               ),
 
-              const SizedBox(height: 25),
+              SizedBox(height: ResponsiveHelper.space(25)),
 
-              const Text(
+              Text(
                 "Transit Date",
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: ResponsiveHelper.fontSize(18),
                     fontWeight: FontWeight.w600),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: ResponsiveHelper.space(20)),
 
               // Transit Date Container
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
                   color: CustomColors.secondbackgroundColor,
                   border: Border.all(color: const Color(0xFF2F3448)),
                 ),
@@ -140,7 +141,7 @@ class _TransitChartState extends State<TransitChart> {
                 ),
               ),
 
-              const SizedBox(height: 60),
+              SizedBox(height: ResponsiveHelper.space(60)),
               CustomButton(
                 text: "Next",
                 onpress: () {
@@ -158,7 +159,7 @@ class _TransitChartState extends State<TransitChart> {
                   }
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: ResponsiveHelper.space(20)),
             ],
           ),
         ),
@@ -186,48 +187,48 @@ class _TransitChartState extends State<TransitChart> {
       children: [
         Text(
           title,
-          style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+          style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: ResponsiveHelper.space(8)),
         GestureDetector(
           onTap: onTap,
           child: Container(
-            height: 48, // ✅ fixed height দিয়ে দিন সব field এর জন্য
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            height: ResponsiveHelper.height(55),
+            padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(14)),
             decoration: BoxDecoration(
               color: const Color(0xFF111424),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
               border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: Row(
               children: [
                 Expanded(
-                  child: onTap != null // যদি onTap থাকে (date/time field)
+                  child: onTap != null
                       ? Align(
-                    alignment: Alignment.centerLeft, // ✅ text কে vertically center করবে
+                    alignment: Alignment.centerLeft,
                     child: Text(
                       hint,
                       style: TextStyle(
                         color: hint.contains("mm/dd/yyyy") || hint.contains("Enter accurate")
-                            ? Colors.grey  // placeholder text grey
-                            : Colors.white, // selected value white
-                        fontSize: 16,
+                            ? Colors.grey
+                            : Colors.white,
+                        fontSize: ResponsiveHelper.fontSize(16),
                       ),
                     ),
                   )
-                      : TextField( // normal text field
+                      : TextField(
                     controller: controller,
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(16)),
                     decoration: InputDecoration(
                       hintText: hint,
-                      hintStyle: const TextStyle(color: Colors.grey),
+                      hintStyle: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(16)),
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.zero, // ✅ extra padding remove
+                      contentPadding: EdgeInsets.zero,
                     ),
                   ),
                 ),
                 if (icon != null)
-                  Icon(icon, color: Colors.grey, size: 20),
+                  Icon(icon, color: Colors.grey, size: ResponsiveHelper.iconSize(20)),
               ],
             ),
           ),
@@ -248,10 +249,13 @@ class _TransitChartState extends State<TransitChart> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        padding: EdgeInsets.symmetric(
+          horizontal: ResponsiveHelper.padding(14),
+          vertical: ResponsiveHelper.padding(14),
+        ),
         decoration: BoxDecoration(
           color: const Color(0xFF111424),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           border: Border.all(color: const Color(0xFF2F3448)),
         ),
         child: Column(
@@ -259,9 +263,9 @@ class _TransitChartState extends State<TransitChart> {
           children: [
             Text(
               title,
-              style: const TextStyle(color: Colors.white, fontSize: 14),
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: ResponsiveHelper.space(6)),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -270,11 +274,11 @@ class _TransitChartState extends State<TransitChart> {
                     text.isEmpty ? "dd/mm/yyyy" : text,
                     style: TextStyle(
                       color: text.isEmpty ? Colors.grey : Colors.white,
-                      fontSize: 16,
+                      fontSize: ResponsiveHelper.fontSize(16),
                     ),
                   ),
                 ),
-                const Icon(Icons.calendar_today, size: 18, color: Colors.grey),
+                Icon(Icons.calendar_today, size: ResponsiveHelper.iconSize(18), color: Colors.grey),
               ],
             ),
           ],
@@ -314,14 +318,13 @@ class _TransitChartState extends State<TransitChart> {
   Widget _stepBar(bool filled) {
     return Expanded(
       child: Container(
-        height: 4,
-        margin: const EdgeInsets.only(right: 6),
+        height: ResponsiveHelper.height(4),
+        margin: EdgeInsets.only(right: ResponsiveHelper.space(6)),
         decoration: BoxDecoration(
           color: filled ? Colors.purple : const Color(0xFF2F3448),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(20)),
         ),
       ),
     );
   }
 }
-

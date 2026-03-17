@@ -1,4 +1,5 @@
 import 'package:astrology_app/controllers/auth_controller/forgetPass_controller.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:astrology_app/views/base/custom_textField.dart';
 import 'package:flutter/material.dart';
@@ -25,76 +26,84 @@ class _ForgotpassScreenState extends State<ForgotpassScreen> {
       body: Form(
         key: _formKey,
         child: SafeArea(
-          child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 20,horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
+          child: Center(
+            child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(
+              vertical: ResponsiveHelper.padding(20),
+              horizontal: ResponsiveHelper.isTablet ? ResponsiveHelper.horizontalPadding : 20,
+            ),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: ResponsiveHelper.maxContentWidth ?? double.infinity,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  IconButton(
-                    color: Colors.white,
-                    icon: Icon(Icons.arrow_back_ios_new),
-                    onPressed: () => Navigator.pop(context),
+                  Row(
+                    children: [
+                      IconButton(
+                        color: Colors.white,
+                        icon: Icon(Icons.arrow_back_ios_new),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+
+                      SizedBox(width: ResponsiveHelper.space(10)),
+
+                      Text('Forgot Password',style: TextStyle(
+                          color: Colors.white,
+                          fontSize: ResponsiveHelper.fontSize(18),
+                          fontWeight: FontWeight.w500
+                      ),),
+                    ],
                   ),
 
-                  SizedBox(width: 10,),
+                  SizedBox(height: ResponsiveHelper.space(250)),
 
-                  Text('Forgot Password',style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500
-                  ),),
+                  Text(
+                    "Select which contact details should we use to reset your password.",
+                    style: TextStyle(fontSize: ResponsiveHelper.fontSize(16),
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white),),
+
+                  SizedBox(height: ResponsiveHelper.space(24)),
+
+                  Align(alignment: Alignment.topLeft,
+                      child: Text(
+                        "E-mail",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: ResponsiveHelper.fontSize(14)
+                        ),)),
+
+                  SizedBox(height: ResponsiveHelper.space(10)),
+
+                  CustomTextFromField(
+                    hintText: "Enter your Email",
+                    controller: _emailCtrl,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "email is required!";
+                      }
+                      return null;
+                    },
+                  ),
+
+                  SizedBox(height: ResponsiveHelper.space(157)),
+
+                  Obx(() =>
+                      CustomButton(
+                        text: "Continue",
+                        isLoading: _forgetController.isLoading.value,
+                        onpress: () {
+                       if (_formKey.currentState!.validate()) {
+                         _forgetController.forgetpassword(_emailCtrl.text);
+                       }
+                      },))
                 ],
               ),
-
-              SizedBox(
-                height: 250,
-              ),
-
-              Text(
-                "Select which contact details should we use to reset your password.",
-                style: TextStyle(fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white),),
-
-              SizedBox(height: 24,),
-
-              Align(alignment: Alignment.topLeft,
-                  child: Text(
-                    "E-mail",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14
-                    ),)),
-
-              const SizedBox(height: 10),
-
-              CustomTextFromField(
-                hintText: "Enter your Email",
-                controller: _emailCtrl,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "email is required!";
-                  }
-                  return null;
-                },
-              ),
-
-              SizedBox(height: 157),
-
-              Obx(() =>
-                  CustomButton(
-                    text: "Continue",
-                    isLoading: _forgetController.isLoading.value,
-                    onpress: () {
-                   if (_formKey.currentState!.validate()) {
-                     _forgetController.forgetpassword(_emailCtrl.text);
-                   }
-                  },))
-            ],
-          ),
+            ),
+            ),
           ),
         ),
       ),

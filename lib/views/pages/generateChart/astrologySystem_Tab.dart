@@ -1,6 +1,7 @@
 // astrology_system_tab.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,16 +28,16 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
       backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
           child: Column(
             children: [
               Container(
-                height: 200,
+                height: ResponsiveHelper.height(200),
                 width: double.infinity,
-                padding: EdgeInsets.all(12),
+                padding: EdgeInsets.all(ResponsiveHelper.padding(12)),
                 decoration: BoxDecoration(
                   color: CustomColors.secondbackgroundColor,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
                   border: Border.all(
                     color: Color(0xff2A2F45),
                     width: 1,
@@ -45,18 +46,22 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       "Select Chart Type",
-                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: ResponsiveHelper.fontSize(16),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: ResponsiveHelper.space(16)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(child: buildCard(0, "Natal \nChart", "assets/icons/natal.svg")),
-                        SizedBox(width: 8),
+                        SizedBox(width: ResponsiveHelper.space(8)),
                         Expanded(child: buildCard(1, "Transit \nChart", "assets/icons/transit.svg")),
-                        SizedBox(width: 8),
+                        SizedBox(width: ResponsiveHelper.space(8)),
                         Expanded(child: buildCard(2, "Synastry \nChart", "assets/icons/synastry.svg")),
                       ],
                     ),
@@ -81,7 +86,7 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
                 },
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: ResponsiveHelper.space(20)),
             ],
           ),
         ),
@@ -97,27 +102,31 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
         setState(() => selectedIndex = index);
       },
       child: Container(
-        width: 100,
-        height: 110,
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        height: ResponsiveHelper.height(115), // Increased slightly to accommodate scaled text
+        padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
         decoration: BoxDecoration(
           color: const Color(0xff1B1F33),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
           border: Border.all(
             color: isSelected ? Colors.purple : const Color(0xff2A2F45),
             width: 1,
           ),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(url),
-            const SizedBox(height: 12),
+            SvgPicture.asset(
+              url,
+              width: ResponsiveHelper.iconSize(24),
+              height: ResponsiveHelper.iconSize(24),
+            ),
+            SizedBox(height: ResponsiveHelper.space(12)),
             Text(
               title,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: isSelected ? Colors.purple : Colors.white,
-                fontSize: 14,
+                fontSize: ResponsiveHelper.fontSize(14),
                 fontWeight: FontWeight.w600,
               ),
             )
@@ -127,4 +136,3 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
     );
   }
 }
-

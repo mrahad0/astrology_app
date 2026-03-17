@@ -1,6 +1,8 @@
+// lib/views/pages/profile/accounts/personal_info.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/controllers/profile_controller/personal_info_controller.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,34 +21,37 @@ class PersonalInfo extends StatelessWidget {
         title: "Personal Information",
         leading: GestureDetector(
           onTap:() => Navigator.pop(context),
-          child: Icon(Icons.arrow_back_ios, color: Colors.white),
+          child: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
         ),
       ),
       body: SafeArea(
         child: Obx(() {
           if (controller.isLoading.value) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator(
+                color: const Color(0xFF9A3BFF),
+                strokeWidth: ResponsiveHelper.width(4),
+              ),
+            );
           }
 
           if (controller.userInfo.value == null) {
             return Center(
               child: Text(
                 "No user info available",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
               ),
             );
           }
 
-          // user info is accessed via controller directly
-
           return SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(10),
+              padding: EdgeInsets.all(ResponsiveHelper.padding(10)),
               child: Container(
-                padding: const EdgeInsets.all(15),
+                padding: EdgeInsets.all(ResponsiveHelper.padding(15)),
                 decoration: BoxDecoration(
                   color: CustomColors.secondbackgroundColor,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
                   border: Border.all(color: const Color(0xFF2A2F4A)),
                 ),
                 child: Column(
@@ -56,34 +61,34 @@ class PersonalInfo extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           'Personal Information',
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
+                              fontSize: ResponsiveHelper.fontSize(16), fontWeight: FontWeight.w500, color: Colors.white),
                         ),
                         OutlinedButton.icon(
                           onPressed: () => Get.toNamed(Routes.personalInfoEdit),
-                          icon: const Icon(Icons.edit_outlined, size: 16),
-                          label: const Text('Edit Info'),
+                          icon: Icon(Icons.edit_outlined, size: ResponsiveHelper.iconSize(16)),
+                          label: Text('Edit Info', style: TextStyle(fontSize: ResponsiveHelper.fontSize(12))),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: Colors.white,
                             side: const BorderSide(color: Color(0xFF3A3F5A)),
                             backgroundColor: const Color(0xFF252A45),
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(12), vertical: ResponsiveHelper.padding(8)),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8)),
                             ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: ResponsiveHelper.space(24)),
 
                     // Profile Picture
                     Center(
                       child: Container(
-                        width: 100,
-                        height: 100,
+                        width: ResponsiveHelper.width(100),
+                        height: ResponsiveHelper.height(100),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
@@ -95,34 +100,34 @@ class PersonalInfo extends StatelessWidget {
                           if (controller.profileImageUrl.isNotEmpty) {
                             return ClipOval(
                               child: Image.network(
-                                controller.profileImageUrl.value, // ✅ full URL
+                                controller.profileImageUrl.value,
                                 fit: BoxFit.cover,
                                 errorBuilder: (_, __, ___) => Container(
                                   color: const Color(0xFF2A2F4A),
-                                  child: const Icon(Icons.person, size: 50, color: Colors.grey),
+                                  child: Icon(Icons.person, size: ResponsiveHelper.iconSize(50), color: Colors.grey),
                                 ),
                               ),
                             );
                           } else {
-                            return const Icon(Icons.person, size: 50, color: Colors.grey);
+                            return Icon(Icons.person, size: ResponsiveHelper.iconSize(50), color: Colors.grey);
                           }
                         }),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    SizedBox(height: ResponsiveHelper.space(32)),
 
                     // Text Fields
                     CustomTextField(label: 'Name', controller: controller.nameController),
-                    const SizedBox(height: 20),
+                    SizedBox(height: ResponsiveHelper.space(20)),
                     CustomTextField(
                         label: 'Email', controller: controller.emailController, keyboardType: TextInputType.emailAddress),
-                    const SizedBox(height: 20),
+                    SizedBox(height: ResponsiveHelper.space(20)),
                     CustomTextField(label: 'Date of Birth', controller: controller.dobController),
-                    const SizedBox(height: 20),
+                    SizedBox(height: ResponsiveHelper.space(20)),
                     CustomTextField(label: 'Time of Birth', controller: controller.timeController),
-                    const SizedBox(height: 20),
+                    SizedBox(height: ResponsiveHelper.space(20)),
                     CustomTextField(label: 'Birth Country', controller: controller.countryController),
-                    const SizedBox(height: 20),
+                    SizedBox(height: ResponsiveHelper.space(20)),
                     CustomTextField(label: 'Birth City', controller: controller.cityController),
                   ],
                 ),
@@ -135,7 +140,6 @@ class PersonalInfo extends StatelessWidget {
   }
 }
 
-// CustomTextField remains the same
 class CustomTextField extends StatelessWidget {
   final String label;
   final TextEditingController controller;
@@ -154,33 +158,33 @@ class CustomTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label,
-            style: const TextStyle(
-              fontSize: 14,
+            style: TextStyle(
+              fontSize: ResponsiveHelper.fontSize(14),
               color: Colors.white,
               fontWeight: FontWeight.w400,
             )),
-        const SizedBox(height: 8),
+        SizedBox(height: ResponsiveHelper.space(8)),
         TextField(
           readOnly: true,
           controller: controller,
           keyboardType: keyboardType,
-          style: const TextStyle(color: Colors.white, fontSize: 15),
+          style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(15)),
           decoration: InputDecoration(
             filled: true,
             fillColor: const Color(0xFF0F1329),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8)),
               borderSide: const BorderSide(color: Color(0xFF2A2F4A)),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8)),
               borderSide: const BorderSide(color: Color(0xFF2A2F4A)),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8)),
               borderSide: const BorderSide(color: Color(0xFF3A3F5A)),
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(16), vertical: ResponsiveHelper.padding(14)),
           ),
         ),
       ],

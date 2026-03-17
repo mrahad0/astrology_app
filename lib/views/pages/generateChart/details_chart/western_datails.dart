@@ -3,6 +3,7 @@ import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,8 +33,11 @@ class _WesternDatailsState extends State<WesternDatails> {
             return _buildSynastryChart();
           }
 
-          return const Center(
-            child: Text('No data available', style: TextStyle(color: Colors.white)),
+          return Center(
+            child: Text(
+              'No data available',
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(16)),
+            ),
           );
         }),
       ),
@@ -45,8 +49,11 @@ class _WesternDatailsState extends State<WesternDatails> {
     final westernData = controller.natalResponse.value?.charts['western'];
 
     if (westernData == null) {
-      return const Center(
-        child: CircularProgressIndicator(color: Color(0xFF9A3BFF)),
+      return Center(
+        child: CircularProgressIndicator(
+          color: const Color(0xFF9A3BFF),
+          strokeWidth: ResponsiveHelper.width(4),
+        ),
       );
     }
 
@@ -55,44 +62,56 @@ class _WesternDatailsState extends State<WesternDatails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                border: Border.all(color: const Color(0xff262A40)),
-                borderRadius: BorderRadius.circular(14),
-                color: CustomColors.secondbackgroundColor,
-              ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(child:
-                Text("About Western Chart",style: TextStyle(color: Colors.white),),),
-                const SizedBox(height: 10),
-                Text("Based on the seasons. Your sign reflects where the Sun was relative to the spring equinox. More focused on personality, psychology, and self-understanding.",
-                     style:TextStyle(color: Colors.white) ,
-                ),
-              ]
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          /// Info Card
-          Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
               color: CustomColors.secondbackgroundColor,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Info",
+                Center(
+                  child: Text(
+                    "About Western Chart",
                     style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600)),
-                const SizedBox(height: 20),
+                      color: Colors.white,
+                      fontSize: ResponsiveHelper.fontSize(16),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                SizedBox(height: ResponsiveHelper.space(10)),
+                Text(
+                  "Based on the seasons. Your sign reflects where the Sun was relative to the spring equinox. More focused on personality, psychology, and self-understanding.",
+                  style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
+                ),
+              ],
+            ),
+          ),
+
+          SizedBox(height: ResponsiveHelper.space(24)),
+
+          /// Info Card
+          Container(
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xff262A40)),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
+              color: CustomColors.secondbackgroundColor,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Info",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ResponsiveHelper.fontSize(18),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: ResponsiveHelper.space(20)),
                 _infoRow("Name:", westernData.name),
                 _infoRow("Date of Birth:", westernData.birthDate),
                 _infoRow("Birth Time:", westernData.birthTime),
@@ -103,21 +122,22 @@ class _WesternDatailsState extends State<WesternDatails> {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Chart Wheel
-          const Text(
+          Text(
             "Western Chart Wheel",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.w600),
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: ResponsiveHelper.space(16)),
 
           Center(
             child: SizedBox(
-              height: 350,
+              height: ResponsiveHelper.height(350),
               width: MediaQuery.of(context).size.width,
               child: westernData.imageUrl.isNotEmpty
                   ? Image.network(
@@ -125,36 +145,37 @@ class _WesternDatailsState extends State<WesternDatails> {
                 fit: BoxFit.contain,
                 loadingBuilder: (context, child, progress) {
                   if (progress == null) return child;
-                  return const Center(
+                  return Center(
                     child: CircularProgressIndicator(
-                      color: Color(0xFF9A3BFF),
+                      color: const Color(0xFF9A3BFF),
+                      strokeWidth: ResponsiveHelper.width(4),
                     ),
                   );
                 },
                 errorBuilder: (context, error, stackTrace) {
-                  return const Center(
-                    child: Icon(Icons.error,
-                        color: Colors.red, size: 50),
+                  return Center(
+                    child: Icon(Icons.error, color: Colors.red, size: ResponsiveHelper.iconSize(50)),
                   );
                 },
               )
                   : Image.asset(
                 "assets/images/chartimage.png",
-                fit: BoxFit.fill,
+                fit: BoxFit.contain,
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Planetary Positions
-          const Text(
+          Text(
             "Planetary Positions",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.w600),
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: ResponsiveHelper.space(10)),
 
           ...westernData.planets.entries.take(10).map((entry) {
             final planet = entry.value;
@@ -164,17 +185,18 @@ class _WesternDatailsState extends State<WesternDatails> {
             );
           }),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Key Aspects
-          const Text(
+          Text(
             "Key Aspects",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.w600),
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: ResponsiveHelper.space(10)),
 
           ...westernData.aspects.take(5).map((aspect) {
             return _aspectTile(
@@ -183,7 +205,7 @@ class _WesternDatailsState extends State<WesternDatails> {
             );
           }),
 
-          const SizedBox(height: 40),
+          SizedBox(height: ResponsiveHelper.space(40)),
 
           Obx(() => CustomButton(
             text: "Generate",
@@ -198,7 +220,7 @@ class _WesternDatailsState extends State<WesternDatails> {
               Get.toNamed(Routes.aiComprehensive);
             },
           )),
-          const SizedBox(height: 20),
+          SizedBox(height: ResponsiveHelper.space(20)),
         ],
       ),
     );
@@ -209,8 +231,11 @@ class _WesternDatailsState extends State<WesternDatails> {
     final transitData = controller.transitResponse.value?.results['western'];
 
     if (transitData == null) {
-      return const Center(
-        child: CircularProgressIndicator(color: Color(0xFF9A3BFF)),
+      return Center(
+        child: CircularProgressIndicator(
+          color: const Color(0xFF9A3BFF),
+          strokeWidth: ResponsiveHelper.width(4),
+        ),
       );
     }
 
@@ -221,44 +246,56 @@ class _WesternDatailsState extends State<WesternDatails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
               color: CustomColors.secondbackgroundColor,
             ),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(child:
-                  Text("About Western Chart",style: TextStyle(color: Colors.white),),),
-                  const SizedBox(height: 10),
-                  Text("Based on the seasons. Your sign reflects where the Sun was relative to the spring equinox. More focused on personality, psychology, and self-understanding.",
-                    style:TextStyle(color: Colors.white) ,
+                  Center(
+                    child: Text(
+                      "About Western Chart",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: ResponsiveHelper.fontSize(16),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: ResponsiveHelper.space(10)),
+                  Text(
+                    "Based on the seasons. Your sign reflects where the Sun was relative to the spring equinox. More focused on personality, psychology, and self-understanding.",
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
                   ),
                 ]
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Info Card
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
               color: CustomColors.secondbackgroundColor,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Transit Info",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600)),
-                const SizedBox(height: 20),
+                Text(
+                  "Transit Info",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ResponsiveHelper.fontSize(18),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: ResponsiveHelper.space(20)),
                 _infoRow("Name:", transitData.profileName),
                 _infoRow("Transit Date:", transitData.transitDate),
                 _infoRow("Overall Quality:", transitData.overallQuality),
@@ -267,21 +304,22 @@ class _WesternDatailsState extends State<WesternDatails> {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Chart Image
-          const Text(
+          Text(
             "Transit Chart",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.w600),
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: ResponsiveHelper.space(16)),
 
           Center(
             child: SizedBox(
-              height: 350,
+              height: ResponsiveHelper.height(350),
               width: MediaQuery.of(context).size.width,
               child: imageUrl.isNotEmpty
                   ? Image.network(
@@ -289,48 +327,49 @@ class _WesternDatailsState extends State<WesternDatails> {
                 fit: BoxFit.contain,
                 loadingBuilder: (context, child, progress) {
                   if (progress == null) return child;
-                  return const Center(
+                  return Center(
                     child: CircularProgressIndicator(
-                      color: Color(0xFF9A3BFF),
+                      color: const Color(0xFF9A3BFF),
+                      strokeWidth: ResponsiveHelper.width(4),
                     ),
                   );
                 },
                 errorBuilder: (context, error, stackTrace) {
-                  return const Center(
-                    child: Icon(Icons.error,
-                        color: Colors.red, size: 50),
+                  return Center(
+                    child: Icon(Icons.error, color: Colors.red, size: ResponsiveHelper.iconSize(50)),
                   );
                 },
               )
                   : Image.asset(
                 "assets/images/chartimage.png",
-                fit: BoxFit.fill,
+                fit: BoxFit.contain,
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Active Transits
-          const Text(
+          Text(
             "Active Transits",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.w600),
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: ResponsiveHelper.space(10)),
 
           if (transitData.transits.isEmpty)
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
               decoration: BoxDecoration(
                 color: CustomColors.secondbackgroundColor,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
                 border: Border.all(color: const Color(0xff2B2F45)),
               ),
-              child: const Text(
+              child: Text(
                 "No significant transits at this time",
-                style: TextStyle(color: Colors.white70),
+                style: TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(14)),
               ),
             )
           else
@@ -338,34 +377,37 @@ class _WesternDatailsState extends State<WesternDatails> {
               return _transitTile(transit);
             }),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Interpretation
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
               color: CustomColors.secondbackgroundColor,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Interpretation",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600)),
-                const SizedBox(height: 12),
+                Text(
+                  "Interpretation",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ResponsiveHelper.fontSize(18),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: ResponsiveHelper.space(12)),
                 Text(
                   transitData.interpretation,
-                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  style: TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(14)),
                 ),
               ],
             ),
           ),
 
-          const SizedBox(height: 40),
+          SizedBox(height: ResponsiveHelper.space(40)),
 
           Obx(() => CustomButton(
             text: "Generate",
@@ -380,7 +422,7 @@ class _WesternDatailsState extends State<WesternDatails> {
               Get.toNamed(Routes.aiComprehensive);
             },
           )),
-          const SizedBox(height: 20),
+          SizedBox(height: ResponsiveHelper.space(20)),
         ],
       ),
     );
@@ -391,8 +433,11 @@ class _WesternDatailsState extends State<WesternDatails> {
     final synastryData = controller.synastryResponse.value?.results['western'];
 
     if (synastryData == null) {
-      return const Center(
-        child: CircularProgressIndicator(color: Color(0xFF9A3BFF)),
+      return Center(
+        child: CircularProgressIndicator(
+          color: const Color(0xFF9A3BFF),
+          strokeWidth: ResponsiveHelper.width(4),
+        ),
       );
     }
 
@@ -403,44 +448,56 @@ class _WesternDatailsState extends State<WesternDatails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
               color: CustomColors.secondbackgroundColor,
             ),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(child:
-                  Text("About Western Chart",style: TextStyle(color: Colors.white),),),
-                  const SizedBox(height: 10),
-                  Text("Based on the seasons. Your sign reflects where the Sun was relative to the spring equinox. More focused on personality, psychology, and self-understanding.",
-                    style:TextStyle(color: Colors.white) ,
+                  Center(
+                    child: Text(
+                      "About Western Chart",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: ResponsiveHelper.fontSize(16),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: ResponsiveHelper.space(10)),
+                  Text(
+                    "Based on the seasons. Your sign reflects where the Sun was relative to the spring equinox. More focused on personality, psychology, and self-understanding.",
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
                   ),
                 ]
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Info Card
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
               color: CustomColors.secondbackgroundColor,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Synastry Info",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600)),
-                const SizedBox(height: 20),
+                Text(
+                  "Synastry Info",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ResponsiveHelper.fontSize(18),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: ResponsiveHelper.space(20)),
                 _infoRow("Partner 1:", synastryData.profile1Name),
                 _infoRow("Partner 2:", synastryData.profile2Name),
                 _infoRow("Compatibility Score:", "${synastryData.compatibilityScore.toStringAsFixed(1)}%"),
@@ -448,21 +505,22 @@ class _WesternDatailsState extends State<WesternDatails> {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Chart Image
-          const Text(
+          Text(
             "Synastry Chart",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.w600),
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: ResponsiveHelper.space(16)),
 
           Center(
             child: SizedBox(
-              height: 350,
+              height: ResponsiveHelper.height(350),
               width: MediaQuery.of(context).size.width,
               child: imageUrl.isNotEmpty
                   ? Image.network(
@@ -470,36 +528,37 @@ class _WesternDatailsState extends State<WesternDatails> {
                 fit: BoxFit.contain,
                 loadingBuilder: (context, child, progress) {
                   if (progress == null) return child;
-                  return const Center(
+                  return Center(
                     child: CircularProgressIndicator(
-                      color: Color(0xFF9A3BFF),
+                      color: const Color(0xFF9A3BFF),
+                      strokeWidth: ResponsiveHelper.width(4),
                     ),
                   );
                 },
                 errorBuilder: (context, error, stackTrace) {
-                  return const Center(
-                    child: Icon(Icons.error,
-                        color: Colors.red, size: 50),
+                  return Center(
+                    child: Icon(Icons.error, color: Colors.red, size: ResponsiveHelper.iconSize(50)),
                   );
                 },
               )
                   : Image.asset(
                 "assets/images/chartimage.png",
-                fit: BoxFit.fill,
+                fit: BoxFit.contain,
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Key Aspects
-          const Text(
+          Text(
             "Relationship Aspects",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.w600),
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: ResponsiveHelper.space(10)),
 
           ...synastryData.aspects.take(10).map((aspect) {
             return _aspectTile(
@@ -508,34 +567,37 @@ class _WesternDatailsState extends State<WesternDatails> {
             );
           }),
 
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.space(24)),
 
           /// Interpretation
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
               color: CustomColors.secondbackgroundColor,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Interpretation",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600)),
-                const SizedBox(height: 12),
+                Text(
+                  "Interpretation",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ResponsiveHelper.fontSize(18),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: ResponsiveHelper.space(12)),
                 Text(
                   synastryData.interpretation,
-                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  style: TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(14)),
                 ),
               ],
             ),
           ),
 
-          const SizedBox(height: 40),
+          SizedBox(height: ResponsiveHelper.space(40)),
 
           Obx(() => CustomButton(
             text: "Generate",
@@ -550,7 +612,7 @@ class _WesternDatailsState extends State<WesternDatails> {
               Get.toNamed(Routes.aiComprehensive);
             },
           )),
-          const SizedBox(height: 20),
+          SizedBox(height: ResponsiveHelper.space(20)),
         ],
       ),
     );
@@ -560,17 +622,21 @@ class _WesternDatailsState extends State<WesternDatails> {
 
   Widget _infoRow(String key, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(12)),
       child: Row(
         children: [
           SizedBox(
-            width: 110,
-            child: Text(key,
-                style: const TextStyle(color: Colors.grey, fontSize: 14)),
+            width: ResponsiveHelper.width(110),
+            child: Text(
+              key,
+              style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
+            ),
           ),
           Expanded(
-            child: Text(value,
-                style: const TextStyle(color: Colors.white, fontSize: 14)),
+            child: Text(
+              value,
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
+            ),
           ),
         ],
       ),
@@ -579,22 +645,25 @@ class _WesternDatailsState extends State<WesternDatails> {
 
   Widget _planetTile(String planet, String detail) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
         border: Border.all(color: const Color(0xff2B2F45)),
       ),
       child: Row(
         children: [
-          Text("$planet:",
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold)),
-          const SizedBox(width: 8),
+          Text(
+            "$planet:",
+            style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.bold),
+          ),
+          SizedBox(width: ResponsiveHelper.space(8)),
           Expanded(
-            child:
-            Text(detail, style: const TextStyle(color: Color(0xffA4A9C1))),
+            child: Text(
+              detail,
+              style: TextStyle(color: const Color(0xffA4A9C1), fontSize: ResponsiveHelper.fontSize(14)),
+            ),
           ),
         ],
       ),
@@ -603,22 +672,30 @@ class _WesternDatailsState extends State<WesternDatails> {
 
   Widget _aspectTile(String title, String subtitle) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
         border: Border.all(color: const Color(0xff2B2F45)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: Text(title,
-                style: const TextStyle(
-                    color: Color(0xffFF6B9D), fontWeight: FontWeight.w600)),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: const Color(0xffFF6B9D),
+                fontSize: ResponsiveHelper.fontSize(14),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
-          Text(subtitle, style: const TextStyle(color: Colors.white70)),
+          Text(
+            subtitle,
+            style: TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(14)),
+          ),
         ],
       ),
     );
@@ -626,11 +703,11 @@ class _WesternDatailsState extends State<WesternDatails> {
 
   Widget _transitTile(TransitModel transit) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
         border: Border.all(color: const Color(0xff2B2F45)),
       ),
       child: Column(
@@ -641,24 +718,27 @@ class _WesternDatailsState extends State<WesternDatails> {
             children: [
               Text(
                 "${transit.planet} ${transit.aspect}",
-                style: const TextStyle(
-                    color: Color(0xffFF6B9D), fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  color: const Color(0xffFF6B9D),
+                  fontSize: ResponsiveHelper.fontSize(14),
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               Text(
                 "orb: ${transit.orb.toStringAsFixed(1)}°",
-                style: const TextStyle(color: Colors.white70, fontSize: 12),
+                style: TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(12)),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: ResponsiveHelper.space(8)),
           Text(
             "Natal: ${transit.natalPosition} → Transit: ${transit.transitPosition}",
-            style: const TextStyle(color: Color(0xffA4A9C1), fontSize: 13),
+            style: TextStyle(color: const Color(0xffA4A9C1), fontSize: ResponsiveHelper.fontSize(13)),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: ResponsiveHelper.space(6)),
           Text(
             transit.interpretation,
-            style: const TextStyle(color: Colors.white70, fontSize: 13),
+            style: TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(13)),
           ),
         ],
       ),

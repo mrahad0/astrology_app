@@ -3,6 +3,7 @@ import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,8 +33,11 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
           }
 
           if (evolutionaryData == null) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFF9A3BFF)),
+            return Center(
+              child: CircularProgressIndicator(
+                color: const Color(0xFF9A3BFF),
+                strokeWidth: ResponsiveHelper.width(4),
+              ),
             );
           }
 
@@ -42,42 +46,48 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
                   decoration: BoxDecoration(
                     border: Border.all(color: const Color(0xff262A40)),
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
                     color: CustomColors.secondbackgroundColor,
                   ),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(child:
-                        Text("About Evolutionary Chart",style: TextStyle(color: Colors.white),),),
-                        const SizedBox(height: 10),
+                        Text("About Evolutionary Chart",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: ResponsiveHelper.fontSize(16),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),),
+                        SizedBox(height: ResponsiveHelper.space(10)),
                         Text("Less about personality traits and more about soul purpose – what you are here to learn this lifetime.\nIt views your chart as a story of growth: the patterns you carry from the past and what you are meant to evolve toward.",
-                          style:TextStyle(color: Colors.white) ,
+                          style:TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)) ,
                         ),
                       ]
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: ResponsiveHelper.space(24)),
                 /// ---- INFO CARD ----
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
                   decoration: BoxDecoration(
                     border: Border.all(color: const Color(0xff262A40)),
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
                     color: CustomColors.secondbackgroundColor,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Info",
+                      Text("Info",
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 18,
+                              fontSize: ResponsiveHelper.fontSize(18),
                               fontWeight: FontWeight.w600)),
-                      const SizedBox(height: 20),
+                      SizedBox(height: ResponsiveHelper.space(20)),
                       _infoRow("Name:", evolutionaryData.name),
                       _infoRow("Date of Birth:", evolutionaryData.birthDate),
                       _infoRow("Birth Time:", evolutionaryData.birthTime),
@@ -88,21 +98,21 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: ResponsiveHelper.space(24)),
 
                 /// ---- EVOLUTIONARY POINTS CHART ----
-                const Text(
+                Text(
                   "Evolutionary Chart",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 17,
+                      fontSize: ResponsiveHelper.fontSize(17),
                       fontWeight: FontWeight.w600),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: ResponsiveHelper.space(16)),
 
                 Center(
-                  child: Container(
-                    height: 350,
+                  child: SizedBox(
+                    height: ResponsiveHelper.height(350),
                     width: MediaQuery.of(context).size.width,
                     child: evolutionaryData.imageUrl.isNotEmpty
                         ? Image.network(
@@ -110,27 +120,28 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
                       fit: BoxFit.contain,
                       loadingBuilder: (context, child, progress) {
                         if (progress == null) return child;
-                        return const Center(
+                        return Center(
                           child: CircularProgressIndicator(
-                            color: Color(0xFF9A3BFF),
+                            color: const Color(0xFF9A3BFF),
+                            strokeWidth: ResponsiveHelper.width(4),
                           ),
                         );
                       },
                       errorBuilder: (context, error, stackTrace) {
-                        return const Center(
+                        return Center(
                           child: Icon(Icons.error,
-                              color: Colors.red, size: 50),
+                              color: Colors.red, size: ResponsiveHelper.iconSize(50)),
                         );
                       },
                     )
                         : Image.asset(
                       "assets/images/chartimage.png",
-                      fit: BoxFit.fill,
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: ResponsiveHelper.space(24)),
 
                 /// ---- POINTS GRID ----
                 Row(
@@ -141,7 +152,7 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
                         evolutionaryData.planets['North Node']?.sign ?? '-',
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: ResponsiveHelper.space(12)),
                     Expanded(
                       child: _pointCard(
                         "South Node",
@@ -151,7 +162,7 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
                   ],
                 ),
 
-                const SizedBox(height: 12),
+                SizedBox(height: ResponsiveHelper.space(12)),
 
                 Row(
                   children: [
@@ -161,7 +172,7 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
                         evolutionaryData.planets['Pluto']?.sign ?? '-',
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: ResponsiveHelper.space(12)),
                     Expanded(
                       child: _pointCard(
                         "Chiron",
@@ -171,7 +182,7 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
                   ],
                 ),
 
-                const SizedBox(height: 40),
+                SizedBox(height: ResponsiveHelper.space(40)),
 
                 Obx(() => CustomButton(
                   text: "Generate",
@@ -187,7 +198,7 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
                   },
                 )),
 
-                const SizedBox(height: 20),
+                SizedBox(height: ResponsiveHelper.space(20)),
               ],
             ),
           );
@@ -198,17 +209,17 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
 
   Widget _infoRow(String key, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(12)),
       child: Row(
         children: [
           SizedBox(
-            width: 110,
+            width: ResponsiveHelper.width(110),
             child: Text(key,
-                style: const TextStyle(color: Colors.grey, fontSize: 14)),
+                style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14))),
           ),
           Expanded(
             child: Text(value,
-                style: const TextStyle(color: Colors.white, fontSize: 14)),
+                style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14))),
           ),
         ],
       ),
@@ -217,30 +228,30 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
 
   Widget _pointCard(String title, String subtitle) {
     return Container(
-      height: 100,
-      width: 150,
-      padding: const EdgeInsets.all(16),
+      height: ResponsiveHelper.height(100),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
         border: Border.all(color: const Color(0xff2B2F45)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white70,
-              fontSize: 12,
+              fontSize: ResponsiveHelper.fontSize(12),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: ResponsiveHelper.space(8)),
           Text(
             subtitle,
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white,
-              fontSize: 14,
+              fontSize: ResponsiveHelper.fontSize(14),
               fontWeight: FontWeight.w600,
             ),
           ),

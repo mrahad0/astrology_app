@@ -1,3 +1,4 @@
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:astrology_app/views/base/custom_bottomBar.dart';
@@ -50,8 +51,8 @@ class _MainScreenState extends State<MainScreen> {
             // Bottom bar
             Positioned(
               bottom: 0,
-              left: 10,
-              right: 10,
+              left: ResponsiveHelper.padding(10),
+              right: ResponsiveHelper.padding(10),
               child: Obx(() => CustomBottomBar(
                 selectedIndex: currentIndex.value,
                 onItemTapped: (index) {

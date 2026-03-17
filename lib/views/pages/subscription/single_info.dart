@@ -1,5 +1,7 @@
+// lib/views/pages/subscription/single_info.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +28,7 @@ class _SingleInfo extends State<SingleInfo> {
         title: "Single Info",
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: Icon(Icons.arrow_back_ios, color: Colors.white),
+          child: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
         ),
       ),
       body: SafeArea(
@@ -36,14 +38,14 @@ class _SingleInfo extends State<SingleInfo> {
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
                   child: Column(
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(20),
+                        padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
                         decoration: BoxDecoration(
                           color: CustomColors.secondbackgroundColor,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
                           border: Border.all(
                             color: const Color(0xFF262A40).withOpacity(0.5),
                           ),
@@ -52,85 +54,85 @@ class _SingleInfo extends State<SingleInfo> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             /// Title
-                            const Text(
+                            Text(
                               "Birth Information",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: ResponsiveHelper.fontSize(20),
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const SizedBox(height: 24),
+                            SizedBox(height: ResponsiveHelper.space(24)),
 
                             /// Name
-                            const Text(
+                            Text(
                               "Name",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 15,
+                                fontSize: ResponsiveHelper.fontSize(15),
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: ResponsiveHelper.space(8)),
                             _buildTextField(
                               controller: nameController,
                               hint: "Enter accurate your name",
                             ),
-                            const SizedBox(height: 20),
+                            SizedBox(height: ResponsiveHelper.space(20)),
 
                             /// Date of Birth
-                            const Text(
+                            Text(
                               "Date of Birth",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 15,
+                                fontSize: ResponsiveHelper.fontSize(15),
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: ResponsiveHelper.space(8)),
                             _buildDateField(
                               controller: dateController,
                               hint: "mm/dd/yyyy",
                             ),
-                            const SizedBox(height: 20),
+                            SizedBox(height: ResponsiveHelper.space(20)),
 
                             /// Birth City
-                            const Text(
+                            Text(
                               "Birth City",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 15,
+                                fontSize: ResponsiveHelper.fontSize(15),
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: ResponsiveHelper.space(8)),
                             _buildTextField(
                               controller: cityController,
                               hint: "Enter accurate birth city name",
                             ),
-                            const SizedBox(height: 20),
+                            SizedBox(height: ResponsiveHelper.space(20)),
 
                             /// Birth Country
-                            const Text(
+                            Text(
                               "Birth Country",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 15,
+                                fontSize: ResponsiveHelper.fontSize(15),
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: ResponsiveHelper.space(8)),
                             _buildTextField(
                               controller: countryController,
                               hint: "Enter accurate birth country",
                             ),
-                            const SizedBox(height: 20),
+                            SizedBox(height: ResponsiveHelper.space(20)),
 
                             /// Birth Time
-                            const Text(
+                            Text(
                               "Birth Time",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 15,
+                                fontSize: ResponsiveHelper.fontSize(15),
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: ResponsiveHelper.space(8)),
                             _buildTextField(
                               controller: timeController,
                               hint: "Enter accurate birth time",
@@ -138,7 +140,7 @@ class _SingleInfo extends State<SingleInfo> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: ResponsiveHelper.space(20)),
 
                       CustomButton(
                         text: "Generate",
@@ -151,8 +153,6 @@ class _SingleInfo extends State<SingleInfo> {
                 ),
               ),
             ),
-
-            /// ---- GENERATE BUTTON ----
           ],
         ),
       ),
@@ -168,27 +168,27 @@ class _SingleInfo extends State<SingleInfo> {
   }) {
     return TextField(
       controller: controller,
-      style: const TextStyle(color: Colors.white, fontSize: 15),
+      style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(15)),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(color: Colors.white38, fontSize: 14),
+        hintStyle: TextStyle(color: Colors.white38, fontSize: ResponsiveHelper.fontSize(14)),
         filled: true,
         fillColor: const Color(0xFF0F1329).withOpacity(0.5),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           borderSide: const BorderSide(color: Color(0xFF262A40)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           borderSide: const BorderSide(color: Color(0xFF262A40)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           borderSide: const BorderSide(color: Color(0xFF3A3F5A)),
         ),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: ResponsiveHelper.padding(16),
+          vertical: ResponsiveHelper.padding(14),
         ),
       ),
     );
@@ -204,32 +204,32 @@ class _SingleInfo extends State<SingleInfo> {
     return TextField(
       controller: controller,
       readOnly: true,
-      style: const TextStyle(color: Colors.white, fontSize: 15),
+      style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(15)),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(color: Colors.white38, fontSize: 14),
+        hintStyle: TextStyle(color: Colors.white38, fontSize: ResponsiveHelper.fontSize(14)),
         filled: true,
         fillColor: const Color(0xFF0F1329).withOpacity(0.5),
-        suffixIcon: const Icon(
+        suffixIcon: Icon(
           Icons.calendar_today,
           color: Colors.white60,
-          size: 20,
+          size: ResponsiveHelper.iconSize(20),
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           borderSide: const BorderSide(color: Color(0xFF262A40)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           borderSide: const BorderSide(color: Color(0xFF262A40)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           borderSide: const BorderSide(color: Color(0xFF3A3F5A)),
         ),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: ResponsiveHelper.padding(16),
+          vertical: ResponsiveHelper.padding(14),
         ),
       ),
       onTap: () async {

@@ -1,5 +1,7 @@
+// lib/views/pages/subscription/subscription_page.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_alertDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,12 +13,12 @@ class SubscriptionPage extends StatefulWidget {
   @override
   State<SubscriptionPage> createState() => _SubscriptionPageState();
 
-  static const TextStyle labelStyle = TextStyle(color: Colors.white70, fontSize: 14);
-  static const TextStyle valueStyle = TextStyle(color: Colors.white, fontSize: 14);
+  static TextStyle get labelStyle => TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(14));
+  static TextStyle get valueStyle => TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14));
 
   static Widget infoRow(String label, String value, {bool green = false}) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -31,29 +33,27 @@ class SubscriptionPage extends StatefulWidget {
   }
   // ------------------- PLAN CARD -------------------
 
-  static Widget planCard(String title, String subtitle, String price,String url, BuildContext context) {
+  static Widget planCard(String title, String subtitle, String price, String url, BuildContext context) {
     return Container(
-      //height: 200,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
       decoration: BoxDecoration(
         image: DecorationImage(image: AssetImage(url), fit: BoxFit.cover),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
         border: Border.all(color: const Color(0xff2E334A)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 6),
-          Text(subtitle, style: const TextStyle(color: Colors.black)),
-          const SizedBox(height: 10),
-          Text(price, style: const TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 12),
+          Text(title, style: TextStyle(color: Colors.black, fontSize: ResponsiveHelper.fontSize(16), fontWeight: FontWeight.bold)),
+          SizedBox(height: ResponsiveHelper.space(6)),
+          Text(subtitle, style: TextStyle(color: Colors.black, fontSize: ResponsiveHelper.fontSize(12))),
+          SizedBox(height: ResponsiveHelper.space(10)),
+          Text(price, style: TextStyle(color: Colors.black, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.bold)),
+          SizedBox(height: ResponsiveHelper.space(12)),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                // screenWidth removed - was unused
                 CustomAlertdialog(
                   onPressed: (){
                     Get.toNamed(Routes.paymentCard);
@@ -65,9 +65,10 @@ class SubscriptionPage extends StatefulWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: CustomColors.primaryColor,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(8)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10))),
               ),
-              child: const Text("Upgrade", style: TextStyle(color: Colors.white)),
+              child: Text("Upgrade", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14))),
             ),
           ),
         ],
@@ -79,12 +80,12 @@ class SubscriptionPage extends StatefulWidget {
 
   static Widget featureItem(String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
       child: Row(
         children: [
-          SvgPicture.asset("assets/icons/tick-01.svg"),
-          const SizedBox(width: 8),
-          Expanded(child: Text(text, style: const TextStyle(color: Colors.white, fontSize: 14))),
+          SvgPicture.asset("assets/icons/tick-01.svg", height: ResponsiveHelper.iconSize(14), width: ResponsiveHelper.iconSize(14)),
+          SizedBox(width: ResponsiveHelper.space(8)),
+          Expanded(child: Text(text, style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)))),
         ],
       ),
     );
@@ -97,7 +98,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all( 20),
+          padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -105,49 +106,46 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                 children: [
                   GestureDetector(
                       onTap: () => Navigator.pop(context),
-                      child: Icon(Icons.arrow_back_ios, color: Colors.white,)),
-                  SizedBox(width: 20,),
+                      child: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20))),
+                  SizedBox(width: ResponsiveHelper.space(20)),
                   Text(
                     "Subscription",
-                    style: TextStyle(color: Colors.white, fontSize: 24),
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(24), fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: ResponsiveHelper.space(16)),
 
               infoCard(),
 
-              const SizedBox(height: 16),
+              SizedBox(height: ResponsiveHelper.space(16)),
 
-              const Text(
+              Text(
                 "Single Report",
-                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
+                style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.w500),
               ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: ResponsiveHelper.space(16)),
 
               singlefeaturesCard(),
 
-              const SizedBox(height: 16),
+              SizedBox(height: ResponsiveHelper.space(16)),
 
-              const Text(
+              Text(
                 "Upgrade Your Plan",
-                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
+                style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.w500),
               ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: ResponsiveHelper.space(16)),
 
               featuresCard(),
 
-              const SizedBox(height: 16),
-
-              // Replace your existing plan cards section with this code:
+              SizedBox(height: ResponsiveHelper.space(16)),
 
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // First Row - Standard and Premium side by side
                   Row(
                     children: [
                       Expanded(
@@ -159,7 +157,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                             context
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: ResponsiveHelper.space(12)),
                       Expanded(
                         child: SubscriptionPage.planCard(
                             "Premium",
@@ -172,9 +170,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     ],
                   ),
 
-                  const SizedBox(height: 12),
+                  SizedBox(height: ResponsiveHelper.space(12)),
 
-                  // Second Row - Platinum card (half width, left aligned)
                   Row(
                     children: [
                       Expanded(
@@ -187,17 +184,13 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                             context
                         ),
                       ),
-                      const Expanded(flex: 1, child: SizedBox()), // Empty space on right
+                      Expanded(flex: 1, child: SizedBox(width: ResponsiveHelper.space(12))), // Empty space on right
                     ],
                   ),
                 ],
               ),
 
-              const SizedBox(height: 12),
-
-
-
-              const SizedBox(height: 30),
+              SizedBox(height: ResponsiveHelper.space(30)),
 
               featuresCard(),
             ],
@@ -211,17 +204,17 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 
   Widget infoCard() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
         border: Border.all(color: const Color(0xff2E334A)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Info", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 16),
+          Text("Info", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.bold)),
+          SizedBox(height: ResponsiveHelper.space(16)),
           SubscriptionPage.infoRow("Current Plan:", "Free"),
           SubscriptionPage.infoRow("Monthly Cost:", "\$0"),
           SubscriptionPage.infoRow("Renewal Date:", "7:00 pm"),
@@ -236,18 +229,18 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   Widget featuresCard() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
         border: Border.all(color: const Color(0xff2E334A)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Current Plan Features",
-              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 16),
+          Text("Current Plan Features",
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.bold)),
+          SizedBox(height: ResponsiveHelper.space(16)),
           SubscriptionPage.featureItem("1 chart (local storage)"),
           SubscriptionPage.featureItem("Western + Vedic astrology only"),
           SubscriptionPage.featureItem("Pre-written interpretations for individual placements"),
@@ -265,29 +258,29 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 Widget singlefeaturesCard() {
   return Container(
     width: double.infinity,
-    padding: const EdgeInsets.all(16),
+    padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
     decoration: BoxDecoration(
       color: CustomColors.secondbackgroundColor,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
       border: Border.all(color: const Color(0xff2E334A)),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Unlock a universe of insights with one simple purchase. This all-inclusive plan grants you full access to every astrology system, including Western, Vedic, 13-Sign (Ophiuchus), and premium systems like Galactic Astrology and Human Design.\nWith the All-Access Astrology Plan, you experience:s",
-            style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500)),
-        const SizedBox(height: 16),
+        Text("Unlock a universe of insights with one simple purchase. This all-inclusive plan grants you full access to every astrology system, including Western, Vedic, 13-Sign (Ophiuchus), and premium systems like Galactic Astrology and Human Design.\nWith the All-Access Astrology Plan, you experience:s",
+            style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(15), fontWeight: FontWeight.w500)),
+        SizedBox(height: ResponsiveHelper.space(16)),
         SubscriptionPage.featureItem("Full system unlocks"),
         SubscriptionPage.featureItem("Unlimited readings & interpretations"),
         SubscriptionPage.featureItem("Detailed charts & personalized breakdowns"),
         SubscriptionPage.featureItem("Multi-system comparisons & deeper insights"),
         SubscriptionPage.featureItem("Lifetime access to future enhancements"),
 
-        const SizedBox(height: 16),
+        SizedBox(height: ResponsiveHelper.space(16)),
 
-        Text("\$149.99/single purchase", style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w400)),
+        Text("\$149.99/single purchase", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.w400)),
 
-        const SizedBox(height: 16),
+        SizedBox(height: ResponsiveHelper.space(16)),
 
         SizedBox(
           width: double.infinity,
@@ -298,19 +291,19 @@ Widget singlefeaturesCard() {
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
               side: const BorderSide(color: Color(0xFF2A2F4A)),
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
               ),
             ),
-            child: const Text(
+            child: Text(
               'View Details',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: ResponsiveHelper.fontSize(16)),
             ),
           ),
         ),
 
-        const SizedBox(height: 16),
+        SizedBox(height: ResponsiveHelper.space(16)),
 
         SizedBox(
           width: double.infinity,
@@ -320,19 +313,17 @@ Widget singlefeaturesCard() {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: CustomColors.primaryColor,
-              padding:  EdgeInsets.symmetric(vertical: 16),
+              padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
               ),
             ),
-            child: const Text(
+            child: Text(
               'Purchase',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.white),
+              style: TextStyle(fontSize: ResponsiveHelper.fontSize(16), fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
         ),
-
-
       ],
     ),
   );

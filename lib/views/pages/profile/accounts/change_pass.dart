@@ -1,9 +1,9 @@
+// lib/views/pages/profile/accounts/change_pass.dart
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:astrology_app/views/base/custom_password_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-
 import '../../../../controllers/profile_controller/change_pass_controller.dart';
 
 class ChangePass extends StatefulWidget {
@@ -31,11 +31,11 @@ class _ChangePassState extends State<ChangePass> {
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(20)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 50),
+              SizedBox(height: ResponsiveHelper.space(50)),
               Row(
                 children: [
                   GestureDetector(
@@ -43,28 +43,29 @@ class _ChangePassState extends State<ChangePass> {
                     child: Icon(
                       Icons.arrow_back_ios,
                       color: Colors.white,
+                      size: ResponsiveHelper.iconSize(20),
                     ),
                   ),
-                  SizedBox(width: 20),
+                  SizedBox(width: ResponsiveHelper.space(20)),
                   Text(
                     "Change Password",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              const SizedBox(height: 50),
+              SizedBox(height: ResponsiveHelper.space(50)),
 
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
                   "Current Password",
                   style: TextStyle(
-                      fontSize: 16,
+                      fontSize: ResponsiveHelper.fontSize(16),
                       fontWeight: FontWeight.w600,
                       color: Colors.white),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: ResponsiveHelper.space(12)),
 
               CustomPasswordField(
                 controller: currentPasswordController,
@@ -76,7 +77,7 @@ class _ChangePassState extends State<ChangePass> {
                 },
                 hintText: "Enter Current Password",
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: ResponsiveHelper.space(12)),
 
               Align(
                 alignment: Alignment.topLeft,
@@ -85,10 +86,10 @@ class _ChangePassState extends State<ChangePass> {
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
-                      fontSize: 14),
+                      fontSize: ResponsiveHelper.fontSize(14)),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: ResponsiveHelper.space(12)),
 
               CustomPasswordField(
                 controller: newPasswordController,
@@ -100,19 +101,19 @@ class _ChangePassState extends State<ChangePass> {
                   return null;
                 },
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: ResponsiveHelper.space(12)),
 
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
                   "Confirm New Password",
                   style: TextStyle(
-                      fontSize: 16,
+                      fontSize: ResponsiveHelper.fontSize(16),
                       fontWeight: FontWeight.w600,
                       color: Colors.white),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: ResponsiveHelper.space(12)),
 
               CustomPasswordField(
                 controller: confirmPasswordController,
@@ -128,7 +129,7 @@ class _ChangePassState extends State<ChangePass> {
                 },
               ),
 
-              SizedBox(height: 40),
+              SizedBox(height: ResponsiveHelper.space(40)),
 
               Obx(
                 () => CustomButton(
@@ -148,6 +149,7 @@ class _ChangePassState extends State<ChangePass> {
                   },
                 ),
               ),
+              SizedBox(height: ResponsiveHelper.space(20)),
             ],
           ),
         ),

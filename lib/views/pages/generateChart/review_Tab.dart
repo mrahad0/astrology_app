@@ -1,6 +1,7 @@
 // lib/views/pages/generateChart/review_Tab.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,12 +21,12 @@ class ReviewGeneratePage extends StatelessWidget {
         title: "Generate Chart",
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(24)),
         ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -38,16 +39,16 @@ class ReviewGeneratePage extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: ResponsiveHelper.space(20)),
 
               Expanded(
                 child: SingleChildScrollView(
                   child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
                     decoration: BoxDecoration(
                       color: CustomColors.secondbackgroundColor,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
                       border: Border.all(color: const Color(0xFF2F3448)),
                     ),
                     child: Obx(() {
@@ -68,18 +69,24 @@ class ReviewGeneratePage extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: ResponsiveHelper.space(20)),
 
               // GENERATE BUTTON API CALL
               Obx(() {
                 if (controller.isLoading.value) {
-                  return const Center(
+                  return Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("Generating charts...",style: TextStyle(color: Colors.white,fontSize: 24),),
-                          SizedBox(width: 10,),
+                          Text(
+                            "Generating charts...",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: ResponsiveHelper.fontSize(24)
+                            ),
+                          ),
+                          SizedBox(width: ResponsiveHelper.space(10)),
                           CircularProgressIndicator(color: Colors.white,)
                         ],
                       )
@@ -88,12 +95,12 @@ class ReviewGeneratePage extends StatelessWidget {
 
                 return SizedBox(
                   width: double.infinity,
-                  height: 52,
+                  height: ResponsiveHelper.height(52),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF8A2BE2),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
                       ),
                     ),
                     onPressed: () async {
@@ -105,18 +112,18 @@ class ReviewGeneratePage extends StatelessWidget {
                             isError: true);
                       }
                     },
-                    child: const Text(
+                    child: Text(
                       "Generate Chart",
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: ResponsiveHelper.fontSize(16),
                           fontWeight: FontWeight.w500),
                     ),
                   ),
                 );
               }),
 
-              const SizedBox(height: 20),
+              SizedBox(height: ResponsiveHelper.space(20)),
             ],
           ),
         ),
@@ -131,15 +138,15 @@ class ReviewGeneratePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "Review & Generate",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: ResponsiveHelper.fontSize(18),
             fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: ResponsiveHelper.space(20)),
         _infoRow("Chart Type:", "Natal Chart"),
         _infoRow("Name:", data['name'] ?? '-'),
         _infoRow("Date of Birth:",
@@ -156,20 +163,19 @@ class ReviewGeneratePage extends StatelessWidget {
 
   Widget _buildTransitReview(RxMap<String, dynamic> data) {
     final futureDate = data['futureDate'] as DateTime?;
-    // pastDate removed - was unused
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "Review & Generate",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: ResponsiveHelper.fontSize(18),
             fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: ResponsiveHelper.space(20)),
         _infoRow("Chart Type:", "Transit Chart"),
         _infoRow("Transit Date:", futureDate != null
             ? "${futureDate.day}/${futureDate.month}/${futureDate.year}"
@@ -191,26 +197,26 @@ class ReviewGeneratePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "Review & Generate",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: ResponsiveHelper.fontSize(18),
             fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: ResponsiveHelper.space(20)),
         _infoRow("Chart Type:", "Synastry Chart"),
-        const SizedBox(height: 10),
-        const Text(
+        SizedBox(height: ResponsiveHelper.space(10)),
+        Text(
           "Partner 1:",
           style: TextStyle(
             color: Colors.purpleAccent,
-            fontSize: 16,
+            fontSize: ResponsiveHelper.fontSize(16),
             fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: ResponsiveHelper.space(8)),
         _infoRow("Name:", partner1?['name'] ?? '-'),
         _infoRow("Date of Birth:", date1 != null
             ? "${date1.month}/${date1.day}/${date1.year}"
@@ -220,16 +226,16 @@ class ReviewGeneratePage extends StatelessWidget {
             : '-'),
         _infoRow("Birth City:", partner1?['birthCity'] ?? '-'),
         _infoRow("Birth Country:", partner1?['birthCountry'] ?? '-'),
-        const SizedBox(height: 15),
-        const Text(
+        SizedBox(height: ResponsiveHelper.space(15)),
+        Text(
           "Partner 2:",
           style: TextStyle(
             color: Colors.purpleAccent,
-            fontSize: 16,
+            fontSize: ResponsiveHelper.fontSize(16),
             fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: ResponsiveHelper.space(8)),
         _infoRow("Name:", partner2?['name'] ?? '-'),
         _infoRow("Date of Birth:", date2 != null
             ? "${date2.month}/${date2.day}/${date2.year}"
@@ -246,11 +252,11 @@ class ReviewGeneratePage extends StatelessWidget {
   Widget _stepBar(bool active) {
     return Expanded(
       child: Container(
-        height: 4,
-        margin: const EdgeInsets.only(right: 8),
+        height: ResponsiveHelper.height(4),
+        margin: EdgeInsets.only(right: ResponsiveHelper.space(8)),
         decoration: BoxDecoration(
           color: active ? const Color(0xFF8A2BE2) : Colors.white24,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
         ),
       ),
     );
@@ -258,25 +264,25 @@ class ReviewGeneratePage extends StatelessWidget {
 
   Widget _infoRow(String title, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(12)),
       child: Row(
         children: [
           SizedBox(
-            width: 120,
+            width: ResponsiveHelper.width(120),
             child: Text(
               title,
               style: TextStyle(
                 color: Colors.white.withOpacity(0.8),
-                fontSize: 14,
+                fontSize: ResponsiveHelper.fontSize(14),
               ),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 14,
+                fontSize: ResponsiveHelper.fontSize(14),
               ),
             ),
           )

@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_snackBar.dart';
 import 'package:flutter/material.dart';
@@ -54,37 +55,37 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
         title: "$chartCategory - $systemDisplayName",
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(20)),
           child: Column(
             children: [
-              const SizedBox(height: 20),
+              SizedBox(height: ResponsiveHelper.space(20)),
 
               // Word Count & Generated Card
               _buildWordCountCard(context),
 
-              const SizedBox(height: 16),
+              SizedBox(height: ResponsiveHelper.space(16)),
 
               // Chart Image Card
               if (chartImageUrl.isNotEmpty) ...[
                 _buildChartImageCard(context),
-                const SizedBox(height: 16),
+                SizedBox(height: ResponsiveHelper.space(16)),
               ],
 
               // Info Card
               _buildInfoCard(),
 
-              const SizedBox(height: 16),
+              SizedBox(height: ResponsiveHelper.space(16)),
 
               // Interpretation Section
               if (interpretation.isNotEmpty)
                 _buildInterpretationCard(),
 
-              const SizedBox(height: 32),
+              SizedBox(height: ResponsiveHelper.space(32)),
             ],
           ),
         ),
@@ -95,10 +96,10 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
   // Word Count Card
   Widget _buildWordCountCard(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(20)),
         border: Border.all(color: const Color(0xff2E334A)),
       ),
       child: Column(
@@ -110,93 +111,93 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Word Count",
-                      style: TextStyle(color: Colors.grey, fontSize: 12)),
-                  const SizedBox(height: 4),
+                  Text("Word Count",
+                      style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(12))),
+                  SizedBox(height: ResponsiveHelper.space(4)),
                   Text("$wordCount words",
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: ResponsiveHelper.fontSize(16),
                           fontWeight: FontWeight.w600)),
                 ],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Generated",
-                      style: TextStyle(color: Colors.grey, fontSize: 12)),
-                  const SizedBox(height: 4),
+                  Text("Generated",
+                      style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(12))),
+                  SizedBox(height: ResponsiveHelper.space(4)),
                   Text(formattedDate,
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: ResponsiveHelper.fontSize(16),
                           fontWeight: FontWeight.w600)),
                 ],
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: ResponsiveHelper.space(16)),
           Row(
             children: [
               Expanded(
                 child: GestureDetector(
                   onTap: _isSharing ? null : () => _shareChart(),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(12)),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
                       border: Border.all(color: Colors.white24),
                     ),
                     child: Center(
                       child: _isSharing
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
+                          ? SizedBox(
+                              height: ResponsiveHelper.height(20),
+                              width: ResponsiveHelper.width(20),
                               child: CircularProgressIndicator(
                                 color: Colors.white,
-                                strokeWidth: 2,
+                                strokeWidth: ResponsiveHelper.width(2),
                               ),
                             )
-                          : const Row(
+                          : Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.share, color: Colors.white, size: 18),
-                                SizedBox(width: 6),
+                                Icon(Icons.share, color: Colors.white, size: ResponsiveHelper.iconSize(18)),
+                                SizedBox(width: ResponsiveHelper.space(6)),
                                 Text("Share",
-                                    style: TextStyle(color: Colors.white)),
+                                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14))),
                               ],
                             ),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: ResponsiveHelper.space(12)),
               Expanded(
                 child: GestureDetector(
                   onTap: _isDownloading ? null : () => _downloadChart(),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(12)),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
                       border: Border.all(color: Colors.white24),
                     ),
                     child: Center(
                       child: _isDownloading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
+                          ? SizedBox(
+                              height: ResponsiveHelper.height(20),
+                              width: ResponsiveHelper.width(20),
                               child: CircularProgressIndicator(
                                 color: Colors.white,
-                                strokeWidth: 2,
+                                strokeWidth: ResponsiveHelper.width(2),
                               ),
                             )
-                          : const Row(
+                          : Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.download, color: Colors.white, size: 18),
-                                SizedBox(width: 6),
+                                Icon(Icons.download, color: Colors.white, size: ResponsiveHelper.iconSize(18)),
+                                SizedBox(width: ResponsiveHelper.space(6)),
                                 Text("Download",
-                                    style: TextStyle(color: Colors.white)),
+                                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14))),
                               ],
                             ),
                     ),
@@ -214,54 +215,55 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
   Widget _buildChartImageCard(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(18)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(20)),
         border: Border.all(color: const Color(0xff2E334A)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("$systemDisplayName Chart",
-              style: const TextStyle(
+              style: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: ResponsiveHelper.fontSize(18),
                   fontWeight: FontWeight.w600)),
-          const SizedBox(height: 16),
+          SizedBox(height: ResponsiveHelper.space(16)),
           ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
             child: Image.network(
               chartImageUrl,
               fit: BoxFit.contain,
               width: double.infinity,
-              height: 300,
+              height: ResponsiveHelper.height(300),
               loadingBuilder: (context, child, progress) {
                 if (progress == null) return child;
                 return Container(
-                  height: 300,
+                  height: ResponsiveHelper.height(300),
                   alignment: Alignment.center,
-                  child: const CircularProgressIndicator(
-                    color: Color(0xFF9A3BFF),
+                  child: CircularProgressIndicator(
+                    color: const Color(0xFF9A3BFF),
+                    strokeWidth: ResponsiveHelper.width(4),
                   ),
                 );
               },
               errorBuilder: (context, error, stackTrace) {
                 return Container(
-                  height: 200,
+                  height: ResponsiveHelper.height(200),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: Colors.grey[900],
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
                   ),
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.image_not_supported,
-                          color: Colors.grey, size: 50),
-                      SizedBox(height: 8),
+                          color: Colors.grey, size: ResponsiveHelper.iconSize(50)),
+                      SizedBox(height: ResponsiveHelper.space(8)),
                       Text("Failed to load chart image",
-                          style: TextStyle(color: Colors.grey)),
+                          style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14))),
                     ],
                   ),
                 );
@@ -274,7 +276,7 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
   }
 
   // Info Card
-  Widget _buildInfoCard() {
+  _buildInfoCard() {
     // Check if this is a Synastry chart with two profiles
     final isSynastry = chartCategory == 'Synastry';
     
@@ -306,55 +308,55 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
     
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(18)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(20)),
         border: Border.all(color: const Color(0xff2E334A)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Info",
+          Text("Info",
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: ResponsiveHelper.fontSize(18),
                   fontWeight: FontWeight.w600)),
-          const SizedBox(height: 16),
+          SizedBox(height: ResponsiveHelper.space(16)),
           
           if (isSynastry && person2Name != null) ...[
             // Synastry: Show both profiles
-            const Text("Person 1",
+            Text("Person 1",
                 style: TextStyle(
-                    color: Color(0xFF9A3BFF),
-                    fontSize: 14,
+                    color: const Color(0xFF9A3BFF),
+                    fontSize: ResponsiveHelper.fontSize(14),
                     fontWeight: FontWeight.w600)),
-            const SizedBox(height: 8),
+            SizedBox(height: ResponsiveHelper.space(8)),
             _infoRow("Name:", person1Name.isNotEmpty ? person1Name : '-'),
             _infoRow("Date of Birth:", date.isNotEmpty ? date : "-"),
             _infoRow("Birth Time:", birthTime.isNotEmpty ? birthTime : "-"),
             _infoRow("City:", city.isNotEmpty ? city : "-"),
             _infoRow("Country:", country.isNotEmpty ? country : "-"),
             
-            const SizedBox(height: 16),
+            SizedBox(height: ResponsiveHelper.space(16)),
             const Divider(color: Colors.grey),
-            const SizedBox(height: 8),
+            SizedBox(height: ResponsiveHelper.space(8)),
             
-            const Text("Person 2",
+            Text("Person 2",
                 style: TextStyle(
-                    color: Color(0xFF9A3BFF),
-                    fontSize: 14,
+                    color: const Color(0xFF9A3BFF),
+                    fontSize: ResponsiveHelper.fontSize(14),
                     fontWeight: FontWeight.w600)),
-            const SizedBox(height: 8),
+            SizedBox(height: ResponsiveHelper.space(8)),
             _infoRow("Name:", person2Name.isNotEmpty ? person2Name : '-'),
             _infoRow("Date of Birth:", person2Date?.isNotEmpty == true ? person2Date! : "-"),
             _infoRow("Birth Time:", person2BirthTime?.isNotEmpty == true ? person2BirthTime! : "-"),
             _infoRow("City:", person2City?.isNotEmpty == true ? person2City! : "-"),
             _infoRow("Country:", person2Country?.isNotEmpty == true ? person2Country! : "-"),
             
-            const SizedBox(height: 16),
+            SizedBox(height: ResponsiveHelper.space(16)),
             const Divider(color: Colors.grey),
-            const SizedBox(height: 8),
+            SizedBox(height: ResponsiveHelper.space(8)),
           ] else ...[
             // Standard: Single person info
             _infoRow("Name:", name.isNotEmpty ? name : "-"),
@@ -373,17 +375,17 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
 
   Widget _infoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(6)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label,
-              style: const TextStyle(color: Colors.grey, fontSize: 14)),
+              style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14))),
           Flexible(
             child: Text(value,
-                style: const TextStyle(
+                style: TextStyle(
                     color: Colors.white,
-                    fontSize: 14,
+                    fontSize: ResponsiveHelper.fontSize(14),
                     fontWeight: FontWeight.w500),
                 textAlign: TextAlign.right),
           ),
@@ -396,42 +398,42 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
   Widget _buildInterpretationCard() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(18)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(20)),
         border: Border.all(color: const Color(0xff2E334A)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("$systemDisplayName Interpretation",
-              style: const TextStyle(
+              style: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: ResponsiveHelper.fontSize(18),
                   fontWeight: FontWeight.w600)),
-          const SizedBox(height: 16),
+          SizedBox(height: ResponsiveHelper.space(16)),
           MarkdownBody(
             data: interpretation,
             styleSheet: MarkdownStyleSheet(
-              p: const TextStyle(color: Colors.grey, fontSize: 14, height: 1.6),
-              strong: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
-              em: const TextStyle(
-                  color: Colors.white70, fontStyle: FontStyle.italic),
-              h1: const TextStyle(
+              p: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14), height: 1.6),
+              strong: TextStyle(
+                  color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.bold),
+              em: TextStyle(
+                  color: Colors.white70, fontSize: ResponsiveHelper.fontSize(14), fontStyle: FontStyle.italic),
+              h1: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: ResponsiveHelper.fontSize(20),
                   fontWeight: FontWeight.bold),
-              h2: const TextStyle(
+              h2: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: ResponsiveHelper.fontSize(18),
                   fontWeight: FontWeight.bold),
-              h3: const TextStyle(
+              h3: TextStyle(
                   color: Colors.white,
-                  fontSize: 16,
+                  fontSize: ResponsiveHelper.fontSize(16),
                   fontWeight: FontWeight.bold),
-              listBullet: const TextStyle(color: Colors.grey),
+              listBullet: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
             ),
           ),
         ],

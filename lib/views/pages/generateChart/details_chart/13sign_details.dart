@@ -1,6 +1,8 @@
+// lib/views/pages/generateChart/details_chart/13sign_details.dart
 import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,9 +28,10 @@ class _Sign13DetailsState extends State<Sign13Details> {
 
           if (response == null ||
               !response.charts.containsKey('13_sign')) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(
-                color: Color(0xFF9A3BFF),
+                color: const Color(0xFF9A3BFF),
+                strokeWidth: ResponsiveHelper.width(4),
               ),
             );
           }
@@ -41,49 +44,55 @@ class _Sign13DetailsState extends State<Sign13Details> {
               children: [
 
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
                   decoration: BoxDecoration(
                     border: Border.all(color: const Color(0xff262A40)),
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
                     color: CustomColors.secondbackgroundColor,
                   ),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(child:
-                        Text("About 13-sign Chart",style: TextStyle(color: Colors.white),),),
-                        const SizedBox(height: 10),
+                        Text("About 13-sign Chart",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: ResponsiveHelper.fontSize(16),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),),
+                        SizedBox(height: ResponsiveHelper.space(10)),
                         Text("Astronomically, there are 13 constellations the Sun travels through – not 12. Ophiuchus (the serpent-bearer) sits between Scorpio and Sagittarius, but was never included in traditional astrology. Science recognizes 13; astrology uses 12.",
-                          style:TextStyle(color: Colors.white),
+                          style:TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
                         ),
                       ]
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: ResponsiveHelper.space(24)),
 
                 /// ---------- INFO CARD ----------
                 _infoCard(sign13),
 
-                const SizedBox(height: 24),
+                SizedBox(height: ResponsiveHelper.space(24)),
 
                 /// ---------- CHART IMAGE ----------
-                const Text(
+                Text(
                   "13-Sign Chart Wheel",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 17,
+                    fontSize: ResponsiveHelper.fontSize(17),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: ResponsiveHelper.space(16)),
 
                 Container(
-                  height: 350,
+                  height: ResponsiveHelper.height(350),
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: CustomColors.secondbackgroundColor,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
                   ),
                   child: sign13.imageUrl.isNotEmpty
                       ? Image.network(
@@ -91,16 +100,17 @@ class _Sign13DetailsState extends State<Sign13Details> {
                           fit: BoxFit.contain,
                           loadingBuilder: (context, child, progress) {
                             if (progress == null) return child;
-                            return const Center(
+                            return Center(
                               child: CircularProgressIndicator(
-                                color: Color(0xFF9A3BFF),
+                                color: const Color(0xFF9A3BFF),
+                                strokeWidth: ResponsiveHelper.width(4),
                               ),
                             );
                           },
                           errorBuilder: (context, error, stackTrace) {
-                            return const Center(
+                            return Center(
                               child: Icon(Icons.error,
-                                  color: Colors.red, size: 50),
+                                  color: Colors.red, size: ResponsiveHelper.iconSize(50)),
                             );
                           },
                         )
@@ -110,28 +120,28 @@ class _Sign13DetailsState extends State<Sign13Details> {
                         ),
                 ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: ResponsiveHelper.space(24)),
 
                 /// ---------- PLANETS ----------
-                const Text(
+                Text(
                   "Planetary Positions",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 17,
+                    fontSize: ResponsiveHelper.fontSize(17),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: ResponsiveHelper.space(12)),
 
                 ...sign13.planets.entries.map((entry) {
                   final planet = entry.value;
 
                   return Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    padding: const EdgeInsets.all(14),
+                    margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+                    padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
                     decoration: BoxDecoration(
                       color: CustomColors.secondbackgroundColor,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
                       border: Border.all(color: const Color(0xff2B2F45)),
                     ),
                     child: Row(
@@ -139,16 +149,17 @@ class _Sign13DetailsState extends State<Sign13Details> {
                         Expanded(
                           child: Text(
                             planet.name,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Colors.white70,
-                              fontSize: 14,
+                              fontSize: ResponsiveHelper.fontSize(14),
                             ),
                           ),
                         ),
                         Text(
                           "${planet.sign}  ${planet.degree}°",
-                          style: const TextStyle(
-                            color: Color(0xffA855F7),
+                          style: TextStyle(
+                            color: const Color(0xffA855F7),
+                            fontSize: ResponsiveHelper.fontSize(14),
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -157,7 +168,7 @@ class _Sign13DetailsState extends State<Sign13Details> {
                   );
                 }),
 
-                const SizedBox(height: 40),
+                SizedBox(height: ResponsiveHelper.space(40)),
 
                 Obx(() => CustomButton(
                   text: "Generate",
@@ -172,6 +183,7 @@ class _Sign13DetailsState extends State<Sign13Details> {
                     Get.toNamed(Routes.aiComprehensive);
                   },
                 )),
+                SizedBox(height: ResponsiveHelper.space(20)),
               ],
             ),
           );
@@ -183,24 +195,24 @@ class _Sign13DetailsState extends State<Sign13Details> {
   /// ---------- INFO CARD ----------
   Widget _infoCard(sign13) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
         border: Border.all(color: const Color(0xff262A40)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Info",
             style: TextStyle(
               color: Colors.white,
-              fontSize: 18,
+              fontSize: ResponsiveHelper.fontSize(18),
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: ResponsiveHelper.space(16)),
           _infoRow("Name", sign13.name),
           _infoRow("Birth Date", sign13.birthDate),
           _infoRow("Birth Time", sign13.birthTime),
@@ -214,20 +226,20 @@ class _Sign13DetailsState extends State<Sign13Details> {
 
   Widget _infoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
       child: Row(
         children: [
           SizedBox(
-            width: 120,
+            width: ResponsiveHelper.width(120),
             child: Text(
               "$label:",
-              style: const TextStyle(color: Colors.grey),
+              style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
             ),
           ),
         ],

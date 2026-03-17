@@ -15,7 +15,7 @@ class ChartReadingPage extends StatelessWidget {
     super.key,
     this.recentChart,
     this.savedChart,
-  }) : assert(recentChart != null || savedChart != null, 
+  }) : assert(recentChart != null || savedChart != null,
          'Either recentChart or savedChart must be provided');
 
   // Getters to access data from either model
@@ -38,7 +38,7 @@ class ChartReadingPage extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: hasInterpretation 
+        child: hasInterpretation
           ? _buildInterpretationContent(context)
           : _buildNoInterpretationContent(context),
       ),

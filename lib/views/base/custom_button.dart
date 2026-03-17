@@ -1,4 +1,5 @@
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
@@ -15,17 +16,17 @@ class CustomButton extends StatelessWidget {
         ? Center(child: CircularProgressIndicator())
         : SizedBox(
         width: double.infinity,
-        height: 50,
+        height: ResponsiveHelper.height(50),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: CustomColors.primaryColor,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
             ),
           ),
           onPressed:onpress,
           child:  Text(text!,
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600,color: Colors.white),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w600,color: Colors.white),
           ),
         ),
       );

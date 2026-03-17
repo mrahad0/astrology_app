@@ -1,3 +1,4 @@
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 
@@ -18,72 +19,71 @@ class CustomAlertdialog {
       builder: (_) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
           ),
           title: Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w700,
-              fontSize: 16,
+              fontSize: ResponsiveHelper.fontSize(16),
             ),
           ),
           content: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 60,
+            width: ResponsiveHelper.isTablet ? 400 : MediaQuery.of(context).size.width,
             child: Text(
               content,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w500,
-                fontSize: 14,
+                fontSize: ResponsiveHelper.fontSize(14),
               ),
             ),
           ),
-          actionsPadding: const EdgeInsets.only(
-            bottom: 16,
-            left: 16,
-            right: 16,
+          actionsPadding: EdgeInsets.only(
+            bottom: ResponsiveHelper.padding(16),
+            left: ResponsiveHelper.padding(16),
+            right: ResponsiveHelper.padding(16),
           ),
           actionsAlignment: MainAxisAlignment.spaceBetween,
           actions: [
             // Cancel
             SizedBox(
-              width: 110,
-              height: 40,
+              width: ResponsiveHelper.width(110),
+              height: ResponsiveHelper.height(40),
               child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: Colors.grey.shade400),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
                   ),
                 ),
                 onPressed: () => Navigator.pop(context),
-                child: const Text(
+                child: Text(
                   "Cancel",
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.black, fontSize: ResponsiveHelper.fontSize(14)),
                 ),
               ),
             ),
 
             // Upgrade
             SizedBox(
-              width: 110,
-              height: 40,
+              width: ResponsiveHelper.width(110),
+              height: ResponsiveHelper.height(40),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF8B3DFF),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
                   ),
                 ),
                 onPressed: () {
                   Navigator.pop(context);
                   onPressed();
                 },
-                child: const Text(
+                child: Text(
                   "Upgrade",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
                 ),
               ),
             ),

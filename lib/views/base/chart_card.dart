@@ -1,3 +1,4 @@
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:flutter/material.dart';
 class ChartCard extends StatelessWidget {
   final String text;
@@ -17,10 +18,10 @@ class ChartCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 100,
-        padding: EdgeInsets.all(16),
+        width: ResponsiveHelper.width(100),
+        padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
           gradient: isSelected
               ? LinearGradient(colors: [Colors.purpleAccent, Colors.purple])
               : null,
@@ -30,14 +31,15 @@ class ChartCard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 32, color: isSelected ? Colors.white : Colors.black),
-            SizedBox(height: 8),
+            Icon(icon, size: ResponsiveHelper.iconSize(32), color: isSelected ? Colors.white : Colors.black),
+            SizedBox(height: ResponsiveHelper.space(8)),
             Text(
               text,
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: isSelected ? Colors.white : Colors.black,
-                  fontWeight: FontWeight.bold),
+                  fontWeight: FontWeight.bold,
+                  fontSize: ResponsiveHelper.fontSize(14)),
             ),
           ],
         ),

@@ -2,6 +2,7 @@ import 'package:astrology_app/data/utils/app_constants.dart';
 import 'package:astrology_app/helpers/prefs_helpers.dart';
 import 'package:astrology_app/routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controllers/chart_controller/chart_controller.dart';
@@ -68,6 +69,7 @@ class _Astrology_AppState extends State<Astrology_App> {
 
       // Global background image
       builder: (context, child) {
+        ResponsiveHelper.init(context);
         return Stack(
           children: [
             Positioned.fill(

@@ -1,4 +1,5 @@
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:flutter/material.dart';
 
 class CustomPasswordField extends StatefulWidget {
@@ -30,45 +31,51 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
       obscureText: _obscureText,
       validator: widget.validator,
 
-      style: const TextStyle(color: Colors.white),
+      style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
       decoration: InputDecoration(
         hintText: widget.hintText,
-        hintStyle: const TextStyle(
+        hintStyle: TextStyle(
           color: Color(0xffABABAB),
-          fontSize: 14,
+          fontSize: ResponsiveHelper.fontSize(14),
           fontWeight: FontWeight.w400,
         ),
 
         filled: true,
         fillColor: CustomColors.secondbackgroundColor,
 
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: ResponsiveHelper.padding(12),
+          vertical: ResponsiveHelper.padding(14),
+        ),
+
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           borderSide: const BorderSide(color: Colors.white38),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           borderSide: const BorderSide(color: Colors.white38),
         ),
 
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           borderSide: const BorderSide(color: Colors.redAccent),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           borderSide: const BorderSide(color: Colors.redAccent),
         ),
 
-        errorStyle: const TextStyle(
+        errorStyle: TextStyle(
           color: Colors.redAccent,
-          fontSize: 12,
+          fontSize: ResponsiveHelper.fontSize(12),
         ),
 
         suffixIcon: IconButton(
           icon: Icon(
             _obscureText ? Icons.visibility_off : Icons.visibility,
             color: Colors.white70,
+            size: ResponsiveHelper.iconSize(22),
           ),
           onPressed: () {
             setState(() {
@@ -80,5 +87,3 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
     );
   }
 }
-
-

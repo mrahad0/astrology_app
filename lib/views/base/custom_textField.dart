@@ -1,4 +1,5 @@
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFromField extends StatelessWidget {
@@ -29,9 +30,6 @@ class CustomTextFromField extends StatelessWidget {
   final void Function(String)? onChanged;
   final void Function(String)? onFieldSubmitted;
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -44,43 +42,47 @@ class CustomTextFromField extends StatelessWidget {
       focusNode: focusNode,
       onChanged: onChanged,
       onFieldSubmitted: onFieldSubmitted,
-      style: const TextStyle(color: Colors.white),
+      style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
       decoration: InputDecoration(
         hintText: hintText,
         suffixIcon: suffixIcon,
-        hintStyle: const TextStyle(
+        hintStyle: TextStyle(
           color: Color(0xffABABAB),
-          fontSize: 14,
+          fontSize: ResponsiveHelper.fontSize(14),
           fontWeight: FontWeight.w400,
         ),
 
         filled: true,
         fillColor: CustomColors.secondbackgroundColor,
 
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: ResponsiveHelper.padding(12),
+          vertical: ResponsiveHelper.padding(14),
+        ),
+
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           borderSide: const BorderSide(color: Colors.white38),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           borderSide: const BorderSide(color: Colors.white38),
         ),
 
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           borderSide: const BorderSide(color: Colors.redAccent),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           borderSide: const BorderSide(color: Colors.redAccent),
         ),
 
-        errorStyle: const TextStyle(
+        errorStyle: TextStyle(
           color: Colors.redAccent,
-          fontSize: 12,
+          fontSize: ResponsiveHelper.fontSize(12),
         ),
       ),
     );
   }
 }
-

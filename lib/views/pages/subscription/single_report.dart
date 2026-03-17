@@ -1,3 +1,5 @@
+// lib/views/pages/subscription/single_report.dart
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/pages/generateChart/details_chart/13sign_details.dart';
 import 'package:astrology_app/views/pages/generateChart/details_chart/evolutionary_details.dart';
 import 'package:astrology_app/views/pages/generateChart/details_chart/glactic_details.dart';
@@ -44,7 +46,7 @@ class _SingleReport extends State<SingleReport> {
           /// ---------------- CONTENT ----------------
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(10),
+              padding: EdgeInsets.all(ResponsiveHelper.padding(10)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -53,36 +55,36 @@ class _SingleReport extends State<SingleReport> {
                     children: [
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
-                        child: const Icon(
+                        child: Icon(
                           Icons.arrow_back_ios_new,
                           color: Colors.white,
-                          size: 20,
+                          size: ResponsiveHelper.iconSize(20),
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      const Text(
+                      SizedBox(width: ResponsiveHelper.space(10)),
+                      Text(
                         "Generated Chart",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: ResponsiveHelper.fontSize(20),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
                   ),
 
-                  const SizedBox(height: 30),
+                  SizedBox(height: ResponsiveHelper.space(30)),
 
                   /// --------- CUSTOM TAB BAR CONTAINER (Image Style) ----------
                   Container(
-                    height: 60,
+                    height: ResponsiveHelper.height(60),
                     decoration: BoxDecoration(
                       color: const Color(0xFF1E1C3A),
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
                     ),
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                      padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(5), horizontal: ResponsiveHelper.padding(5)),
                       itemCount: tabs.length,
                       separatorBuilder: (_, index) {
                         if (index == tabs.length - 1) {
@@ -90,14 +92,14 @@ class _SingleReport extends State<SingleReport> {
                         }
                         return selected == index || selected == index + 1
                             ? const SizedBox(width: 0)
-                            : const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5),
+                            : Padding(
+                          padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(5)),
                           child: Center(
                             child: Text(
                               "|",
                               style: TextStyle(
                                 color: Colors.white54,
-                                fontSize: 16,
+                                fontSize: ResponsiveHelper.fontSize(16),
                               ),
                             ),
                           ),
@@ -113,15 +115,15 @@ class _SingleReport extends State<SingleReport> {
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
                             padding: isSelected
-                                ? const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10)
-                                : const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
+                                ? EdgeInsets.symmetric(
+                                horizontal: ResponsiveHelper.padding(20), vertical: ResponsiveHelper.padding(10))
+                                : EdgeInsets.symmetric(
+                                horizontal: ResponsiveHelper.padding(10), vertical: ResponsiveHelper.padding(10)),
                             decoration: isSelected
                                 ? BoxDecoration(
                               // The vibrant purple color from the image
                               color: const Color(0xFF9A3BFF),
-                              borderRadius: BorderRadius.circular(14),
+                              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
                             )
                                 : null,
                             child: Center(
@@ -129,7 +131,7 @@ class _SingleReport extends State<SingleReport> {
                                 tabs[index],
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16,
+                                  fontSize: ResponsiveHelper.fontSize(16),
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
@@ -140,7 +142,7 @@ class _SingleReport extends State<SingleReport> {
                     ),
                   ),
 
-                  const SizedBox(height: 20),
+                  SizedBox(height: ResponsiveHelper.space(20)),
 
                   /// --------- PAGE CONTENT DISPLAY ----------
                   Expanded(

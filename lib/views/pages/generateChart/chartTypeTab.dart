@@ -1,6 +1,7 @@
 // chart_type_tab.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
@@ -23,15 +24,15 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
     if (controller.selectedSystems.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text(
+          content: Text(
             'Please select at least one astrology system',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
           ),
           backgroundColor: Colors.red.shade700,
           behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.all(16),
+          margin: EdgeInsets.all(ResponsiveHelper.padding(16)),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
           ),
           duration: const Duration(seconds: 2),
         ),
@@ -50,12 +51,12 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(24)),
         ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -67,26 +68,26 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
                   _stepBar(false),
                 ],
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: ResponsiveHelper.space(20)),
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
                 decoration: BoxDecoration(
                   color: CustomColors.secondbackgroundColor,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
                   border: Border.all(color: Colors.white.withOpacity(0.1)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       "Choose Astrology Systems",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
+                        fontSize: ResponsiveHelper.fontSize(18),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: ResponsiveHelper.space(16)),
                     Obx(() {
                       final availableSystems = controller.availableSystems;
                       final isNatal =
@@ -98,17 +99,17 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
                           if (availableSystems.contains('Western'))
                             _chartBox("Western Astrology", 'Western'),
                           if (availableSystems.contains('Western'))
-                            const SizedBox(height: 10),
+                            SizedBox(height: ResponsiveHelper.space(10)),
                           if (availableSystems.contains('Vedic'))
                             _chartBox("Vedic Astrology", 'Vedic'),
                           if (isNatal) ...[
-                            const SizedBox(height: 10),
+                            SizedBox(height: ResponsiveHelper.space(10)),
                             _chartBox("13-Signs (Ophiuchus)", '13_sign'),
-                            const SizedBox(height: 10),
+                            SizedBox(height: ResponsiveHelper.space(10)),
                             _chartBox("Evolutionary", 'Evolutionary'),
-                            const SizedBox(height: 10),
+                            SizedBox(height: ResponsiveHelper.space(10)),
                             _chartBox("Galactic Astrology", 'Galactic'),
-                            const SizedBox(height: 10),
+                            SizedBox(height: ResponsiveHelper.space(10)),
                             _chartBox(
                                 "Human Design Profile (Type, Strategy, Authority, Profile, Cross)",
                                 'Human Design'),
@@ -124,7 +125,7 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
                 text: "Next",
                 onpress: _handleNext,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: ResponsiveHelper.space(20)),
             ],
           ),
         ),
@@ -135,11 +136,11 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
   Widget _stepBar(bool active) {
     return Expanded(
       child: Container(
-        height: 4,
-        margin: const EdgeInsets.only(right: 8),
+        height: ResponsiveHelper.height(4),
+        margin: EdgeInsets.only(right: ResponsiveHelper.space(8)),
         decoration: BoxDecoration(
           color: active ? const Color(0xFF8A2BE2) : Colors.white24,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
         ),
       ),
     );
@@ -152,11 +153,14 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
       return InkWell(
         onTap: () => controller.toggleSystem(systemKey),
         child: Container(
-          height: 60,
+          height: ResponsiveHelper.height(65), // Adjusted height for potential text wrapping
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          padding: EdgeInsets.symmetric(
+            horizontal: ResponsiveHelper.padding(12),
+            vertical: ResponsiveHelper.padding(10),
+          ),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
             border: Border.all(color: Colors.white24),
             color: CustomColors.secondbackgroundColor,
           ),
@@ -171,7 +175,7 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
               ),
               Expanded(
                   child: Text(title,
-                      style: const TextStyle(color: Colors.white))),
+                      style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)))),
               IconButton(
                 onPressed: () {
                   final description =
@@ -179,7 +183,7 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
                   _showDescriptionDialog(description);
                 },
                 icon: Icon(Icons.info_outline,
-                    color: CustomColors.primaryColor, size: 18,),
+                    color: CustomColors.primaryColor, size: ResponsiveHelper.iconSize(18),),
               )
             ],
           ),
@@ -187,8 +191,6 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
       );
     });
   }
-
-
 
   void _showDescriptionDialog(String content) {
     showDialog(
@@ -199,15 +201,15 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
           backgroundColor:Colors.black,
           shape: RoundedRectangleBorder(
             side: const BorderSide(color: Colors.white),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
           ),
           content: SingleChildScrollView(
             child: Text(
               content,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
-                fontSize: 14,
+                fontSize: ResponsiveHelper.fontSize(14),
               ),
             ),
           ),
@@ -215,10 +217,11 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
             TextButton(onPressed: () {
             Navigator.of(context).pop();
           },
-            child: const Text(
+            child: Text(
               "Close",
               style: TextStyle(
-                  color: Colors.deepPurple
+                  color: Colors.deepPurple,
+                  fontSize: ResponsiveHelper.fontSize(14)
               ),
             ),
           ),

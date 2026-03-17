@@ -1,6 +1,7 @@
 // natal_chart.dart
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:astrology_app/views/base/custom_snackBar.dart';
@@ -36,13 +37,13 @@ class _NatalChart extends State<NatalChart> {
         title: "Generate Chart",
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(24)),
         ),
       ),
 
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -55,34 +56,38 @@ class _NatalChart extends State<NatalChart> {
                 ],
               ),
 
-              const SizedBox(height: 25),
+              SizedBox(height: ResponsiveHelper.space(25)),
 
-              const Text(
+              Text(
                 "Birth Information",
-                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: ResponsiveHelper.fontSize(18),
+                  fontWeight: FontWeight.w600,
+                ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: ResponsiveHelper.space(20)),
 
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
                   color: CustomColors.secondbackgroundColor,
                   border: Border.all(color: const Color(0xFF2F3448)),
                 ),
                 child: Column(
                   children: [
                     _inputField("Name", "Enter your accurate name", controller: nameController),
-                    const SizedBox(height: 15),
+                    SizedBox(height: ResponsiveHelper.space(15)),
                     _inputField("Date of Birth", selectedDate == null ? "mm/dd/yyyy" : "${selectedDate!.month}/${selectedDate!.day}/${selectedDate!.year}",
                         icon: Icons.calendar_today, onTap: pickDate),
-                    const SizedBox(height: 15),
+                    SizedBox(height: ResponsiveHelper.space(15)),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Birth Country", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
-                        const SizedBox(height: 8),
+                        Text("Birth Country", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
+                        SizedBox(height: ResponsiveHelper.space(8)),
                         AutocompleteLocationField(
                           controller: countryController,
                           hintText: "Enter accurate birth country name",
@@ -90,12 +95,12 @@ class _NatalChart extends State<NatalChart> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 15),
+                    SizedBox(height: ResponsiveHelper.space(15)),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Birth City", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
-                        const SizedBox(height: 8),
+                        Text("Birth City", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
+                        SizedBox(height: ResponsiveHelper.space(8)),
                         AutocompleteLocationField(
                           controller: cityController,
                           hintText: "Enter accurate birth city name",
@@ -103,14 +108,14 @@ class _NatalChart extends State<NatalChart> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 15),
+                    SizedBox(height: ResponsiveHelper.space(15)),
                     _inputField("Birth Time", selectedTime == null ? "Enter accurate birth time" : "${selectedTime!.hour}:${selectedTime!.minute.toString().padLeft(2, '0')}",
                         icon: Icons.access_time, onTap: pickTime),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 60),
+              SizedBox(height: ResponsiveHelper.space(60)),
 
               CustomButton(
                 text: "Next",
@@ -129,7 +134,7 @@ class _NatalChart extends State<NatalChart> {
                 },
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: ResponsiveHelper.space(20)),
             ],
           ),
         ),
@@ -180,17 +185,17 @@ class _NatalChart extends State<NatalChart> {
       children: [
         Text(
           title,
-          style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+          style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: ResponsiveHelper.space(8)),
         GestureDetector(
           onTap: onTap,
           child: Container(
-            height: 55,
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            height: ResponsiveHelper.height(55),
+            padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(14)),
             decoration: BoxDecoration(
               color: const Color(0xFF111424),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
               border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: Row(
@@ -205,23 +210,23 @@ class _NatalChart extends State<NatalChart> {
                         color: hint.contains("mm/dd/yyyy") || hint.contains("Enter accurate")
                             ? Colors.grey
                             : Colors.white,
-                        fontSize: 16,
+                        fontSize: ResponsiveHelper.fontSize(16),
                       ),
                     ),
                   )
                       : TextField(
                     controller: controller,
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(16)),
                     decoration: InputDecoration(
                       hintText: hint,
-                      hintStyle: const TextStyle(color: Colors.grey),
+                      hintStyle: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(16)),
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.zero,
                     ),
                   ),
                 ),
                 if (icon != null)
-                  Icon(icon, color: Colors.grey, size: 20),
+                  Icon(icon, color: Colors.grey, size: ResponsiveHelper.iconSize(20)),
               ],
             ),
           ),
@@ -233,11 +238,11 @@ class _NatalChart extends State<NatalChart> {
   Widget _stepBar(bool filled) {
     return Expanded(
       child: Container(
-        height: 4,
-        margin: const EdgeInsets.only(right: 6),
+        height: ResponsiveHelper.height(4),
+        margin: EdgeInsets.only(right: ResponsiveHelper.space(6)),
         decoration: BoxDecoration(
           color: filled ? Colors.purple : const Color(0xFF2F3448),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(20)),
         ),
       ),
     );

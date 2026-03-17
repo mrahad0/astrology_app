@@ -1,4 +1,5 @@
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/notification_controller/notification_controller.dart';
@@ -15,10 +16,10 @@ class NotificationScreen extends StatelessWidget {
         elevation: 0,
         scrolledUnderElevation: 0,
         automaticallyImplyLeading: false,
-        title: const Text(
+        title: Text(
           'Notification',
           style: TextStyle(
-            fontSize: 24,
+            fontSize: ResponsiveHelper.fontSize(24),
             fontWeight: FontWeight.w600,
             color: Colors.white,
           ),
@@ -38,15 +39,15 @@ class NotificationScreen extends StatelessWidget {
               children: [
                 Icon(
                   Icons.notifications_none,
-                  size: 64,
+                  size: ResponsiveHelper.iconSize(64),
                   color: Colors.grey,
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: ResponsiveHelper.space(16)),
                 Text(
                   'No notifications yet',
                   style: TextStyle(
                     color: Colors.grey,
-                    fontSize: 16,
+                    fontSize: ResponsiveHelper.fontSize(16),
                   ),
                 ),
               ],
@@ -57,7 +58,12 @@ class NotificationScreen extends StatelessWidget {
         return RefreshIndicator(
           onRefresh: controller.refreshNotifications,
           child: ListView.builder(
-            padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 70),
+            padding: EdgeInsets.only(
+              left: ResponsiveHelper.padding(10),
+              right: ResponsiveHelper.padding(10),
+              top: ResponsiveHelper.padding(10),
+              bottom: ResponsiveHelper.padding(70),
+            ),
             itemCount: controller.notifications.length,
             itemBuilder: (context, index) {
               final notification = controller.notifications[index];
@@ -107,12 +113,12 @@ class NotificationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0),
+      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(12)),
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
         decoration: BoxDecoration(
           color: CustomColors.secondbackgroundColor,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
           border: Border.all(
             color: Color(0xff2E334A),
             width: 1,
@@ -130,17 +136,15 @@ class NotificationCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Left-side image (original থেকে)
             Container(
-              width: 50,
-              height: 50,
+              width: ResponsiveHelper.width(50),
+              height: ResponsiveHelper.height(50),
               child: Center(
                 child: Image.asset("assets/images/logo.png1.png"),
               ),
             ),
 
-            SizedBox(width: 16),
-            // Text content
+            SizedBox(width: ResponsiveHelper.space(16)),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,7 +159,7 @@ class NotificationCard extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
-                            fontSize: 16,
+                            fontSize: ResponsiveHelper.fontSize(16),
                           ),
                         ),
                       ),
@@ -164,18 +168,18 @@ class NotificationCard extends StatelessWidget {
                           time,
                           style: TextStyle(
                             color: Color(0xff8B8B8B),
-                            fontSize: 12,
+                            fontSize: ResponsiveHelper.fontSize(12),
                           ),
                         ),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: ResponsiveHelper.space(4)),
                   Text(
                     subtitle,
                     style: TextStyle(
                       color: Color(0xffABABAB),
                       fontWeight: FontWeight.w500,
-                      fontSize: 14,
+                      fontSize: ResponsiveHelper.fontSize(14),
                     ),
                   ),
                 ],

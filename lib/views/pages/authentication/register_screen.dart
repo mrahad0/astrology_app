@@ -1,4 +1,5 @@
 import 'package:astrology_app/controllers/auth_controller/register_controller.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:astrology_app/views/base/custom_snackBar.dart';
 import 'package:astrology_app/views/base/custom_textField.dart';
@@ -77,166 +78,181 @@ class _SignupScreenState extends State<SignupScreen> {
       body: Form(
         key: _formKey,
         child: SafeArea(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap:() => Navigator.pop(context),
-                  child: Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios, color: Colors.white),
-                      SizedBox(width: 10),
-                      Text(
-                        "Create a new account",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 26,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
+          child: Center(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: ResponsiveHelper.isTablet
+                    ? ResponsiveHelper.horizontalPadding
+                    : 20,
+                vertical: ResponsiveHelper.padding(16),
+              ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: ResponsiveHelper.maxContentWidth ?? double.infinity,
                 ),
-
-                SizedBox(height: 20),
-
-                _label("Name"),
-                CustomTextFromField(
-                  controller: nameController,
-                  hintText: "Enter your name",
-                  validator: (value){
-                    if(value!.isEmpty){
-                      return "Name is required";
-                    }
-                    return null;
-                  },
-
-                ),
-
-
-                _label("Email"),
-                CustomTextFromField(
-                  controller: emailController,
-                  hintText: "Enter your email",
-                  validator: (value){
-                    if(value!.isEmpty){
-                      return "Email is required";
-                    }
-                    return null;
-                  },
-                ),
-
-
-                _label("Password"),
-                CustomPasswordField(
-                  controller: passwordController,
-                  hintText: "Enter your password",
-                  validator: (value){
-                    if(value!.isEmpty){
-                      return "Password is required";
-                    }
-                    return null;
-                  },
-                ),
-
-
-                _label("Re-password"),
-                CustomPasswordField(
-                  controller: rePasswordController,
-                  hintText: "Re-enter your password",
-                  validator: (value){
-                    if(value!.isEmpty){
-                      return "Password is required";
-                    }else if(value != passwordController.text){
-                      return "Password doesn't match";
-                    }
-                    return null;
-                  }
-                ),
-
-                _label("Date of Birth"),
-                CustomTextFromField(
-                    hintText: "Choose date",
-                    onTap: _pickDate,
-                    readOnly: true,
-                    controller: dobController,
-                    suffixIcon: Icon(Icons.calendar_month,color:Colors.white70,),
-                    validator: (value){
-                      if(value!.isEmpty){
-                        return "Date is required";
-                      }
-                      return null;
-                    }
-
-                ),
-
-                _label("Time of Birth"),
-                CustomTextFromField(
-                  hintText: "Choose time",
-                  onTap: _pickTime,
-                  readOnly: true,
-                  controller: timeOfBirthController,
-                    suffixIcon: Icon(Icons.access_time,color:Colors.white70,),
-                  validator: (value){
-                    if(value!.isEmpty){
-                      return "Time is required";
-                    }
-                    return null;
-                  }
-
-                ),
-
-                _label("Birth Country"),
-                AutocompleteLocationField(
-                  controller: countryController,
-                  hintText: "Enter country",
-                  getSuggestions: LocationService.searchCountries,
-                  validator: (value){
-                    if(value == null || value.isEmpty){
-                      return "Country is required";
-                    }
-                    return null;
-                  },
-                ),
-
-
-                _label("Birth City"),
-                AutocompleteLocationField(
-                  controller: cityController,
-                  hintText: "Enter city",
-                  getSuggestions: (query) => LocationService.searchCities(countryController.text, query),
-                  validator: (value){
-                    if(value == null || value.isEmpty){
-                      return "City is required";
-                    }
-                    return null;
-                  },
-                ),
-
-                Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Checkbox(
-                      value: isChecked,
-                      onChanged: (v) => setState(() => isChecked = v!),
-                      side: BorderSide(color: Colors.white),
-                    ),
-                    Expanded(
-                      child: Text(
-                        "I agree with privacy & policy.",
-                        style: TextStyle(color: Colors.white),
+                    GestureDetector(
+                      onTap:() => Navigator.pop(context),
+                      child: Row(
+                        children: [
+                          Icon(Icons.arrow_back_ios, color: Colors.white),
+                          SizedBox(width: ResponsiveHelper.space(10)),
+                          Text(
+                            "Create a new account",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: ResponsiveHelper.fontSize(26),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
                       ),
-                    )
+                    ),
+
+                    SizedBox(height: ResponsiveHelper.space(20)),
+
+                    _label("Name"),
+                    CustomTextFromField(
+                      controller: nameController,
+                      hintText: "Enter your name",
+                      validator: (value){
+                        if(value!.isEmpty){
+                          return "Name is required";
+                        }
+                        return null;
+                      },
+
+                    ),
+
+
+                    _label("Email"),
+                    CustomTextFromField(
+                      controller: emailController,
+                      hintText: "Enter your email",
+                      validator: (value){
+                        if(value!.isEmpty){
+                          return "Email is required";
+                        }
+                        return null;
+                      },
+                    ),
+
+
+                    _label("Password"),
+                    CustomPasswordField(
+                      controller: passwordController,
+                      hintText: "Enter your password",
+                      validator: (value){
+                        if(value!.isEmpty){
+                          return "Password is required";
+                        }
+                        return null;
+                      },
+                    ),
+
+
+                    _label("Re-password"),
+                    CustomPasswordField(
+                      controller: rePasswordController,
+                      hintText: "Re-enter your password",
+                      validator: (value){
+                        if(value!.isEmpty){
+                          return "Password is required";
+                        }else if(value != passwordController.text){
+                          return "Password doesn't match";
+                        }
+                        return null;
+                      }
+                    ),
+
+                    _label("Date of Birth"),
+                    CustomTextFromField(
+                        hintText: "Choose date",
+                        onTap: _pickDate,
+                        readOnly: true,
+                        controller: dobController,
+                        suffixIcon: Icon(Icons.calendar_month,color:Colors.white70,),
+                        validator: (value){
+                          if(value!.isEmpty){
+                            return "Date is required";
+                          }
+                          return null;
+                        }
+
+                    ),
+
+                    _label("Time of Birth"),
+                    CustomTextFromField(
+                      hintText: "Choose time",
+                      onTap: _pickTime,
+                      readOnly: true,
+                      controller: timeOfBirthController,
+                        suffixIcon: Icon(Icons.access_time,color:Colors.white70,),
+                      validator: (value){
+                        if(value!.isEmpty){
+                          return "Time is required";
+                        }
+                        return null;
+                      }
+
+                    ),
+
+                    _label("Birth Country"),
+                    AutocompleteLocationField(
+                      controller: countryController,
+                      hintText: "Enter country",
+                      getSuggestions: LocationService.searchCountries,
+                      validator: (value){
+                        if(value == null || value.isEmpty){
+                          return "Country is required";
+                        }
+                        return null;
+                      },
+                    ),
+
+
+                    _label("Birth City"),
+                    AutocompleteLocationField(
+                      controller: cityController,
+                      hintText: "Enter city",
+                      getSuggestions: (query) => LocationService.searchCities(countryController.text, query),
+                      validator: (value){
+                        if(value == null || value.isEmpty){
+                          return "City is required";
+                        }
+                        return null;
+                      },
+                    ),
+
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: isChecked,
+                          onChanged: (v) => setState(() => isChecked = v!),
+                          side: BorderSide(color: Colors.white),
+                        ),
+                        Expanded(
+                          child: Text(
+                            "I agree with privacy & policy.",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: ResponsiveHelper.fontSize(14),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: ResponsiveHelper.space(10)),
+                    Obx(() => CustomButton(
+                        text: "Create Account",
+                        isLoading: _registerController.isLoading.value,
+                        onpress: _submit)
+                    ),
                   ],
                 ),
-                SizedBox(height: 10),
-                Obx(() => CustomButton(
-                    text: "Create Account",
-                    isLoading: _registerController.isLoading.value,
-                    onpress: _submit)
-                ),
-              ],
+              ),
             ),
           ),
         ),
@@ -246,16 +262,12 @@ class _SignupScreenState extends State<SignupScreen> {
 
   // -------------- Helper UI -------------
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(top: 16, bottom: 6),
+    padding: EdgeInsets.only(top: ResponsiveHelper.space(16), bottom: ResponsiveHelper.space(6)),
     child: Text(
       text,
-      style: TextStyle(color: Colors.white70, fontSize: 14),
+      style: TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(14)),
     ),
   );
-
-
-
-
 
   // ---------------- DATE PICKER -----------------
   Future<void> _pickDate() async {
@@ -289,4 +301,3 @@ class _SignupScreenState extends State<SignupScreen> {
   String _formatTime(TimeOfDay t) =>
       "${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}:00";
 }
-

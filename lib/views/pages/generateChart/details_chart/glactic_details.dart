@@ -3,6 +3,7 @@ import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,8 +34,11 @@ class _GalacticDetailsState extends State<GalacticDetails> {
           }
 
           if (galacticData == null) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFF9A3BFF)),
+            return Center(
+              child: CircularProgressIndicator(
+                color: const Color(0xFF9A3BFF),
+                strokeWidth: ResponsiveHelper.width(4),
+              ),
             );
           }
 
@@ -43,42 +47,48 @@ class _GalacticDetailsState extends State<GalacticDetails> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
                   decoration: BoxDecoration(
                     border: Border.all(color: const Color(0xff262A40)),
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
                     color: CustomColors.secondbackgroundColor,
                   ),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(child:
-                        Text("About Galactic Chart",style: TextStyle(color: Colors.white),),),
-                        const SizedBox(height: 10),
+                        Text("About Galactic Chart",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: ResponsiveHelper.fontSize(16),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),),
+                        SizedBox(height: ResponsiveHelper.space(10)),
                         Text("Expands beyond the 12 signs to include stars, galaxies, and cosmic points. Often connected to the concept of “starseeds” – the idea that some souls originated from other star systems like the Pleiades or Sirius, with the chart revealing clues about that origin.",
-                          style:TextStyle(color: Colors.white) ,
+                          style:TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)) ,
                         ),
                       ]
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: ResponsiveHelper.space(24)),
                 /// ---- INFO CARD ----
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
                   decoration: BoxDecoration(
                     border: Border.all(color: const Color(0xff262A40)),
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
                     color: CustomColors.secondbackgroundColor,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Info",
+                      Text("Info",
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 18,
+                              fontSize: ResponsiveHelper.fontSize(18),
                               fontWeight: FontWeight.w600)),
-                      const SizedBox(height: 20),
+                      SizedBox(height: ResponsiveHelper.space(20)),
                       _infoRow("Name:", galacticData.name),
                       _infoRow("Date of Birth:", galacticData.birthDate),
                       _infoRow("Birth Time:", galacticData.birthTime),
@@ -89,21 +99,21 @@ class _GalacticDetailsState extends State<GalacticDetails> {
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: ResponsiveHelper.space(24)),
 
                 /// ---- GALACTIC CHART WHEEL ----
-                const Text(
+                Text(
                   "Galactic Chart Wheel",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 17,
+                      fontSize: ResponsiveHelper.fontSize(17),
                       fontWeight: FontWeight.w600),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: ResponsiveHelper.space(16)),
 
                 Center(
-                  child: Container(
-                    height: 350,
+                  child: SizedBox(
+                    height: ResponsiveHelper.height(350),
                     width: MediaQuery.of(context).size.width,
                     child: galacticData.imageUrl.isNotEmpty
                         ? Image.network(
@@ -111,60 +121,61 @@ class _GalacticDetailsState extends State<GalacticDetails> {
                       fit: BoxFit.contain,
                       loadingBuilder: (context, child, progress) {
                         if (progress == null) return child;
-                        return const Center(
+                        return Center(
                           child: CircularProgressIndicator(
-                            color: Color(0xFF9A3BFF),
+                            color: const Color(0xFF9A3BFF),
+                            strokeWidth: ResponsiveHelper.width(4),
                           ),
                         );
                       },
                       errorBuilder: (context, error, stackTrace) {
-                        return const Center(
+                        return Center(
                           child: Icon(Icons.error,
-                              color: Colors.red, size: 50),
+                              color: Colors.red, size: ResponsiveHelper.iconSize(50)),
                         );
                       },
                     )
                         : Image.asset(
                       "assets/images/chartimage.png",
-                      fit: BoxFit.fill,
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: ResponsiveHelper.space(24)),
 
                 /// ---- PLANETARY POSITIONS ----
-                const Text(
+                Text(
                   "Galactic Positions",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 17,
+                      fontSize: ResponsiveHelper.fontSize(17),
                       fontWeight: FontWeight.w600),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: ResponsiveHelper.space(10)),
 
                 ...galacticData.planets.entries.take(8).map((entry) {
                   final planet = entry.value;
                   return _starTile("${planet.name}: ${planet.sign} ${planet.degree.toStringAsFixed(1)}°");
                 }),
 
-                const SizedBox(height: 24),
+                SizedBox(height: ResponsiveHelper.space(24)),
 
                 /// ---- KEY ASPECTS ----
-                const Text(
+                Text(
                   "Key Aspects",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 17,
+                      fontSize: ResponsiveHelper.fontSize(17),
                       fontWeight: FontWeight.w600),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: ResponsiveHelper.space(10)),
 
                 ...galacticData.aspects.take(5).map((aspect) {
                   return _starTile("${aspect.point1} ${aspect.aspect} ${aspect.point2}");
                 }),
 
-                const SizedBox(height: 40),
+                SizedBox(height: ResponsiveHelper.space(40)),
 
                 Obx(() => CustomButton(
                   text: "Generate",
@@ -180,7 +191,7 @@ class _GalacticDetailsState extends State<GalacticDetails> {
                   },
                 )),
 
-                const SizedBox(height: 20),
+                SizedBox(height: ResponsiveHelper.space(20)),
               ],
             ),
           );
@@ -191,17 +202,17 @@ class _GalacticDetailsState extends State<GalacticDetails> {
 
   Widget _infoRow(String key, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(12)),
       child: Row(
         children: [
           SizedBox(
-            width: 110,
+            width: ResponsiveHelper.width(110),
             child: Text(key,
-                style: const TextStyle(color: Colors.grey, fontSize: 14)),
+                style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14))),
           ),
           Expanded(
             child: Text(value,
-                style: const TextStyle(color: Colors.white, fontSize: 14)),
+                style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14))),
           ),
         ],
       ),
@@ -211,18 +222,18 @@ class _GalacticDetailsState extends State<GalacticDetails> {
   Widget _starTile(String title) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
         border: Border.all(color: const Color(0xff2B2F45)),
       ),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           color: Colors.white,
-          fontSize: 14,
+          fontSize: ResponsiveHelper.fontSize(14),
         ),
       ),
     );

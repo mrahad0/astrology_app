@@ -1,3 +1,5 @@
+// lib/views/pages/ai_reading/saved_chart.dart
+import 'package:astrology_app/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/chart_controller/saved_chart_controller.dart';
@@ -31,14 +33,19 @@ class _SavedChartState extends State<SavedChart> {
         title: "Saved Chart",
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(16)),
         child: Obx(() {
           if (controller.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator(
+                color: const Color(0xFF9A3BFF),
+                strokeWidth: ResponsiveHelper.width(4),
+              ),
+            );
           }
           if (controller.savedCharts.isEmpty) {
             return RefreshIndicator(
@@ -48,10 +55,10 @@ class _SavedChartState extends State<SavedChart> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height * 0.7,
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       "No saved charts",
-                      style: TextStyle(color: Colors.grey),
+                      style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
                     ),
                   ),
                 ),
@@ -66,12 +73,12 @@ class _SavedChartState extends State<SavedChart> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 22),
+                  SizedBox(height: ResponsiveHelper.space(22)),
 
                   // Chart cards for current page
                   ...controller.paginatedCharts.map((chart) {
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 14),
+                      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(14)),
                       child: _chartCard(chart: chart),
                     );
                   }),
@@ -96,10 +103,10 @@ class _SavedChartState extends State<SavedChart> {
 
   Widget _chartCard({required SavedChartModel chart}) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(18)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
         border: Border.all(color: const Color(0xff2E334A)),
       ),
       child: Column(
@@ -107,28 +114,28 @@ class _SavedChartState extends State<SavedChart> {
         children: [
           Text(
             "${chart.chartCategory} (${chart.systemDisplayName})",
-            style: const TextStyle(
-              fontSize: 16,
+            style: TextStyle(
+              fontSize: ResponsiveHelper.fontSize(16),
               fontWeight: FontWeight.w600,
               color: Colors.white,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: ResponsiveHelper.space(4)),
           Text(
             chart.name,
-            style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8)),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: const Color(0xffA0A4B8)),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: ResponsiveHelper.space(4)),
           Text(
             chart.date,
-            style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8)),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: const Color(0xffA0A4B8)),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: ResponsiveHelper.space(4)),
           Text(
             "${chart.city}, ${chart.country}",
-            style: const TextStyle(fontSize: 13, color: Color(0xffA0A4B8)),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: const Color(0xffA0A4B8)),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: ResponsiveHelper.space(18)),
           CustomButton(
             text: "View",
             onpress: () {
