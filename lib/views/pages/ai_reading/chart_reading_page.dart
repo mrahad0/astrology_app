@@ -143,7 +143,8 @@ class ChartReadingPage extends StatelessWidget {
                 listBullet: const TextStyle(color: Color(0xFF9A3BFF)),
                 blockquote: const TextStyle(
                   color: Colors.grey,
-                  fontStyle: FontStyle.italic,
+                  fontStyle: FontStyle.italic
+                  ,
                 ),
                 blockquoteDecoration: BoxDecoration(
                   border: Border(

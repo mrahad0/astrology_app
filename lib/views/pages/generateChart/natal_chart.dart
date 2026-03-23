@@ -9,8 +9,8 @@ import 'package:astrology_app/views/base/autocomplete_location_field.dart';
 import 'package:astrology_app/data/services/location_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../controllers/chart_controller/chart_controller.dart';
+
 
 class NatalChart extends StatefulWidget {
   final VoidCallback onNext;
@@ -80,7 +80,7 @@ class _NatalChart extends State<NatalChart> {
                   children: [
                     _inputField("Name", "Enter your accurate name", controller: nameController),
                     SizedBox(height: ResponsiveHelper.space(15)),
-                    _inputField("Date of Birth", selectedDate == null ? "mm/dd/yyyy" : "${selectedDate!.month}/${selectedDate!.day}/${selectedDate!.year}",
+                    _inputField("Date of Birth", selectedDate == null ? "dd/mm/yyyy" : "${selectedDate!.day.toString().padLeft(2, '0')}/${selectedDate!.month.toString().padLeft(2, '0')}/${selectedDate!.year}",
                         icon: Icons.calendar_today, onTap: pickDate),
                     SizedBox(height: ResponsiveHelper.space(15)),
                     Column(
@@ -207,7 +207,7 @@ class _NatalChart extends State<NatalChart> {
                     child: Text(
                       hint,
                       style: TextStyle(
-                        color: hint.contains("mm/dd/yyyy") || hint.contains("Enter accurate")
+                        color: hint.contains("dd/mm/yyyy") || hint.contains("Enter accurate")
                             ? Colors.grey
                             : Colors.white,
                         fontSize: ResponsiveHelper.fontSize(16),

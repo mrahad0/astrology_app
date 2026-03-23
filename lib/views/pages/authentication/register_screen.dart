@@ -75,10 +75,18 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
-        key: _formKey,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/auth_bg.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Form(
+          key: _formKey,
         child: SafeArea(
-          child: Center(
+          child: Align(
+            alignment: Alignment.topCenter,
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(
                 horizontal: ResponsiveHelper.isTablet
@@ -256,6 +264,7 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
           ),
         ),
+      ),
       ),
     );
   }

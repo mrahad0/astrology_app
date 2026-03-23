@@ -80,7 +80,7 @@ class _TransitChartState extends State<TransitChart> {
                   children: [
                     _inputField("Name", "enter your name", controller: nameController),
                     SizedBox(height: ResponsiveHelper.space(15)),
-                    _inputField("Date of Birth", birthDate == null ? "mm/dd/yyyy" : "${birthDate!.month}/${birthDate!.day}/${birthDate!.year}",
+                    _inputField("Date of Birth", birthDate == null ? "dd/mm/yyyy" : "${birthDate!.day.toString().padLeft(2, '0')}/${birthDate!.month.toString().padLeft(2, '0')}/${birthDate!.year}",
                         icon: Icons.calendar_today, onTap: pickBirthDate),
                     SizedBox(height: ResponsiveHelper.space(15)),
                     _inputField("Birth Time", birthTime == null ? "enter birth time" : "${birthTime!.hour}:${birthTime!.minute.toString().padLeft(2, '0')}",
@@ -209,7 +209,7 @@ class _TransitChartState extends State<TransitChart> {
                     child: Text(
                       hint,
                       style: TextStyle(
-                        color: hint.contains("mm/dd/yyyy") || hint.contains("Enter accurate")
+                        color: hint.contains("dd/mm/yyyy") || hint.contains("Enter accurate")
                             ? Colors.grey
                             : Colors.white,
                         fontSize: ResponsiveHelper.fontSize(16),
@@ -244,7 +244,7 @@ class _TransitChartState extends State<TransitChart> {
   }) {
     final String text = value == null
         ? ""
-        : "${value.day}/${value.month}/${value.year}";
+        : "${value!.day.toString().padLeft(2, '0')}/${value!.month.toString().padLeft(2, '0')}/${value!.year}";
 
     return GestureDetector(
       onTap: onTap,

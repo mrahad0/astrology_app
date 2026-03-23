@@ -37,7 +37,6 @@ class AiComprehensive extends StatelessWidget {
                 ),
               );
             }
-
             // 2. Calculate total word count from all interpretations
             int totalWords = 0;
             for (var interpretation in controller.interpretations) {

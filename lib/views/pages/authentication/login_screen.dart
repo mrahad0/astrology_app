@@ -24,8 +24,15 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
-        key: _formKey,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/auth_bg.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Form(
+          key: _formKey,
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
@@ -54,9 +61,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(
                       "Universal Astro Expert",
                       style: TextStyle(
-                        color: Color(0xFFA855F7),
+                        color: Colors.white,
                         fontSize: ResponsiveHelper.fontSize(24),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
 
@@ -205,6 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
+      ),
       ),
     );
   }

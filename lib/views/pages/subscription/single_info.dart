@@ -90,7 +90,7 @@ class _SingleInfo extends State<SingleInfo> {
                             SizedBox(height: ResponsiveHelper.space(8)),
                             _buildDateField(
                               controller: dateController,
-                              hint: "mm/dd/yyyy",
+                              hint: "dd/mm/yyyy",
                             ),
                             SizedBox(height: ResponsiveHelper.space(20)),
 
@@ -254,7 +254,7 @@ class _SingleInfo extends State<SingleInfo> {
         if (picked != null) {
           setState(() {
             controller.text =
-                "${picked.month.toString().padLeft(2, '0')}/${picked.day.toString().padLeft(2, '0')}/${picked.year}";
+                "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
           });
         }
       },

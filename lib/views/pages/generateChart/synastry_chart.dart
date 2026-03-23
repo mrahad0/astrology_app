@@ -86,7 +86,7 @@ class _SynastryChart extends State<SynastryChart> {
                   children: [
                     _inputField("Name", "Enter your accurate name", controller: name1Controller),
                     SizedBox(height: ResponsiveHelper.space(15)),
-                    _inputField("Date of Birth", selectedDate1 == null ? "mm/dd/yyyy" : "${selectedDate1!.month}/${selectedDate1!.day}/${selectedDate1!.year}",
+                    _inputField("Date of Birth", selectedDate1 == null ? "dd/mm/yyyy" : "${selectedDate1!.day.toString().padLeft(2, '0')}/${selectedDate1!.month.toString().padLeft(2, '0')}/${selectedDate1!.year}",
                         icon: Icons.calendar_today, onTap: () => pickDate(1)),
                     SizedBox(height: ResponsiveHelper.space(15)),
                     Column(
@@ -145,7 +145,7 @@ class _SynastryChart extends State<SynastryChart> {
                   children: [
                     _inputField("Name", "Enter your accurate name", controller: name2Controller),
                     SizedBox(height: ResponsiveHelper.space(15)),
-                    _inputField("Date of Birth", selectedDate2 == null ? "mm/dd/yyyy" : "${selectedDate2!.month}/${selectedDate2!.day}/${selectedDate2!.year}",
+                    _inputField("Date of Birth", selectedDate2 == null ? "dd/mm/yyyy" : "${selectedDate2!.day.toString().padLeft(2, '0')}/${selectedDate2!.month.toString().padLeft(2, '0')}/${selectedDate2!.year}",
                         icon: Icons.calendar_today, onTap: () => pickDate(2)),
                     SizedBox(height: ResponsiveHelper.space(15)),
                     Column(
@@ -298,7 +298,7 @@ class _SynastryChart extends State<SynastryChart> {
                     child: Text(
                       hint,
                       style: TextStyle(
-                        color: hint.contains("mm/dd/yyyy") || hint.contains("Enter accurate")
+                        color: hint.contains("dd/mm/yyyy") || hint.contains("Enter accurate")
                             ? Colors.grey
                             : Colors.white,
                         fontSize: ResponsiveHelper.fontSize(16),

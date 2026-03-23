@@ -150,7 +150,7 @@ class ReviewGeneratePage extends StatelessWidget {
         _infoRow("Chart Type:", "Natal Chart"),
         _infoRow("Name:", data['name'] ?? '-'),
         _infoRow("Date of Birth:",
-            date != null ? "${date.month}/${date.day}/${date.year}" : '-'),
+            date != null ? "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}" : '-'),
         _infoRow("Birth Time:", time != null
             ? "${time.hour}:${time.minute.toString().padLeft(2, '0')}"
             : '-'),
@@ -178,7 +178,7 @@ class ReviewGeneratePage extends StatelessWidget {
         SizedBox(height: ResponsiveHelper.space(20)),
         _infoRow("Chart Type:", "Transit Chart"),
         _infoRow("Transit Date:", futureDate != null
-            ? "${futureDate.day}/${futureDate.month}/${futureDate.year}"
+            ? "${futureDate.day.toString().padLeft(2, '0')}/${futureDate.month.toString().padLeft(2, '0')}/${futureDate.year}"
             : '-'),
       ],
     );
@@ -219,7 +219,7 @@ class ReviewGeneratePage extends StatelessWidget {
         SizedBox(height: ResponsiveHelper.space(8)),
         _infoRow("Name:", partner1?['name'] ?? '-'),
         _infoRow("Date of Birth:", date1 != null
-            ? "${date1.month}/${date1.day}/${date1.year}"
+            ? "${date1.day.toString().padLeft(2, '0')}/${date1.month.toString().padLeft(2, '0')}/${date1.year}"
             : '-'),
         _infoRow("Birth Time:", time1 != null
             ? "${time1.hour}:${time1.minute.toString().padLeft(2, '0')}"
@@ -238,7 +238,7 @@ class ReviewGeneratePage extends StatelessWidget {
         SizedBox(height: ResponsiveHelper.space(8)),
         _infoRow("Name:", partner2?['name'] ?? '-'),
         _infoRow("Date of Birth:", date2 != null
-            ? "${date2.month}/${date2.day}/${date2.year}"
+            ? "${date2.day.toString().padLeft(2, '0')}/${date2.month.toString().padLeft(2, '0')}/${date2.year}"
             : '-'),
         _infoRow("Birth Time:", time2 != null
             ? "${time2.hour}:${time2.minute.toString().padLeft(2, '0')}"

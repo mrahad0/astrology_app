@@ -11,8 +11,16 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final NotificationController controller = Get.put(NotificationController());
 
-    return Scaffold(
-      appBar: AppBar(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/notification_bg.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
         elevation: 0,
         scrolledUnderElevation: 0,
         automaticallyImplyLeading: false,
@@ -90,6 +98,7 @@ class NotificationScreen extends StatelessWidget {
           ),
         );
       }),
+    ),
     );
   }
 }
@@ -117,7 +126,7 @@ class NotificationCard extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
         decoration: BoxDecoration(
-          color: CustomColors.secondbackgroundColor,
+          color: const Color(0xFF15192D).withOpacity(0.7),
           borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
           border: Border.all(
             color: Color(0xff2E334A),
