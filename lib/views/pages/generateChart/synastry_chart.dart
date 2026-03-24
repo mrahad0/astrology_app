@@ -38,14 +38,22 @@ class _SynastryChart extends State<SynastryChart> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: "Generate Chart",
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(24)),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/generateChart_bg.png"),
+          fit: BoxFit.cover,
         ),
       ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: CustomAppBar(
+          title: "Generate Chart",
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(24)),
+          ),
+        ),
 
       body: SafeArea(
         child: SingleChildScrollView(
@@ -213,6 +221,7 @@ class _SynastryChart extends State<SynastryChart> {
           ),
         ),
       ),
+     ),
     );
   }
 

@@ -23,8 +23,16 @@ class _SingleInfo extends State<SingleInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/subcription_bg.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: CustomAppBar(
         title: "Single Info",
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
@@ -156,6 +164,7 @@ class _SingleInfo extends State<SingleInfo> {
           ],
         ),
       ),
+     ),
     );
   }
 

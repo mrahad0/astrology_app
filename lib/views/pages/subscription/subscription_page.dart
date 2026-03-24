@@ -95,8 +95,16 @@ class SubscriptionPage extends StatefulWidget {
 class _SubscriptionPageState extends State<SubscriptionPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/subcription_bg.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
           child: Column(
@@ -197,6 +205,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
           ),
         ),
       ),
+     ),
     );
   }
 

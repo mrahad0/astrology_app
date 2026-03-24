@@ -14,88 +14,97 @@ class AiComprehensive extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: "Comprehensive Reading",
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/reading_bg.png"),
+          fit: BoxFit.cover,
         ),
       ),
-      body: SafeArea(
-        child: GetBuilder<InterpretationController>(
-          init: Get.find<InterpretationController>(),
-          builder: (controller) {
-            // 1. Show Loading State while fetching data
-            if (controller.isLoading) {
-              return Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: ResponsiveHelper.width(4),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: CustomAppBar(
+          title: "Comprehensive Reading",
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
+          ),
+        ),
+        body: SafeArea(
+          child: GetBuilder<InterpretationController>(
+            init: Get.find<InterpretationController>(),
+            builder: (controller) {
+              // 1. Show Loading State while fetching data
+              if (controller.isLoading) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: ResponsiveHelper.width(4),
+                  ),
+                );
+              }
+              // 2. Calculate total word count from all interpretations
+              int totalWords = 0;
+              for (var interpretation in controller.interpretations) {
+                totalWords += interpretation.wordLimit ?? 0;
+              }
+
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // --- Word Count Card ---
+                      _buildWordCountCard(totalWords, controller),
+                      SizedBox(height: ResponsiveHelper.space(20)),
+
+                      // --- Dynamic Info Card ---
+                      _buildInfoCard(controller.userInfo),
+                      SizedBox(height: ResponsiveHelper.space(20)),
+
+                      // --- Dynamic AI Sections from multiple interpretations ---
+                      if (controller.interpretations.isEmpty)
+                        Center(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: ResponsiveHelper.space(40)),
+                            child: Text(
+                              "No interpretation results available.",
+                              style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
+                            ),
+                          ),
+                        )
+                      else
+                        ...controller.interpretations.asMap().entries.map((
+                          entry,
+                        ) {
+                          final index = entry.key + 1;
+                          final interpretation = entry.value;
+                          final title =
+                              "${interpretation.chartType ?? 'Chart'} - ${interpretation.system ?? 'System'}";
+                          final content = interpretation.rawInterpretation ?? '';
+
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: ResponsiveHelper.space(16)),
+                            child: _SectionCard(
+                              sectionNumber: index,
+                              title: title,
+                              description: content,
+                            ),
+                          );
+                        }),
+
+                      SizedBox(height: ResponsiveHelper.space(20)),
+                      _buildBottomActionButtons(controller),
+                      SizedBox(height: ResponsiveHelper.space(20)),
+                    ],
+                  ),
                 ),
               );
-            }
-            // 2. Calculate total word count from all interpretations
-            int totalWords = 0;
-            for (var interpretation in controller.interpretations) {
-              totalWords += interpretation.wordLimit ?? 0;
-            }
-
-            return SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // --- Word Count Card ---
-                    _buildWordCountCard(totalWords, controller),
-                    SizedBox(height: ResponsiveHelper.space(20)),
-
-                    // --- Dynamic Info Card ---
-                    _buildInfoCard(controller.userInfo),
-                    SizedBox(height: ResponsiveHelper.space(20)),
-
-                    // --- Dynamic AI Sections from multiple interpretations ---
-                    if (controller.interpretations.isEmpty)
-                      Center(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: ResponsiveHelper.space(40)),
-                          child: Text(
-                            "No interpretation results available.",
-                            style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
-                          ),
-                        ),
-                      )
-                    else
-                      ...controller.interpretations.asMap().entries.map((
-                        entry,
-                      ) {
-                        final index = entry.key + 1;
-                        final interpretation = entry.value;
-                        final title =
-                            "${interpretation.chartType ?? 'Chart'} - ${interpretation.system ?? 'System'}";
-                        final content = interpretation.rawInterpretation ?? '';
-
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: ResponsiveHelper.space(16)),
-                          child: _SectionCard(
-                            sectionNumber: index,
-                            title: title,
-                            description: content,
-                          ),
-                        );
-                      }),
-
-                    SizedBox(height: ResponsiveHelper.space(20)),
-                    _buildBottomActionButtons(controller),
-                    SizedBox(height: ResponsiveHelper.space(20)),
-                  ],
-                ),
-              ),
-            );
-          },
+            },
+          ),
         ),
       ),
     );
@@ -142,7 +151,7 @@ class AiComprehensive extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(width: ResponsiveHelper.space(40)),
+              SizedBox( width: ResponsiveHelper.space(40)),
               Text(
                 'Just Now',
                 style: TextStyle(
@@ -156,8 +165,11 @@ class AiComprehensive extends StatelessWidget {
           SizedBox(height: ResponsiveHelper.space(20)),
           Row(
             children: [
+
               Expanded(child: _buildShareButton(controller)),
+
               SizedBox(width: ResponsiveHelper.space(12)),
+
               Expanded(child: _buildDownloadButton(controller)),
             ],
           ),

@@ -29,18 +29,27 @@ class ChartReadingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: "$systemDisplayName Reading",
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/reading_bg.png"),
+          fit: BoxFit.cover,
         ),
       ),
-      body: SafeArea(
-        child: hasInterpretation
-          ? _buildInterpretationContent(context)
-          : _buildNoInterpretationContent(context),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: CustomAppBar(
+          title: "$systemDisplayName Reading",
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          ),
+        ),
+        body: SafeArea(
+          child: hasInterpretation
+            ? _buildInterpretationContent(context)
+            : _buildNoInterpretationContent(context),
+        ),
       ),
     );
   }

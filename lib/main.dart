@@ -50,11 +50,11 @@ class _Astrology_AppState extends State<Astrology_App> {
       theme: ThemeData(
         fontFamily: "Manrope",
         primaryColor: CustomColors.primaryColor,
-        scaffoldBackgroundColor: Colors.transparent,
-        canvasColor: Colors.transparent,
+        scaffoldBackgroundColor: CustomColors.backgroundColor,
+        canvasColor: CustomColors.backgroundColor,
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          background: Colors.transparent,
-          surface: Colors.transparent,
+          background: CustomColors.backgroundColor,
+          surface: CustomColors.backgroundColor,
         ),
         // REMOVE WHITE FLASH ON NAVIGATION
         pageTransitionsTheme: PageTransitionsTheme(
@@ -67,20 +67,10 @@ class _Astrology_AppState extends State<Astrology_App> {
         appBarTheme: AppBarTheme(backgroundColor: Colors.transparent),
       ),
 
-      // Global background image
+      // Initialize ResponsiveHelper globally
       builder: (context, child) {
         ResponsiveHelper.init(context);
-        return Stack(
-          children: [
-            Positioned.fill(
-              child: Image.asset(
-                "assets/images/astrology_background.png",
-                fit: BoxFit.cover,
-              ),
-            ),
-            child ?? SizedBox.shrink(),
-          ],
-        );
+        return child ?? const SizedBox.shrink();
       },
 
       initialRoute: Routes.loginScreen,

@@ -29,8 +29,16 @@ class AstroDataScreenState extends State<AstroDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/profile_bg.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: CustomAppBar(
         title: "Astro Data",
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
@@ -102,6 +110,7 @@ class AstroDataScreenState extends State<AstroDataScreen> {
           ),
         ),
       ),
+     ),
     );
   }
 

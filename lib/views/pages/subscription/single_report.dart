@@ -40,8 +40,16 @@ class _SingleReport extends State<SingleReport> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/subcription_bg.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(
         children: [
           /// ---------------- CONTENT ----------------
           SafeArea(
@@ -154,6 +162,7 @@ class _SingleReport extends State<SingleReport> {
           ),
         ],
       ),
+     ),
     );
   }
 }

@@ -28,75 +28,84 @@ class _SavedChartState extends State<SavedChart> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: "Saved Chart",
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/reading_bg.png"),
+          fit: BoxFit.cover,
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(16)),
-        child: Obx(() {
-          if (controller.isLoading.value) {
-            return Center(
-              child: CircularProgressIndicator(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: CustomAppBar(
+          title: "Saved Chart",
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
+          ),
+        ),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(16)),
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: const Color(0xFF9A3BFF),
+                  strokeWidth: ResponsiveHelper.width(4),
+                ),
+              );
+            }
+            if (controller.savedCharts.isEmpty) {
+              return RefreshIndicator(
+                onRefresh: () => controller.fetchSavedCharts(),
                 color: const Color(0xFF9A3BFF),
-                strokeWidth: ResponsiveHelper.width(4),
-              ),
-            );
-          }
-          if (controller.savedCharts.isEmpty) {
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    child: Center(
+                      child: Text(
+                        "No saved charts",
+                        style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
             return RefreshIndicator(
               onRefresh: () => controller.fetchSavedCharts(),
               color: const Color(0xFF9A3BFF),
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.7,
-                  child: Center(
-                    child: Text(
-                      "No saved charts",
-                      style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
-                    ),
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: ResponsiveHelper.space(22)),
+
+                    // Chart cards for current page
+                    ...controller.paginatedCharts.map((chart) {
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: ResponsiveHelper.space(14)),
+                        child: _chartCard(chart: chart),
+                      );
+                    }),
+
+                    // Pagination widget
+                    if (controller.totalPages > 1)
+                      PaginationWidget(
+                        currentPage: controller.currentPage.value,
+                        totalPages: controller.totalPages,
+                        onPageChanged: (page) => controller.changePage(page),
+                      ),
+
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  ],
                 ),
               ),
             );
-          }
-          return RefreshIndicator(
-            onRefresh: () => controller.fetchSavedCharts(),
-            color: const Color(0xFF9A3BFF),
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: ResponsiveHelper.space(22)),
-
-                  // Chart cards for current page
-                  ...controller.paginatedCharts.map((chart) {
-                    return Padding(
-                      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(14)),
-                      child: _chartCard(chart: chart),
-                    );
-                  }),
-
-                  // Pagination widget
-                  if (controller.totalPages > 1)
-                    PaginationWidget(
-                      currentPage: controller.currentPage.value,
-                      totalPages: controller.totalPages,
-                      onPageChanged: (page) => controller.changePage(page),
-                    ),
-
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                ],
-              ),
-            ),
-          );
-        }),
+          }),
+        ),
       ),
     );
   }

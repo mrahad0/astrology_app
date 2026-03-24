@@ -23,8 +23,16 @@ class _VedicDetailsState extends State<VedicDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/generateChart_bg.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
         child: Obx(() {
           // Check which chart type is selected
           if (controller.selectedChartType.value == 'Natal') {
@@ -42,6 +50,7 @@ class _VedicDetailsState extends State<VedicDetails> {
           );
         }),
       ),
+     ),
     );
   }
 

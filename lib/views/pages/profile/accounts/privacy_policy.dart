@@ -11,9 +11,16 @@ class PrivacyPolicyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(PrivacypolicyController());
-
-    return Scaffold(
-      body: SafeArea(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/profile_bg.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
         child: Obx(() {
           if (controller.isLoading.value) {
             return Center(
@@ -89,6 +96,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
           );
         }),
       ),
+     ),
     );
   }
 }

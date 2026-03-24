@@ -50,43 +50,52 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: "$chartCategory - $systemDisplayName",
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/reading_bg.png"),
+          fit: BoxFit.cover,
         ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(20)),
-          child: Column(
-            children: [
-              SizedBox(height: ResponsiveHelper.space(20)),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: CustomAppBar(
+          title: "$chartCategory - $systemDisplayName",
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
+          ),
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(20)),
+            child: Column(
+              children: [
+                SizedBox(height: ResponsiveHelper.space(20)),
 
-              // Word Count & Generated Card
-              _buildWordCountCard(context),
+                // Word Count & Generated Card
+                _buildWordCountCard(context),
 
-              SizedBox(height: ResponsiveHelper.space(16)),
-
-              // Chart Image Card
-              if (chartImageUrl.isNotEmpty) ...[
-                _buildChartImageCard(context),
                 SizedBox(height: ResponsiveHelper.space(16)),
+
+                // Chart Image Card
+                if (chartImageUrl.isNotEmpty) ...[
+                  _buildChartImageCard(context),
+                  SizedBox(height: ResponsiveHelper.space(16)),
+                ],
+
+                // Info Card
+                _buildInfoCard(),
+
+                SizedBox(height: ResponsiveHelper.space(16)),
+
+                // Interpretation Section
+                if (interpretation.isNotEmpty)
+                  _buildInterpretationCard(),
+
+                SizedBox(height: ResponsiveHelper.space(32)),
               ],
-
-              // Info Card
-              _buildInfoCard(),
-
-              SizedBox(height: ResponsiveHelper.space(16)),
-
-              // Interpretation Section
-              if (interpretation.isNotEmpty)
-                _buildInterpretationCard(),
-
-              SizedBox(height: ResponsiveHelper.space(32)),
-            ],
+            ),
           ),
         ),
       ),

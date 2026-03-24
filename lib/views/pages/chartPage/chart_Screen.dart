@@ -27,8 +27,16 @@ class _ChartScreenState extends State<ChartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/generateChart_bg.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
         scrolledUnderElevation: 0,
@@ -147,6 +155,7 @@ class _ChartScreenState extends State<ChartScreen> {
           ),
         ),
       ),
+     ),
     );
   }
 

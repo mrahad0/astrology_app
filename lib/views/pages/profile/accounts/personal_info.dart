@@ -15,9 +15,16 @@ class PersonalInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     controller.fetchUserInfo();
-
-    return Scaffold(
-      appBar: CustomAppBar(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/profile_bg.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: CustomAppBar(
         title: "Personal Information",
         leading: GestureDetector(
           onTap:() => Navigator.pop(context),
@@ -136,6 +143,7 @@ class PersonalInfo extends StatelessWidget {
           );
         }),
       ),
+     ),
     );
   }
 }

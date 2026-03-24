@@ -27,8 +27,16 @@ class _ChangePassState extends State<ChangePass> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Form(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/profile_bg.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Form(
         key: _formKey,
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(20)),
@@ -154,6 +162,7 @@ class _ChangePassState extends State<ChangePass> {
           ),
         ),
       ),
+     ),
     );
   }
 }

@@ -12,7 +12,15 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/profile_bg.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           elevation: 0,
           scrolledUnderElevation: 0,
@@ -57,7 +65,8 @@ class ProfileScreen extends StatelessWidget {
             CustomCard(title: "Logout", url: "assets/icons/logout-05.svg",onTap: (){showLogoutBottomSheet(context);},),
           ],
         ),
-      )
+      ),
+     ),
     );
   }
 }

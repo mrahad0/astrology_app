@@ -24,7 +24,8 @@ class AuthController extends GetxController {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (secondsRemaining.value > 0) {
         secondsRemaining.value--;
-      } else {
+      }
+      else {
         enableResend.value = true;
         timer.cancel();
       }

@@ -16,14 +16,22 @@ class ReviewGeneratePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ChartController controller = Get.find<ChartController>();
 
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: "Generate Chart",
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(24)),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/generateChart_bg.png"),
+          fit: BoxFit.cover,
         ),
       ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: CustomAppBar(
+          title: "Generate Chart",
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(24)),
+          ),
+        ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
@@ -128,6 +136,7 @@ class ReviewGeneratePage extends StatelessWidget {
           ),
         ),
       ),
+     ),
     );
   }
 
