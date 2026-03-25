@@ -57,8 +57,8 @@ class AiComprehensive extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // --- Word Count Card ---
-                      _buildWordCountCard(totalWords, controller),
+                      // --- Top Action Buttons ---
+                      _buildTopActionButtons(controller),
                       SizedBox(height: ResponsiveHelper.space(20)),
 
                       // --- Dynamic Info Card ---
@@ -97,6 +97,8 @@ class AiComprehensive extends StatelessWidget {
                         }),
 
                       SizedBox(height: ResponsiveHelper.space(20)),
+                      _buildCombinedInterpretationButton(),
+                      SizedBox(height: ResponsiveHelper.space(12)),
                       _buildBottomActionButtons(controller),
                       SizedBox(height: ResponsiveHelper.space(20)),
                     ],
@@ -112,68 +114,46 @@ class AiComprehensive extends StatelessWidget {
 
   // --- Helper Widgets ---
 
-  Widget _buildWordCountCard(
-    int wordLimit,
-    InterpretationController controller,
-  ) {
+  Widget _buildTopActionButtons(InterpretationController controller) {
     return Container(
       padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
         borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
-        border: Border.all(color: const Color(0xFF2D3554)),
+        border: Border.all(color: const Color(0xFF2A2F4A)),
       ),
-      child: Column(
+      child: Row(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Word Count',
-                style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
-              ),
-              SizedBox(width: ResponsiveHelper.space(40)),
-              Text(
-                'Generated',
-                style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
-              ),
-            ],
-          ),
-          SizedBox(height: ResponsiveHelper.space(8)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '$wordLimit words',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: ResponsiveHelper.fontSize(16),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox( width: ResponsiveHelper.space(40)),
-              Text(
-                'Just Now',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: ResponsiveHelper.fontSize(16),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: ResponsiveHelper.space(20)),
-          Row(
-            children: [
-
-              Expanded(child: _buildShareButton(controller)),
-
-              SizedBox(width: ResponsiveHelper.space(12)),
-
-              Expanded(child: _buildDownloadButton(controller)),
-            ],
-          ),
+          Expanded(child: _buildShareButton(controller)),
+          SizedBox(width: ResponsiveHelper.space(12)),
+          Expanded(child: _buildDownloadButton(controller)),
         ],
+      ),
+    );
+  }
+
+  Widget _buildCombinedInterpretationButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () {
+          Get.toNamed(Routes.combinedInterpretation);
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: CustomColors.primaryColor,
+          padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+          ),
+        ),
+        child: Text(
+          'Combined Interpretation',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: ResponsiveHelper.fontSize(14),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }

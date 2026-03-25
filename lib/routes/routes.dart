@@ -1,6 +1,7 @@
 import 'package:astrology_app/views/pages/ai_reading/ai_comprehensive.dart';
 import 'package:astrology_app/views/pages/ai_reading/ai_reading.dart';
 import 'package:astrology_app/views/pages/ai_reading/saved_chart.dart';
+import 'package:astrology_app/views/pages/ai_reading/combined_interpretation.dart';
 import 'package:astrology_app/views/pages/authentication/forgotpass_screen.dart';
 import 'package:astrology_app/views/pages/authentication/login_screen.dart';
 import 'package:astrology_app/views/pages/authentication/otp_screen.dart';
@@ -43,6 +44,7 @@ class Routes {
   static String savedChart = "/saved-chart";
   static String aiReading = "/AiReading";
   static String aiComprehensive = "/ai-comprehensive";
+  static String combinedInterpretation = "/combined-interpretation";
   static String privacyPolicy = "/PrivacyPolicy";
   static String changePass = "/ChangePassword";
   static String natalChart = "/NatalChart";
@@ -127,6 +129,12 @@ List<GetPage> pages = [
     page: () => AiReadingScreen(),
   ),
   GetPage(name: Routes.aiComprehensive, page: () => const AiComprehensive()),
+  GetPage(
+    name: Routes.combinedInterpretation,
+    transition: Transition.noTransition,
+    transitionDuration: const Duration(milliseconds: 0),
+    page: () => const CombinedInterpretationScreen(),
+  ),
   GetPage(
     name: Routes.privacyPolicy,
     transition: Transition.noTransition,
