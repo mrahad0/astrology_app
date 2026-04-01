@@ -1,4 +1,5 @@
 // lib/views/pages/generateChart/details_chart/vedic_details.dart
+import 'package:astrology_app/views/pages/generateChart/details_chart/widgets/zoomable_chart_image.dart';
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
@@ -7,7 +8,6 @@ import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../data/models/chart_models/transit_chart_model.dart';
 
 
@@ -71,37 +71,6 @@ class _VedicDetailsState extends State<VedicDetails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
-            decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              color: CustomColors.secondbackgroundColor,
-            ),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Text(
-                      "About Vedic Chart",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: ResponsiveHelper.fontSize(16),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: ResponsiveHelper.space(10)),
-                  Text(
-                    "Based on the actual positions of the stars in the sky. Your sign may shift back by one. More focused on karma, fate, and life events.This means you might be a Leo in Western but a Cancer in Vedic – same birthday, different systems.",
-                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
-                  ),
-                ]
-            ),
-          ),
-
-          SizedBox(height: ResponsiveHelper.space(24)),
-
           /// Info Card
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
@@ -113,11 +82,11 @@ class _VedicDetailsState extends State<VedicDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   "Info",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: ResponsiveHelper.fontSize(18),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -125,16 +94,16 @@ class _VedicDetailsState extends State<VedicDetails> {
                 _infoRow("Name:", vedicData.name),
                 _infoRow("Date of Birth:", vedicData.birthDate),
                 _infoRow("Birth Time:", vedicData.birthTime),
-                _infoRow("Sun Sign:", vedicData.sunSign),
-                _infoRow("Moon Sign:", vedicData.moonSign),
-                _infoRow("Lagna:", vedicData.risingSign),
+                _infoRow("Time Zone:", vedicData.location.timezone.isNotEmpty ? vedicData.location.timezone : "N/A"),
+                _infoRow("Birth City:", vedicData.location.city.isNotEmpty ? vedicData.location.city : "N/A"),
+                _infoRow("Birth Country:", vedicData.location.country.isNotEmpty ? vedicData.location.country : "N/A"),
               ],
             ),
           ),
 
           SizedBox(height: ResponsiveHelper.space(24)),
 
-          /// Vedic Chart Wheel
+          /// Vedic Chart Wheel Title
           Text(
             "Vedic Chart Wheel",
             style: TextStyle(
@@ -145,41 +114,17 @@ class _VedicDetailsState extends State<VedicDetails> {
           ),
           SizedBox(height: ResponsiveHelper.space(16)),
 
-          Center(
-            child: SizedBox(
-              height: ResponsiveHelper.height(350),
-              width: MediaQuery.of(context).size.width,
-              child: vedicData.imageUrl.isNotEmpty
-                  ? Image.network(
-                vedicData.imageUrl,
-                fit: BoxFit.contain,
-                loadingBuilder: (context, child, progress) {
-                  if (progress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: const Color(0xFF9A3BFF),
-                      strokeWidth: ResponsiveHelper.width(4),
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Center(
-                    child: Icon(Icons.error, color: Colors.red, size: ResponsiveHelper.iconSize(50)),
-                  );
-                },
-              )
-                  : Image.asset(
-                "assets/images/chartimage.png",
-                fit: BoxFit.contain,
-              ),
-            ),
+          /// Chart Image
+          ZoomableChartImage(
+            imageUrl: vedicData.imageUrl,
+            height: ResponsiveHelper.height(350),
           ),
 
           SizedBox(height: ResponsiveHelper.space(24)),
 
-          /// Sidereal Positions
+          /// ——— Sidereal planetary positions ———
           Text(
-            "Sidereal Positions",
+            "Sidereal planetary positions :",
             style: TextStyle(
               color: Colors.white,
               fontSize: ResponsiveHelper.fontSize(17),
@@ -188,19 +133,90 @@ class _VedicDetailsState extends State<VedicDetails> {
           ),
           SizedBox(height: ResponsiveHelper.space(10)),
 
-          ...vedicData.planets.entries.take(10).map((entry) {
-            final planet = entry.value;
-            return _siderealTile(
-              "${planet.name}:",
-              planet.sign,
-              "in ${planet.house}",
-            );
-          }),
+          if (vedicData.siderealPlanetaryPositions.isNotEmpty)
+            ...vedicData.siderealPlanetaryPositions.map((pos) {
+              final displayName = pos['display_name'] ?? pos['planet'] ?? '';
+              final sign = pos['sign'] ?? '';
+              final houseLabel = pos['house_label'] ?? 'house ${pos['house'] ?? ''}';
+              return _siderealTile(
+                "$displayName:",
+                sign,
+                "in $houseLabel",
+              );
+            })
+          else
+            ...vedicData.planets.entries.take(10).map((entry) {
+              final planet = entry.value;
+              return _siderealTile(
+                "${planet.name}:",
+                planet.sign,
+                "in ${planet.house}",
+              );
+            }),
+
+          SizedBox(height: ResponsiveHelper.space(24)),
+
+          /// ——— Lifepath indicator ———
+          Text(
+            "Lifepath indicator:",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: ResponsiveHelper.space(10)),
+
+          if (vedicData.lifepathIndicator.isNotEmpty)
+            ...vedicData.lifepathIndicator.entries.map((entry) {
+              final data = entry.value is Map ? entry.value as Map<String, dynamic> : {};
+              final label = data['label'] ?? entry.key;
+              final sign = data['sign'] ?? '';
+              final nakshatra = data['nakshatra'] ?? '';
+              return _siderealTile(
+                "$label:",
+                sign,
+                "in $nakshatra",
+              );
+            }),
+
+          SizedBox(height: ResponsiveHelper.space(24)),
+
+          /// ——— Lunar System ———
+          Text(
+            "Lunar System :",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: ResponsiveHelper.space(10)),
+
+          if (vedicData.lunarSystem.isNotEmpty)
+            ...vedicData.lunarSystem.entries.map((entry) {
+              final data = entry.value is Map ? entry.value as Map<String, dynamic> : {};
+              final label = data['label'] ?? entry.key;
+
+              // Handle "Current Dasha" which has planet + remaining instead of sign + nakshatra
+              if (data.containsKey('planet')) {
+                final planet = data['planet'] ?? '';
+                final remaining = data['remaining'] ?? '';
+                return _lunarDashaTile(label, planet, remaining);
+              }
+
+              final sign = data['sign'] ?? '';
+              final nakshatra = data['nakshatra'] ?? '';
+              final pada = data['pada'];
+
+              return _lunarTile(label, sign, nakshatra, pada);
+            }),
 
           SizedBox(height: ResponsiveHelper.space(40)),
 
+          /// Generate Reading Button
           Obx(() => CustomButton(
-            text: "Generate",
+            text: "Generate Reading",
             isLoading: controller.isGeneratingInterpretation.value,
             onpress: () async {
               controller.isGeneratingInterpretation.value = true;
@@ -308,34 +324,9 @@ class _VedicDetailsState extends State<VedicDetails> {
           ),
           SizedBox(height: ResponsiveHelper.space(16)),
 
-          Center(
-            child: SizedBox(
-              height: ResponsiveHelper.height(350),
-              width: MediaQuery.of(context).size.width,
-              child: imageUrl.isNotEmpty
-                  ? Image.network(
-                imageUrl,
-                fit: BoxFit.contain,
-                loadingBuilder: (context, child, progress) {
-                  if (progress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: const Color(0xFF9A3BFF),
-                      strokeWidth: ResponsiveHelper.width(4),
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Center(
-                    child: Icon(Icons.error, color: Colors.red, size: ResponsiveHelper.iconSize(50)),
-                  );
-                },
-              )
-                  : Image.asset(
-                "assets/images/chartimage.png",
-                fit: BoxFit.contain,
-              ),
-            ),
+          ZoomableChartImage(
+            imageUrl: imageUrl,
+            height: ResponsiveHelper.height(350),
           ),
           SizedBox(height: ResponsiveHelper.space(24)),
 
@@ -507,34 +498,9 @@ class _VedicDetailsState extends State<VedicDetails> {
           ),
           SizedBox(height: ResponsiveHelper.space(16)),
 
-          Center(
-            child: SizedBox(
-              height: ResponsiveHelper.height(350),
-              width: MediaQuery.of(context).size.width,
-              child: imageUrl.isNotEmpty
-                  ? Image.network(
-                imageUrl,
-                fit: BoxFit.contain,
-                loadingBuilder: (context, child, progress) {
-                  if (progress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: const Color(0xFF9A3BFF),
-                      strokeWidth: ResponsiveHelper.width(4),
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Center(
-                    child: Icon(Icons.error, color: Colors.red, size: ResponsiveHelper.iconSize(50)),
-                  );
-                },
-              )
-                  : Image.asset(
-                "assets/images/chartimage.png",
-                fit: BoxFit.contain,
-              ),
-            ),
+          ZoomableChartImage(
+            imageUrl: imageUrl,
+            height: ResponsiveHelper.height(350),
           ),
           SizedBox(height: ResponsiveHelper.space(24)),
 
@@ -632,7 +598,7 @@ class _VedicDetailsState extends State<VedicDetails> {
     );
   }
 
-  Widget _siderealTile(String planet, String sign, String nakshatra) {
+  Widget _siderealTile(String planet, String sign, String detail) {
     return Container(
       width: double.infinity,
       margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
@@ -655,13 +621,13 @@ class _VedicDetailsState extends State<VedicDetails> {
             TextSpan(
               text: sign,
               style: TextStyle(
-                color: const Color(0xffA855F7),
+                color: CustomColors.primaryColor,
                 fontSize: ResponsiveHelper.fontSize(14),
                 fontWeight: FontWeight.w600,
               ),
             ),
             TextSpan(
-              text: ' $nakshatra',
+              text: ' $detail',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: ResponsiveHelper.fontSize(14),
@@ -743,6 +709,97 @@ class _VedicDetailsState extends State<VedicDetails> {
             transit.interpretation,
             style: TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(13)),
           ),
+        ],
+      ),
+    );
+  }
+
+  /// Lunar system tile — label, purple sign, nakshatra
+  Widget _lunarTile(String label, String sign, String nakshatra, dynamic pada) {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
+      decoration: BoxDecoration(
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
+        border: Border.all(color: const Color(0xff2B2F45)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: ResponsiveHelper.fontSize(13),
+            ),
+          ),
+          SizedBox(height: ResponsiveHelper.space(4)),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: sign,
+                  style: TextStyle(
+                    color: CustomColors.primaryColor,
+                    fontSize: ResponsiveHelper.fontSize(14),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                TextSpan(
+                  text: ' in $nakshatra',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ResponsiveHelper.fontSize(14),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Current Dasha tile — label, purple planet name, remaining text
+  Widget _lunarDashaTile(String label, String planet, String remaining) {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
+      decoration: BoxDecoration(
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
+        border: Border.all(color: const Color(0xff2B2F45)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: ResponsiveHelper.fontSize(13),
+            ),
+          ),
+          SizedBox(height: ResponsiveHelper.space(4)),
+          Text(
+            planet,
+            style: TextStyle(
+              color: CustomColors.primaryColor,
+              fontSize: ResponsiveHelper.fontSize(14),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          if (remaining.isNotEmpty)
+            Text(
+              remaining,
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: ResponsiveHelper.fontSize(12),
+              ),
+            ),
         ],
       ),
     );

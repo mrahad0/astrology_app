@@ -1,4 +1,5 @@
 // lib/views/pages/generateChart/details_chart/evolutionary_details.dart
+import 'package:astrology_app/views/pages/generateChart/details_chart/widgets/zoomable_chart_image.dart';
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
@@ -19,6 +20,16 @@ class EvolutionaryDetails extends StatefulWidget {
 
 class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
   final ChartController controller = Get.find<ChartController>();
+
+  // Ordered keys for the grid — displayed as 2-column rows
+  static const List<List<String>> _gridRows = [
+    ['pluto_sign_house', 'north_node_sign_house'],
+    ['south_node', 'pluto_to_node_aspect'],
+    ['chiron_sign_house', 'chiron_to_pluto_aspect'],
+    ['saturn_sign_house', 'sun_sign'],
+    ['moon_sign', 'rising_sign'],
+    ['vertex_point', 'part_of_fortune'],
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -49,36 +60,12 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
             );
           }
 
+          final grid = evolutionaryData.grid;
+
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xff262A40)),
-                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-                    color: CustomColors.secondbackgroundColor,
-                  ),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(child:
-                        Text("About Evolutionary Chart",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: ResponsiveHelper.fontSize(16),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),),
-                        SizedBox(height: ResponsiveHelper.space(10)),
-                        Text("Less about personality traits and more about soul purpose – what you are here to learn this lifetime.\nIt views your chart as a story of growth: the patterns you carry from the past and what you are meant to evolve toward.",
-                          style:TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)) ,
-                        ),
-                      ]
-                  ),
-                ),
-                SizedBox(height: ResponsiveHelper.space(24)),
                 /// ---- INFO CARD ----
                 Container(
                   padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
@@ -99,18 +86,18 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
                       _infoRow("Name:", evolutionaryData.name),
                       _infoRow("Date of Birth:", evolutionaryData.birthDate),
                       _infoRow("Birth Time:", evolutionaryData.birthTime),
-                      _infoRow("Sun Sign:", evolutionaryData.sunSign),
-                      _infoRow("Moon Sign:", evolutionaryData.moonSign),
-                      _infoRow("Rising Sign:", evolutionaryData.risingSign),
+                      _infoRow("Time Zone:", evolutionaryData.location.timezone.isNotEmpty ? evolutionaryData.location.timezone : "N/A"),
+                      _infoRow("Birth City:", evolutionaryData.location.city.isNotEmpty ? evolutionaryData.location.city : "N/A"),
+                      _infoRow("Birth Country:", evolutionaryData.location.country.isNotEmpty ? evolutionaryData.location.country : "N/A"),
                     ],
                   ),
                 ),
 
                 SizedBox(height: ResponsiveHelper.space(24)),
 
-                /// ---- EVOLUTIONARY POINTS CHART ----
+                /// ---- EVOLUTIONARY POINTS CHART TITLE ----
                 Text(
-                  "Evolutionary Chart",
+                  "Evolutionary Points Chart",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: ResponsiveHelper.fontSize(17),
@@ -118,82 +105,38 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
                 ),
                 SizedBox(height: ResponsiveHelper.space(16)),
 
-                Center(
-                  child: SizedBox(
-                    height: ResponsiveHelper.height(350),
-                    width: MediaQuery.of(context).size.width,
-                    child: evolutionaryData.imageUrl.isNotEmpty
-                        ? Image.network(
-                      evolutionaryData.imageUrl,
-                      fit: BoxFit.contain,
-                      loadingBuilder: (context, child, progress) {
-                        if (progress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: const Color(0xFF9A3BFF),
-                            strokeWidth: ResponsiveHelper.width(4),
-                          ),
-                        );
-                      },
-                      errorBuilder: (context, error, stackTrace) {
-                        return Center(
-                          child: Icon(Icons.error,
-                              color: Colors.red, size: ResponsiveHelper.iconSize(50)),
-                        );
-                      },
-                    )
-                        : Image.asset(
-                      "assets/images/chartimage.png",
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+                /// ---- CHART IMAGE ----
+                ZoomableChartImage(
+                  imageUrl: evolutionaryData.imageUrl,
+                  height: ResponsiveHelper.height(350),
                 ),
 
                 SizedBox(height: ResponsiveHelper.space(24)),
 
-                /// ---- POINTS GRID ----
-                Row(
-                  children: [
-                    Expanded(
-                      child: _pointCard(
-                        "North Node",
-                        evolutionaryData.planets['North Node']?.sign ?? '-',
+                /// ---- EVOLUTIONARY POINTS GRID ----
+                if (grid.isNotEmpty)
+                  ..._gridRows.map((rowKeys) {
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(12)),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _gridCard(grid, rowKeys[0]),
+                          ),
+                          SizedBox(width: ResponsiveHelper.space(12)),
+                          Expanded(
+                            child: _gridCard(grid, rowKeys[1]),
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(width: ResponsiveHelper.space(12)),
-                    Expanded(
-                      child: _pointCard(
-                        "South Node",
-                        evolutionaryData.planets['South Node']?.sign ?? '-',
-                      ),
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: ResponsiveHelper.space(12)),
-
-                Row(
-                  children: [
-                    Expanded(
-                      child: _pointCard(
-                        "Pluto",
-                        evolutionaryData.planets['Pluto']?.sign ?? '-',
-                      ),
-                    ),
-                    SizedBox(width: ResponsiveHelper.space(12)),
-                    Expanded(
-                      child: _pointCard(
-                        "Chiron",
-                        evolutionaryData.planets['Chiron']?.sign ?? '-',
-                      ),
-                    ),
-                  ],
-                ),
+                    );
+                  }),
 
                 SizedBox(height: ResponsiveHelper.space(40)),
 
+                /// ---- GENERATE READING ----
                 Obx(() => CustomButton(
-                  text: "Generate",
+                  text: "Generate Reading",
                   isLoading: controller.isGeneratingInterpretation.value,
                   onpress: () async {
                     controller.isGeneratingInterpretation.value = true;
@@ -216,6 +159,8 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
     );
   }
 
+  // ==================== HELPER WIDGETS ====================
+
   Widget _infoRow(String key, String value) {
     return Padding(
       padding: EdgeInsets.only(bottom: ResponsiveHelper.space(12)),
@@ -235,10 +180,21 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
     );
   }
 
-  Widget _pointCard(String title, String subtitle) {
+  /// Builds a single grid card from the evolutionary `grid` map.
+  /// Each entry has: { "label": "...", "sign": "...", "house": "..." (optional) }
+  Widget _gridCard(Map<String, dynamic> grid, String key) {
+    final entry = grid[key];
+    if (entry == null || entry is! Map) {
+      return const SizedBox.shrink();
+    }
+
+    final data = Map<String, dynamic>.from(entry);
+    final label = data['label'] ?? key;
+    final sign = data['sign'] ?? '';
+    final house = data['house'] ?? '';
+
     return Container(
-      height: ResponsiveHelper.height(100),
-      padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
       decoration: BoxDecoration(
         color: CustomColors.secondbackgroundColor,
         borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
@@ -246,24 +202,47 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            title,
+            label,
             style: TextStyle(
               color: Colors.white70,
-              fontSize: ResponsiveHelper.fontSize(12),
+              fontSize: ResponsiveHelper.fontSize(13),
             ),
           ),
           SizedBox(height: ResponsiveHelper.space(8)),
-          Text(
-            subtitle,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: ResponsiveHelper.fontSize(14),
-              fontWeight: FontWeight.w600,
+          if (house.isNotEmpty)
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: sign,
+                    style: TextStyle(
+                      color: CustomColors.primaryColor,
+                      fontSize: ResponsiveHelper.fontSize(14),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' $house',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: ResponsiveHelper.fontSize(14),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          else
+            Text(
+              sign,
+              style: TextStyle(
+                color: CustomColors.primaryColor,
+                fontSize: ResponsiveHelper.fontSize(14),
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
         ],
       ),
     );

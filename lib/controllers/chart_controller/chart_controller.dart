@@ -25,7 +25,7 @@ class ChartController extends GetxController {
 
   List<String> get availableSystems {
     if (selectedChartType.value == 'Natal') {
-      return ['Western', 'Vedic', '13_sign', 'Evolutionary', 'Galactic', 'Human Design'];
+      return ['Western', 'Vedic', 'Ophiuchus', 'Evolutionary', 'Galactic', 'Human Design'];
     } else if (selectedChartType.value == 'Transit' || selectedChartType.value == 'Synastry') {
       return ['Western', 'Vedic'];
     }

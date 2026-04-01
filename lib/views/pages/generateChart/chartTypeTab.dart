@@ -112,7 +112,7 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
                             _chartBox("Vedic Astrology", 'Vedic'),
                           if (isNatal) ...[
                             SizedBox(height: ResponsiveHelper.space(10)),
-                            _chartBox("13-Signs (Ophiuchus)", '13_sign'),
+                            _chartBox("13-Signs (Ophiuchus)", 'Ophiuchus'),
                             SizedBox(height: ResponsiveHelper.space(10)),
                             _chartBox("Evolutionary", 'Evolutionary'),
                             SizedBox(height: ResponsiveHelper.space(10)),

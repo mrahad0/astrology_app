@@ -5,7 +5,7 @@ class ChartDescriptions {
     'Western Astrology\n\nBased on the seasons. Your sign reflects where the Sun was relative to the spring equinox. More focused on personality, psychology, and self-understanding.',
     'Vedic':
     'Vedic Astrology\n\nBased on the actual positions of the stars in the sky. Your sign may shift back by one. More focused on karma, fate, and life events.\nThis means you might be a Leo in Western but a Cancer in Vedic – same birthday, different systems.',
-    '13_sign':
+    'Ophiuchus':
     '13-Sign Zodiac (Ophiuchus)\n\nAstronomically, there are 13 constellations the Sun travels through – not 12. Ophiuchus (the serpent-bearer) sits between Scorpio and Sagittarius, but was never included in traditional astrology. Science recognizes 13; astrology uses 12.',
     'Evolutionary':
     'Evolutionary Astrology\n\nLess about personality traits and more about soul purpose – what you are here to learn this lifetime.\nIt views your chart as a story of growth: the patterns you carry from the past and what you are meant to evolve toward.',

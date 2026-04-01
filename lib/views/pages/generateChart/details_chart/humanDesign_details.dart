@@ -1,4 +1,5 @@
 // lib/views/pages/generateChart/details_chart/humanDesign_details.dart
+import 'package:astrology_app/views/pages/generateChart/details_chart/widgets/zoomable_chart_image.dart';
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
@@ -31,15 +32,10 @@ class _HumandesignDetails extends State<HumandesignDetails> {
         backgroundColor: Colors.transparent,
         body: SafeArea(
         child: Obx(() {
+          final response = controller.natalResponse.value;
 
-          var humanDesignData;
-
-          if (controller.selectedChartType.value == 'Natal' &&
-              controller.natalResponse.value != null) {
-            humanDesignData = controller.natalResponse.value!.charts['human_design'];
-          }
-
-          if (humanDesignData == null) {
+          if (response == null ||
+              !response.charts.containsKey('human_design')) {
             return Center(
               child: CircularProgressIndicator(
                 color: const Color(0xFF9A3BFF),
@@ -48,36 +44,25 @@ class _HumandesignDetails extends State<HumandesignDetails> {
             );
           }
 
+          final hd = response.charts['human_design']!;
+
+          // Build incarnation cross display text
+          String incarnationCrossText = '';
+          if (hd.hdIncarnationCross.isNotEmpty) {
+            final crossName = hd.hdIncarnationCross['name'] ?? '';
+            final gates = hd.hdIncarnationCross['gates'];
+            if (gates != null && gates is List && gates.isNotEmpty) {
+              final gatesStr = gates.map((g) => g.toString()).join('/');
+              incarnationCrossText = '$crossName ($gatesStr)';
+            } else {
+              incarnationCrossText = crossName;
+            }
+          }
+
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xff262A40)),
-                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-                    color: CustomColors.secondbackgroundColor,
-                  ),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(child:
-                        Text("About Human Design Chart",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: ResponsiveHelper.fontSize(16),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),),
-                        SizedBox(height: ResponsiveHelper.space(10)),
-                        Text('A system that blends astrology with other spiritual frameworks. It identifies your "type" and shows how you are best designed to make decisions and use your energy. Less about prediction, more about understanding how you naturally operate.',
-                          style:TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)) ,
-                        ),
-                      ]
-                  ),
-                ),
-                SizedBox(height: ResponsiveHelper.space(24)),
                 /// ---- INFO CARD ----
                 Container(
                   padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
@@ -95,9 +80,12 @@ class _HumandesignDetails extends State<HumandesignDetails> {
                               fontSize: ResponsiveHelper.fontSize(18),
                               fontWeight: FontWeight.w600)),
                       SizedBox(height: ResponsiveHelper.space(20)),
-                      _infoRow("Name:", humanDesignData.name),
-                      _infoRow("Date of Birth:", humanDesignData.birthDate),
-                      _infoRow("Birth Time:", humanDesignData.birthTime),
+                      _infoRow("Name:", hd.name),
+                      _infoRow("Date of Birth:", hd.birthDate),
+                      _infoRow("Birth Time:", hd.birthTime),
+                      _infoRow("Time Zone:", hd.location.timezone.isNotEmpty ? hd.location.timezone : "N/A"),
+                      _infoRow("Birth City:", hd.location.city.isNotEmpty ? hd.location.city : "N/A"),
+                      _infoRow("Birth Country:", hd.location.country.isNotEmpty ? hd.location.country : "N/A"),
                     ],
                   ),
                 ),
@@ -114,82 +102,81 @@ class _HumandesignDetails extends State<HumandesignDetails> {
                 ),
                 SizedBox(height: ResponsiveHelper.space(16)),
 
-                Center(
-                  child: SizedBox(
-                    height: ResponsiveHelper.height(350),
-                    width: MediaQuery.of(context).size.width,
-                    child: humanDesignData.imageUrl.isNotEmpty
-                        ? Image.network(
-                      humanDesignData.imageUrl,
-                      fit: BoxFit.contain,
-                      loadingBuilder: (context, child, progress) {
-                        if (progress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: const Color(0xFF9A3BFF),
-                            strokeWidth: ResponsiveHelper.width(4),
-                          ),
-                        );
-                      },
-                      errorBuilder: (context, error, stackTrace) {
-                        return Center(
-                          child: Icon(Icons.error,
-                              color: Colors.red, size: ResponsiveHelper.iconSize(50)),
-                        );
-                      },
-                    )
-                        : Image.asset(
-                      "assets/images/chartimage.png",
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+                ZoomableChartImage(
+                  imageUrl: hd.imageUrl,
+                  height: ResponsiveHelper.height(350),
                 ),
 
                 SizedBox(height: ResponsiveHelper.space(24)),
 
-                /// ---- POINTS GRID ----
+                /// ---- TYPE & STRATEGY ROW ----
                 Row(
                   children: [
                     Expanded(
-                      child: _pointCard(
-                        "Type",
-                        "Generator",
-                      ),
+                      child: _pointCard("Type", hd.hdType),
                     ),
                     SizedBox(width: ResponsiveHelper.space(12)),
                     Expanded(
-                      child: _pointCard(
-                        "Strategy",
-                        "To Respond",
-                      ),
+                      child: _pointCard("Strategy", hd.hdStrategy),
                     ),
                   ],
                 ),
 
                 SizedBox(height: ResponsiveHelper.space(12)),
 
+                /// ---- AUTHORITY & PROFILE ROW ----
                 Row(
                   children: [
                     Expanded(
-                      child: _pointCard(
-                        "Authority",
-                        "Sacral",
-                      ),
+                      child: _pointCard("Authority", hd.hdAuthority),
                     ),
                     SizedBox(width: ResponsiveHelper.space(12)),
                     Expanded(
-                      child: _pointCard(
-                        "Profile",
-                        "3/5",
-                      ),
+                      child: _pointCard("Profile", hd.hdProfile),
                     ),
                   ],
                 ),
 
+                SizedBox(height: ResponsiveHelper.space(12)),
+
+                /// ---- INCARNATION CROSS (FULL WIDTH) ----
+                if (incarnationCrossText.isNotEmpty)
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
+                    decoration: BoxDecoration(
+                      color: CustomColors.secondbackgroundColor,
+                      borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+                      border: Border.all(color: const Color(0xff2B2F45)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Incarnation Cross",
+                          style: TextStyle(
+                            color: CustomColors.primaryColor,
+                            fontSize: ResponsiveHelper.fontSize(14),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: ResponsiveHelper.space(8)),
+                        Text(
+                          incarnationCrossText,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: ResponsiveHelper.fontSize(14),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
                 SizedBox(height: ResponsiveHelper.space(40)),
 
+                /// ---- GENERATE READING ----
                 Obx(() => CustomButton(
-                  text: "Generate",
+                  text: "Generate Reading",
                   isLoading: controller.isGeneratingInterpretation.value,
                   onpress: () async {
                     controller.isGeneratingInterpretation.value = true;
@@ -211,6 +198,8 @@ class _HumandesignDetails extends State<HumandesignDetails> {
      ),
     );
   }
+
+  // ==================== HELPER WIDGETS ====================
 
   Widget _infoRow(String key, String value) {
     return Padding(
@@ -247,8 +236,9 @@ class _HumandesignDetails extends State<HumandesignDetails> {
           Text(
             title,
             style: TextStyle(
-              color: Colors.white70,
-              fontSize: ResponsiveHelper.fontSize(12),
+              color: CustomColors.primaryColor,
+              fontSize: ResponsiveHelper.fontSize(14),
+              fontWeight: FontWeight.w600,
             ),
           ),
           SizedBox(height: ResponsiveHelper.space(8)),
@@ -257,7 +247,6 @@ class _HumandesignDetails extends State<HumandesignDetails> {
             style: TextStyle(
               color: Colors.white,
               fontSize: ResponsiveHelper.fontSize(14),
-              fontWeight: FontWeight.w600,
             ),
           ),
         ],

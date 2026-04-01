@@ -1,4 +1,5 @@
 // lib/views/pages/generateChart/details_chart/western_datails.dart
+import 'package:astrology_app/views/pages/generateChart/details_chart/widgets/zoomable_chart_image.dart';
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
@@ -54,6 +55,44 @@ class _WesternDatailsState extends State<WesternDatails> {
   }
 
   // ==================== NATAL CHART ====================
+
+  // Personal planets list (Sun through Mars)
+  static const List<String> _personalPlanets = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars'];
+  // Outer planets list (Jupiter through Pluto)
+  static const List<String> _outerPlanets = ['Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto'];
+
+  // Color mapping for zodiac signs
+  Color _getSignColor(String sign) {
+    switch (sign.toLowerCase()) {
+      case 'aries':
+        return const Color(0xFFFF4D4D);
+      case 'taurus':
+        return const Color(0xFF4CAF50);
+      case 'gemini':
+        return const Color(0xFFFFEB3B);
+      case 'cancer':
+        return const Color(0xFF42A5F5);
+      case 'leo':
+        return const Color(0xFFFF9800);
+      case 'virgo':
+        return const Color(0xFF8BC34A);
+      case 'libra':
+        return const Color(0xFFE91E63);
+      case 'scorpio':
+        return const Color(0xFF9C27B0);
+      case 'sagittarius':
+        return const Color(0xFFFF5722);
+      case 'capricorn':
+        return const Color(0xFF795548);
+      case 'aquarius':
+        return const Color(0xFF00BCD4);
+      case 'pisces':
+        return const Color(0xFF3F51B5);
+      default:
+        return const Color(0xFF9726f2);
+    }
+  }
+
   Widget _buildNatalChart() {
     final westernData = controller.natalResponse.value?.charts['western'];
 
@@ -66,41 +105,26 @@ class _WesternDatailsState extends State<WesternDatails> {
       );
     }
 
+    // Extract personal planets from the planets map
+    final personalPlanetEntries = westernData.planets.entries
+        .where((e) => _personalPlanets.contains(e.key))
+        .toList();
+
+    // Extract outer planets from the planets map
+    final outerPlanetEntries = westernData.planets.entries
+        .where((e) => _outerPlanets.contains(e.key))
+        .toList();
+
+    // Get personal planet aspects (where point1 is a personal planet)
+    final personalAspects = westernData.aspects
+        .where((a) => _personalPlanets.contains(a.point1))
+        .take(6)
+        .toList();
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
-            decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff262A40)),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              color: CustomColors.secondbackgroundColor,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Text(
-                    "About Western Chart",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: ResponsiveHelper.fontSize(16),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                SizedBox(height: ResponsiveHelper.space(10)),
-                Text(
-                  "Based on the seasons. Your sign reflects where the Sun was relative to the spring equinox. More focused on personality, psychology, and self-understanding.",
-                  style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
-                ),
-              ],
-            ),
-          ),
-
-          SizedBox(height: ResponsiveHelper.space(24)),
-
           /// Info Card
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
@@ -124,18 +148,18 @@ class _WesternDatailsState extends State<WesternDatails> {
                 _infoRow("Name:", westernData.name),
                 _infoRow("Date of Birth:", westernData.birthDate),
                 _infoRow("Birth Time:", westernData.birthTime),
-                _infoRow("Sun Sign:", westernData.sunSign),
-                _infoRow("Moon Sign:", westernData.moonSign),
-                _infoRow("Rising Sign:", westernData.risingSign),
+                _infoRow("Time Zone:", westernData.location.timezone.isNotEmpty ? westernData.location.timezone : "N/A"),
+                _infoRow("Birth City:", westernData.location.city.isNotEmpty ? westernData.location.city : "N/A"),
+                _infoRow("Birth Country:", westernData.location.country.isNotEmpty ? westernData.location.country : "N/A"),
               ],
             ),
           ),
 
           SizedBox(height: ResponsiveHelper.space(24)),
 
-          /// Chart Wheel
+          /// Birth Chart Wheel Title
           Text(
-            "Western Chart Wheel",
+            "Birth Chart Wheel",
             style: TextStyle(
               color: Colors.white,
               fontSize: ResponsiveHelper.fontSize(17),
@@ -144,40 +168,16 @@ class _WesternDatailsState extends State<WesternDatails> {
           ),
           SizedBox(height: ResponsiveHelper.space(16)),
 
-          Center(
-            child: SizedBox(
-              height: ResponsiveHelper.height(350),
-              width: MediaQuery.of(context).size.width,
-              child: westernData.imageUrl.isNotEmpty
-                  ? Image.network(
-                westernData.imageUrl,
-                fit: BoxFit.contain,
-                loadingBuilder: (context, child, progress) {
-                  if (progress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: const Color(0xFF9A3BFF),
-                      strokeWidth: ResponsiveHelper.width(4),
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Center(
-                    child: Icon(Icons.error, color: Colors.red, size: ResponsiveHelper.iconSize(50)),
-                  );
-                },
-              )
-                  : Image.asset(
-                "assets/images/chartimage.png",
-                fit: BoxFit.contain,
-              ),
-            ),
+          /// Chart Image
+          ZoomableChartImage(
+            imageUrl: westernData.imageUrl,
+            height: ResponsiveHelper.height(350),
           ),
           SizedBox(height: ResponsiveHelper.space(24)),
 
-          /// Planetary Positions
+          /// ——— Personal Planets ———
           Text(
-            "Planetary Positions",
+            "Personal Planets:",
             style: TextStyle(
               color: Colors.white,
               fontSize: ResponsiveHelper.fontSize(17),
@@ -186,19 +186,20 @@ class _WesternDatailsState extends State<WesternDatails> {
           ),
           SizedBox(height: ResponsiveHelper.space(10)),
 
-          ...westernData.planets.entries.take(10).map((entry) {
+          ...personalPlanetEntries.map((entry) {
             final planet = entry.value;
-            return _planetTile(
+            return _planetTileNew(
               planet.name,
-              "${planet.sign} in ${planet.house}",
+              planet.sign,
+              "in ${_ordinalHouse(planet.house)} house",
             );
           }),
 
           SizedBox(height: ResponsiveHelper.space(24)),
 
-          /// Key Aspects
+          /// ——— Personal Planets Key Aspects ———
           Text(
-            "Key Aspects",
+            "Personal Planets Key Aspects :",
             style: TextStyle(
               color: Colors.white,
               fontSize: ResponsiveHelper.fontSize(17),
@@ -207,17 +208,41 @@ class _WesternDatailsState extends State<WesternDatails> {
           ),
           SizedBox(height: ResponsiveHelper.space(10)),
 
-          ...westernData.aspects.take(5).map((aspect) {
-            return _aspectTile(
-              "${aspect.point1} ${aspect.aspect} ${aspect.point2}",
-              "orb: ${aspect.orb.toStringAsFixed(1)}°",
+          ...personalAspects.map((aspect) {
+            return _aspectTileNew(
+              aspect.point1,
+              _capitalizeFirst(aspect.aspect),
+              "${aspect.orb.toStringAsFixed(0)}°",
+            );
+          }),
+
+          SizedBox(height: ResponsiveHelper.space(24)),
+
+          /// ——— Outer Planets Key Aspects ———
+          Text(
+            "Outer Planets  Key Aspects :",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(17),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: ResponsiveHelper.space(10)),
+
+          ...outerPlanetEntries.map((entry) {
+            final planet = entry.value;
+            return _planetTileNew(
+              planet.name,
+              planet.sign,
+              "in ${_ordinalHouse(planet.house)} house",
             );
           }),
 
           SizedBox(height: ResponsiveHelper.space(40)),
 
+          /// Generate Reading Button
           Obx(() => CustomButton(
-            text: "Generate",
+            text: "Generate Reading",
             isLoading: controller.isGeneratingInterpretation.value,
             onpress: () async {
               controller.isGeneratingInterpretation.value = true;
@@ -233,6 +258,111 @@ class _WesternDatailsState extends State<WesternDatails> {
         ],
       ),
     );
+  }
+
+  /// New planet tile with purple sign text — matches the screenshot
+  Widget _planetTileNew(String planetName, String sign, String houseText) {
+    return Container(
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.symmetric(
+        horizontal: ResponsiveHelper.padding(14),
+        vertical: ResponsiveHelper.padding(12),
+      ),
+      decoration: BoxDecoration(
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
+        border: Border.all(color: const Color(0xff2B2F45)),
+      ),
+      child: Row(
+        children: [
+          Text(
+            "$planetName:   ",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(14),
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Text(
+            sign,
+            style: TextStyle(
+              color: CustomColors.primaryColor,
+              fontSize: ResponsiveHelper.fontSize(14),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Text(
+            " $houseText",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(14),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// New aspect tile — planet name, aspect type, orb degree
+  Widget _aspectTileNew(String planetName, String aspectName, String orbDegree) {
+    return Container(
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.symmetric(
+        horizontal: ResponsiveHelper.padding(14),
+        vertical: ResponsiveHelper.padding(12),
+      ),
+      decoration: BoxDecoration(
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
+        border: Border.all(color: const Color(0xff2B2F45)),
+      ),
+      child: Row(
+        children: [
+          Text(
+            "$planetName:  ",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(14),
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Text(
+            aspectName,
+            style: TextStyle(
+              color: const Color(0xffA4A9C1),
+              fontSize: ResponsiveHelper.fontSize(14),
+            ),
+          ),
+          SizedBox(width: ResponsiveHelper.space(6)),
+          Text(
+            orbDegree,
+            style: TextStyle(
+              color: CustomColors.primaryColor,
+              fontSize: ResponsiveHelper.fontSize(14),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Helper to convert house number string to ordinal (e.g. "2" -> "2nd")
+  String _ordinalHouse(String houseStr) {
+    final num = int.tryParse(houseStr) ?? 0;
+    if (num == 0) return houseStr;
+    switch (num) {
+      case 1: return '1st';
+      case 2: return '2nd';
+      case 3: return '3rd';
+      default: return '${num}th';
+    }
+  }
+
+  /// Capitalize first letter of a string
+  String _capitalizeFirst(String s) {
+    if (s.isEmpty) return s;
+    return s[0].toUpperCase() + s.substring(1);
   }
 
   // ==================== TRANSIT CHART ====================
@@ -326,34 +456,9 @@ class _WesternDatailsState extends State<WesternDatails> {
           ),
           SizedBox(height: ResponsiveHelper.space(16)),
 
-          Center(
-            child: SizedBox(
-              height: ResponsiveHelper.height(350),
-              width: MediaQuery.of(context).size.width,
-              child: imageUrl.isNotEmpty
-                  ? Image.network(
-                imageUrl,
-                fit: BoxFit.contain,
-                loadingBuilder: (context, child, progress) {
-                  if (progress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: const Color(0xFF9A3BFF),
-                      strokeWidth: ResponsiveHelper.width(4),
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Center(
-                    child: Icon(Icons.error, color: Colors.red, size: ResponsiveHelper.iconSize(50)),
-                  );
-                },
-              )
-                  : Image.asset(
-                "assets/images/chartimage.png",
-                fit: BoxFit.contain,
-              ),
-            ),
+          ZoomableChartImage(
+            imageUrl: imageUrl,
+            height: ResponsiveHelper.height(350),
           ),
           SizedBox(height: ResponsiveHelper.space(24)),
 
@@ -527,34 +632,9 @@ class _WesternDatailsState extends State<WesternDatails> {
           ),
           SizedBox(height: ResponsiveHelper.space(16)),
 
-          Center(
-            child: SizedBox(
-              height: ResponsiveHelper.height(350),
-              width: MediaQuery.of(context).size.width,
-              child: imageUrl.isNotEmpty
-                  ? Image.network(
-                imageUrl,
-                fit: BoxFit.contain,
-                loadingBuilder: (context, child, progress) {
-                  if (progress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: const Color(0xFF9A3BFF),
-                      strokeWidth: ResponsiveHelper.width(4),
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Center(
-                    child: Icon(Icons.error, color: Colors.red, size: ResponsiveHelper.iconSize(50)),
-                  );
-                },
-              )
-                  : Image.asset(
-                "assets/images/chartimage.png",
-                fit: BoxFit.contain,
-              ),
-            ),
+          ZoomableChartImage(
+            imageUrl: imageUrl,
+            height: ResponsiveHelper.height(350),
           ),
           SizedBox(height: ResponsiveHelper.space(24)),
 

@@ -338,6 +338,7 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
       case 'vedic':
         return 'Vedic';
       case '13_sign':
+      case 'ophiuchus':
         return '13-Sign';
       case 'evolutionary':
         return 'Evolutionary';

@@ -1,4 +1,5 @@
 // lib/views/pages/generateChart/details_chart/glactic_details.dart
+import 'package:astrology_app/views/pages/generateChart/details_chart/widgets/zoomable_chart_image.dart';
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
@@ -20,6 +21,17 @@ class GalacticDetails extends StatefulWidget {
 class _GalacticDetailsState extends State<GalacticDetails> {
   final ChartController controller = Get.find<ChartController>();
 
+  // Ordered section keys matching the user's requirements
+  static const List<String> _sectionOrder = [
+    'Celestial',
+    'Royal Stars',
+    'Galactic Fixed Stars',
+    'Starseed Origin Indicator',
+    'Black Holes',
+    'Dwarf Planets',
+    'Asteroids',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,7 +45,6 @@ class _GalacticDetailsState extends State<GalacticDetails> {
         backgroundColor: Colors.transparent,
         body: SafeArea(
         child: Obx(() {
-
           NatalChartModel? galacticData;
 
           if (controller.selectedChartType.value == 'Natal' &&
@@ -50,36 +61,12 @@ class _GalacticDetailsState extends State<GalacticDetails> {
             );
           }
 
+          final sections = galacticData.sections;
+
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xff262A40)),
-                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-                    color: CustomColors.secondbackgroundColor,
-                  ),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(child:
-                        Text("About Galactic Chart",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: ResponsiveHelper.fontSize(16),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),),
-                        SizedBox(height: ResponsiveHelper.space(10)),
-                        Text("Expands beyond the 12 signs to include stars, galaxies, and cosmic points. Often connected to the concept of “starseeds” – the idea that some souls originated from other star systems like the Pleiades or Sirius, with the chart revealing clues about that origin.",
-                          style:TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)) ,
-                        ),
-                      ]
-                  ),
-                ),
-                SizedBox(height: ResponsiveHelper.space(24)),
                 /// ---- INFO CARD ----
                 Container(
                   padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
@@ -100,18 +87,18 @@ class _GalacticDetailsState extends State<GalacticDetails> {
                       _infoRow("Name:", galacticData.name),
                       _infoRow("Date of Birth:", galacticData.birthDate),
                       _infoRow("Birth Time:", galacticData.birthTime),
-                      _infoRow("Sun Sign:", galacticData.sunSign),
-                      _infoRow("Moon Sign:", galacticData.moonSign),
-                      _infoRow("Rising Sign:", galacticData.risingSign),
+                      _infoRow("Time Zone:", galacticData.location.timezone.isNotEmpty ? galacticData.location.timezone : "N/A"),
+                      _infoRow("Birth City:", galacticData.location.city.isNotEmpty ? galacticData.location.city : "N/A"),
+                      _infoRow("Birth Country:", galacticData.location.country.isNotEmpty ? galacticData.location.country : "N/A"),
                     ],
                   ),
                 ),
 
                 SizedBox(height: ResponsiveHelper.space(24)),
 
-                /// ---- GALACTIC CHART WHEEL ----
+                /// ---- GALACTIC ASTROLOGY CHART ----
                 Text(
-                  "Galactic Chart Wheel",
+                  "Galactic Astrology",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: ResponsiveHelper.fontSize(17),
@@ -119,74 +106,47 @@ class _GalacticDetailsState extends State<GalacticDetails> {
                 ),
                 SizedBox(height: ResponsiveHelper.space(16)),
 
-                Center(
-                  child: SizedBox(
-                    height: ResponsiveHelper.height(350),
-                    width: MediaQuery.of(context).size.width,
-                    child: galacticData.imageUrl.isNotEmpty
-                        ? Image.network(
-                      galacticData.imageUrl,
-                      fit: BoxFit.contain,
-                      loadingBuilder: (context, child, progress) {
-                        if (progress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: const Color(0xFF9A3BFF),
-                            strokeWidth: ResponsiveHelper.width(4),
-                          ),
-                        );
-                      },
-                      errorBuilder: (context, error, stackTrace) {
-                        return Center(
-                          child: Icon(Icons.error,
-                              color: Colors.red, size: ResponsiveHelper.iconSize(50)),
-                        );
-                      },
-                    )
-                        : Image.asset(
-                      "assets/images/chartimage.png",
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+                ZoomableChartImage(
+                  imageUrl: galacticData.imageUrl,
+                  height: ResponsiveHelper.height(350),
                 ),
 
                 SizedBox(height: ResponsiveHelper.space(24)),
 
-                /// ---- PLANETARY POSITIONS ----
-                Text(
-                  "Galactic Positions",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: ResponsiveHelper.fontSize(17),
-                      fontWeight: FontWeight.w600),
-                ),
-                SizedBox(height: ResponsiveHelper.space(10)),
+                /// ---- DYNAMIC SECTIONS ----
+                ..._sectionOrder.where((key) => sections.containsKey(key)).map((sectionKey) {
+                  final items = sections[sectionKey]!;
+                  if (items.isEmpty) return const SizedBox.shrink();
 
-                ...galacticData.planets.entries.take(8).map((entry) {
-                  final planet = entry.value;
-                  return _starTile("${planet.name}: ${planet.sign} ${planet.degree.toStringAsFixed(1)}°");
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        sectionKey,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: ResponsiveHelper.fontSize(17),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: ResponsiveHelper.space(12)),
+                      ...items.map((item) {
+                        if (item is Map) {
+                          final data = Map<String, dynamic>.from(item);
+                          return _buildSectionItem(sectionKey, data);
+                        }
+                        return const SizedBox.shrink();
+                      }),
+                      SizedBox(height: ResponsiveHelper.space(16)),
+                    ],
+                  );
                 }),
 
                 SizedBox(height: ResponsiveHelper.space(24)),
 
-                /// ---- KEY ASPECTS ----
-                Text(
-                  "Key Aspects",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: ResponsiveHelper.fontSize(17),
-                      fontWeight: FontWeight.w600),
-                ),
-                SizedBox(height: ResponsiveHelper.space(10)),
-
-                ...galacticData.aspects.take(5).map((aspect) {
-                  return _starTile("${aspect.point1} ${aspect.aspect} ${aspect.point2}");
-                }),
-
-                SizedBox(height: ResponsiveHelper.space(40)),
-
+                /// ---- GENERATE READING ----
                 Obx(() => CustomButton(
-                  text: "Generate",
+                  text: "Generate Reading",
                   isLoading: controller.isGeneratingInterpretation.value,
                   onpress: () async {
                     controller.isGeneratingInterpretation.value = true;
@@ -209,6 +169,347 @@ class _GalacticDetailsState extends State<GalacticDetails> {
     );
   }
 
+  // ==================== SECTION ITEM BUILDERS ====================
+
+  Widget _buildSectionItem(String sectionKey, Map<String, dynamic> data) {
+    switch (sectionKey) {
+      case 'Celestial':
+        return _celestialTile(data);
+      case 'Royal Stars':
+        return _celestialTile(data);
+      case 'Galactic Fixed Stars':
+        return _fixedStarTile(data);
+      case 'Starseed Origin Indicator':
+        return _starseedTile(data);
+      case 'Black Holes':
+        return _blackHoleTile(data);
+      case 'Dwarf Planets':
+        return _dwarfPlanetTile(data);
+      case 'Asteroids':
+        return _dwarfPlanetTile(data);
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+
+  /// Celestial & Royal Stars: name, sign, degree, house_label, meaning
+  Widget _celestialTile(Map<String, dynamic> data) {
+    final name = data['name'] ?? '';
+    final sign = data['sign'] ?? '';
+    final degree = data['degree']?.toString() ?? '';
+    final houseLabel = data['house_label'] ?? data['house_name'] ?? '';
+    final meaning = data['meaning'] ?? '';
+
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
+      decoration: BoxDecoration(
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
+        border: Border.all(color: const Color(0xff2B2F45)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                text: '$name: ',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: ResponsiveHelper.fontSize(14),
+                ),
+              ),
+              TextSpan(
+                text: sign,
+                style: TextStyle(
+                  color: CustomColors.primaryColor,
+                  fontSize: ResponsiveHelper.fontSize(14),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (degree.isNotEmpty)
+                TextSpan(
+                  text: ' $degree°',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ResponsiveHelper.fontSize(14),
+                  ),
+                ),
+              if (houseLabel.isNotEmpty)
+                TextSpan(
+                  text: ' in $houseLabel',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ResponsiveHelper.fontSize(14),
+                  ),
+                ),
+            ]),
+          ),
+          if (meaning.isNotEmpty) ...[
+            SizedBox(height: ResponsiveHelper.space(4)),
+            Text(
+              meaning,
+              style: TextStyle(
+                color: Colors.white38,
+                fontSize: ResponsiveHelper.fontSize(12),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Galactic Fixed Stars: star, planet, constellation, separation, meaning
+  Widget _fixedStarTile(Map<String, dynamic> data) {
+    final star = data['star'] ?? '';
+    final planet = data['planet'] ?? '';
+    final constellation = data['constellation'] ?? '';
+    final separation = data['separation']?.toString() ?? '';
+    final meaning = data['meaning'] ?? '';
+    final exact = data['exact'] == true;
+
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
+      decoration: BoxDecoration(
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
+        border: Border.all(color: const Color(0xff2B2F45)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                text: star,
+                style: TextStyle(
+                  color: CustomColors.primaryColor,
+                  fontSize: ResponsiveHelper.fontSize(14),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              TextSpan(
+                text: ' conjunct $planet',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: ResponsiveHelper.fontSize(14),
+                ),
+              ),
+              if (constellation.isNotEmpty)
+                TextSpan(
+                  text: ' ($constellation)',
+                  style: TextStyle(
+                    color: Colors.white54,
+                    fontSize: ResponsiveHelper.fontSize(13),
+                  ),
+                ),
+            ]),
+          ),
+          SizedBox(height: ResponsiveHelper.space(4)),
+          Row(
+            children: [
+              Text(
+                'Orb: $separation°',
+                style: TextStyle(
+                  color: Colors.white54,
+                  fontSize: ResponsiveHelper.fontSize(12),
+                ),
+              ),
+              if (exact) ...[
+                SizedBox(width: ResponsiveHelper.space(8)),
+                Text(
+                  '(Exact)',
+                  style: TextStyle(
+                    color: CustomColors.primaryColor,
+                    fontSize: ResponsiveHelper.fontSize(12),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          if (meaning.isNotEmpty) ...[
+            SizedBox(height: ResponsiveHelper.space(4)),
+            Text(
+              meaning,
+              style: TextStyle(
+                color: Colors.white38,
+                fontSize: ResponsiveHelper.fontSize(12),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Starseed Origin Indicator: display text, meaning
+  Widget _starseedTile(Map<String, dynamic> data) {
+    final display = data['display'] ?? '';
+    final meaning = data['meaning'] ?? '';
+
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
+      decoration: BoxDecoration(
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
+        border: Border.all(color: const Color(0xff2B2F45)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            display,
+            style: TextStyle(
+              color: CustomColors.primaryColor,
+              fontSize: ResponsiveHelper.fontSize(14),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          if (meaning.isNotEmpty) ...[
+            SizedBox(height: ResponsiveHelper.space(4)),
+            Text(
+              meaning,
+              style: TextStyle(
+                color: Colors.white54,
+                fontSize: ResponsiveHelper.fontSize(12),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Black Holes: title, subtitle, planet, orb_text, display
+  Widget _blackHoleTile(Map<String, dynamic> data) {
+    final title = data['title'] ?? data['name'] ?? '';
+    final subtitle = data['subtitle'] ?? '';
+    final planet = data['planet'] ?? '';
+    final orbText = data['orb_text'] ?? '';
+    final exact = data['exact'] == true;
+
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
+      decoration: BoxDecoration(
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
+        border: Border.all(color: const Color(0xff2B2F45)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                text: title,
+                style: TextStyle(
+                  color: CustomColors.primaryColor,
+                  fontSize: ResponsiveHelper.fontSize(14),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              TextSpan(
+                text: ' conjunct $planet',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: ResponsiveHelper.fontSize(14),
+                ),
+              ),
+            ]),
+          ),
+          SizedBox(height: ResponsiveHelper.space(4)),
+          Text(
+            subtitle,
+            style: TextStyle(
+              color: Colors.white54,
+              fontSize: ResponsiveHelper.fontSize(13),
+            ),
+          ),
+          if (orbText.isNotEmpty) ...[
+            SizedBox(height: ResponsiveHelper.space(2)),
+            Row(
+              children: [
+                Text(
+                  'Orb: $orbText',
+                  style: TextStyle(
+                    color: Colors.white54,
+                    fontSize: ResponsiveHelper.fontSize(12),
+                  ),
+                ),
+                if (exact) ...[
+                  SizedBox(width: ResponsiveHelper.space(8)),
+                  Text(
+                    '(Exact)',
+                    style: TextStyle(
+                      color: CustomColors.primaryColor,
+                      fontSize: ResponsiveHelper.fontSize(12),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Dwarf Planets & Asteroids: name, sign, house_label, placement, display
+  Widget _dwarfPlanetTile(Map<String, dynamic> data) {
+    final name = data['name'] ?? '';
+    final sign = data['sign'] ?? '';
+    final houseLabel = data['house_label'] ?? data['house_name'] ?? '';
+
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
+      decoration: BoxDecoration(
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
+        border: Border.all(color: const Color(0xff2B2F45)),
+      ),
+      child: RichText(
+        text: TextSpan(children: [
+          TextSpan(
+            text: '$name: ',
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: ResponsiveHelper.fontSize(14),
+            ),
+          ),
+          TextSpan(
+            text: sign,
+            style: TextStyle(
+              color: CustomColors.primaryColor,
+              fontSize: ResponsiveHelper.fontSize(14),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          if (houseLabel.isNotEmpty)
+            TextSpan(
+              text: ' in $houseLabel',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: ResponsiveHelper.fontSize(14),
+              ),
+            ),
+        ]),
+      ),
+    );
+  }
+
+  // ==================== COMMON WIDGETS ====================
+
   Widget _infoRow(String key, String value) {
     return Padding(
       padding: EdgeInsets.only(bottom: ResponsiveHelper.space(12)),
@@ -224,26 +525,6 @@ class _GalacticDetailsState extends State<GalacticDetails> {
                 style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14))),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _starTile(String title) {
-    return Container(
-      width: double.infinity,
-      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
-      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
-      decoration: BoxDecoration(
-        color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-        border: Border.all(color: const Color(0xff2B2F45)),
-      ),
-      child: Text(
-        title,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: ResponsiveHelper.fontSize(14),
-        ),
       ),
     );
   }

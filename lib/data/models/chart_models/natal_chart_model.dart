@@ -30,19 +30,37 @@ class LocationData {
 }
 
 class NatalChartModel {
-  final String chartId;  // 🆕 Added
+  final String chartId;
   final String system;
   final String name;
   final String birthDate;
   final String birthTime;
   final String imageUrl;
-  final LocationData location;  // 🆕 Added
+  final LocationData location;
   final Map<String, PlanetModel> planets;
   final Map<int, HouseModel> houses;
   final List<AspectModel> aspects;
   final String sunSign;
   final String moonSign;
   final String risingSign;
+
+  // Vedic-specific fields (raw JSON data)
+  final List<Map<String, dynamic>> siderealPlanetaryPositions;
+  final Map<String, dynamic> lifepathIndicator;
+  final Map<String, dynamic> lunarSystem;
+
+  // Evolutionary-specific field
+  final Map<String, dynamic> grid;
+
+  // Galactic-specific field
+  final Map<String, List<dynamic>> sections;
+
+  // Human Design-specific fields
+  final String hdType;
+  final String hdStrategy;
+  final String hdAuthority;
+  final String hdProfile;
+  final Map<String, dynamic> hdIncarnationCross;
 
   NatalChartModel({
     required this.chartId,
@@ -58,6 +76,16 @@ class NatalChartModel {
     required this.sunSign,
     required this.moonSign,
     required this.risingSign,
+    this.siderealPlanetaryPositions = const [],
+    this.lifepathIndicator = const {},
+    this.lunarSystem = const {},
+    this.grid = const {},
+    this.sections = const {},
+    this.hdType = '',
+    this.hdStrategy = '',
+    this.hdAuthority = '',
+    this.hdProfile = '',
+    this.hdIncarnationCross = const {},
   });
 
   factory NatalChartModel.fromJson(Map<String, dynamic> json, String systemKey) {
@@ -99,13 +127,50 @@ class NatalChartModel {
       locationData = LocationData.fromJson(json['location']);
     }
 
+    // Parse Vedic-specific: sidereal_planetary_positions
+    List<Map<String, dynamic>> siderealPositions = [];
+    if (json['sidereal_planetary_positions'] != null) {
+      siderealPositions = (json['sidereal_planetary_positions'] as List)
+          .map((e) => Map<String, dynamic>.from(e))
+          .toList();
+    }
+
+    // Parse Vedic-specific: lifepath_indicator
+    Map<String, dynamic> lifepath = {};
+    if (json['lifepath_indicator'] != null) {
+      lifepath = Map<String, dynamic>.from(json['lifepath_indicator']);
+    }
+
+    // Parse Vedic-specific: lunar_system
+    Map<String, dynamic> lunar = {};
+    if (json['lunar_system'] != null) {
+      lunar = Map<String, dynamic>.from(json['lunar_system']);
+    }
+
+    // Parse Evolutionary-specific: grid
+    Map<String, dynamic> gridData = {};
+    if (json['grid'] != null) {
+      gridData = Map<String, dynamic>.from(json['grid']);
+    }
+
+    // Parse Galactic-specific: sections
+    Map<String, List<dynamic>> sectionsData = {};
+    if (json['sections'] != null) {
+      (json['sections'] as Map<String, dynamic>).forEach((key, value) {
+        if (value is List) {
+          sectionsData[key] = List<dynamic>.from(value);
+        }
+      });
+    }
+
+
     return NatalChartModel(
-      chartId: json['chart_id'] ?? json['id'] ?? '', // Try multiple keys
+      chartId: json['chart_id'] ?? json['id'] ?? '',
       system: systemKey,
       name: json['name'] ?? '',
       birthDate: json['birth_date'] ?? '',
       birthTime: json['birth_time'] ?? '',
-      imageUrl: '', // Will be set from images map
+      imageUrl: '',
       location: locationData,
       planets: planetMap,
       houses: houseMap,
@@ -113,6 +178,18 @@ class NatalChartModel {
       sunSign: json['sun_sign'] ?? '',
       moonSign: json['moon_sign'] ?? '',
       risingSign: json['rising_sign'] ?? json['ascendant'] ?? '',
+      siderealPlanetaryPositions: siderealPositions,
+      lifepathIndicator: lifepath,
+      lunarSystem: lunar,
+      grid: gridData,
+      sections: sectionsData,
+      hdType: json['type']?.toString() ?? '',
+      hdStrategy: json['strategy']?.toString() ?? '',
+      hdAuthority: json['authority']?.toString() ?? '',
+      hdProfile: json['profile']?.toString() ?? '',
+      hdIncarnationCross: json['incarnation_cross'] != null
+          ? Map<String, dynamic>.from(json['incarnation_cross'])
+          : {},
     );
   }
 
@@ -131,6 +208,16 @@ class NatalChartModel {
     String? sunSign,
     String? moonSign,
     String? risingSign,
+    List<Map<String, dynamic>>? siderealPlanetaryPositions,
+    Map<String, dynamic>? lifepathIndicator,
+    Map<String, dynamic>? lunarSystem,
+    Map<String, dynamic>? grid,
+    Map<String, List<dynamic>>? sections,
+    String? hdType,
+    String? hdStrategy,
+    String? hdAuthority,
+    String? hdProfile,
+    Map<String, dynamic>? hdIncarnationCross,
   }) {
     return NatalChartModel(
       chartId: chartId ?? this.chartId,
@@ -146,6 +233,16 @@ class NatalChartModel {
       sunSign: sunSign ?? this.sunSign,
       moonSign: moonSign ?? this.moonSign,
       risingSign: risingSign ?? this.risingSign,
+      siderealPlanetaryPositions: siderealPlanetaryPositions ?? this.siderealPlanetaryPositions,
+      lifepathIndicator: lifepathIndicator ?? this.lifepathIndicator,
+      lunarSystem: lunarSystem ?? this.lunarSystem,
+      grid: grid ?? this.grid,
+      sections: sections ?? this.sections,
+      hdType: hdType ?? this.hdType,
+      hdStrategy: hdStrategy ?? this.hdStrategy,
+      hdAuthority: hdAuthority ?? this.hdAuthority,
+      hdProfile: hdProfile ?? this.hdProfile,
+      hdIncarnationCross: hdIncarnationCross ?? this.hdIncarnationCross,
     );
   }
 }

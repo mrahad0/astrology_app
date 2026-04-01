@@ -24,7 +24,7 @@ class _MainDetailChart extends State<MainDetailChart> {
   final Map<String, String> systemLabels = {
     'western': 'Western',
     'vedic': 'Vedic',
-    '13_sign': '13 Sign',
+    'ophiuchus': '13-Sign',
     'evolutionary': 'Evolutionary',
     'galactic': 'Galactic',
     'human_design': 'Human Design',
@@ -33,7 +33,7 @@ class _MainDetailChart extends State<MainDetailChart> {
   final Map<String, Widget> systemPages = {
     'western': const WesternDatails(),
     'vedic': const VedicDetails(),
-    '13_sign': const Sign13Details(),
+    'ophiuchus': const Sign13Details(),
     'evolutionary': const EvolutionaryDetails(),
     'galactic': const GalacticDetails(),
     'human_design': const HumandesignDetails(),

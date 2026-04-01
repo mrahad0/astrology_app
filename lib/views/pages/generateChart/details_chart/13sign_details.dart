@@ -1,4 +1,5 @@
 // lib/views/pages/generateChart/details_chart/13sign_details.dart
+import 'package:astrology_app/views/pages/generateChart/details_chart/widgets/zoomable_chart_image.dart';
 import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:astrology_app/utils/color.dart';
@@ -19,6 +20,11 @@ class Sign13Details extends StatefulWidget {
 class _Sign13DetailsState extends State<Sign13Details> {
   final ChartController controller = Get.find<ChartController>();
 
+  // Personal planets (Sun through Mars)
+  static const List<String> _personalPlanets = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars'];
+  // Outer planets (Jupiter through Pluto)
+  static const List<String> _outerPlanets = ['Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto'];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,7 +41,7 @@ class _Sign13DetailsState extends State<Sign13Details> {
           final response = controller.natalResponse.value;
 
           if (response == null ||
-              !response.charts.containsKey('13_sign')) {
+              !response.charts.containsKey('ophiuchus')) {
             return Center(
               child: CircularProgressIndicator(
                 color: const Color(0xFF9A3BFF),
@@ -44,13 +50,14 @@ class _Sign13DetailsState extends State<Sign13Details> {
             );
           }
 
-          final sign13 = response.charts['13_sign']!;
+          final sign13 = response.charts['ophiuchus']!;
 
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
+                /// ---------- INFO CARD ----------
                 Container(
                   padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
                   decoration: BoxDecoration(
@@ -59,28 +66,26 @@ class _Sign13DetailsState extends State<Sign13Details> {
                     color: CustomColors.secondbackgroundColor,
                   ),
                   child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(child:
-                        Text("About 13-sign Chart",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: ResponsiveHelper.fontSize(16),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),),
-                        SizedBox(height: ResponsiveHelper.space(10)),
-                        Text("Astronomically, there are 13 constellations the Sun travels through – not 12. Ophiuchus (the serpent-bearer) sits between Scorpio and Sagittarius, but was never included in traditional astrology. Science recognizes 13; astrology uses 12.",
-                          style:TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Info",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: ResponsiveHelper.fontSize(18),
+                          fontWeight: FontWeight.w600,
                         ),
-                      ]
+                      ),
+                      SizedBox(height: ResponsiveHelper.space(20)),
+                      _infoRow("Name:", sign13.name),
+                      _infoRow("Date of Birth:", sign13.birthDate),
+                      _infoRow("Birth Time:", sign13.birthTime),
+                      _infoRow("Time Zone:", sign13.location.timezone.isNotEmpty ? sign13.location.timezone : "N/A"),
+                      _infoRow("Birth City:", sign13.location.city.isNotEmpty ? sign13.location.city : "N/A"),
+                      _infoRow("Birth Country:", sign13.location.country.isNotEmpty ? sign13.location.country : "N/A"),
+                    ],
                   ),
                 ),
-
-                SizedBox(height: ResponsiveHelper.space(24)),
-
-                /// ---------- INFO CARD ----------
-                _infoCard(sign13),
 
                 SizedBox(height: ResponsiveHelper.space(24)),
 
@@ -95,44 +100,27 @@ class _Sign13DetailsState extends State<Sign13Details> {
                 ),
                 SizedBox(height: ResponsiveHelper.space(16)),
 
-                Container(
+                ZoomableChartImage(
+                  imageUrl: sign13.imageUrl,
                   height: ResponsiveHelper.height(350),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: CustomColors.secondbackgroundColor,
-                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+                ),
+
+                SizedBox(height: ResponsiveHelper.space(8)),
+                Center(
+                  child: Text(
+                    "In the 13-sign system, your placements shift slightly",
+                    style: TextStyle(
+                      color: Colors.white54,
+                      fontSize: ResponsiveHelper.fontSize(12),
+                    ),
                   ),
-                  child: sign13.imageUrl.isNotEmpty
-                      ? Image.network(
-                          sign13.imageUrl,
-                          fit: BoxFit.contain,
-                          loadingBuilder: (context, child, progress) {
-                            if (progress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                color: const Color(0xFF9A3BFF),
-                                strokeWidth: ResponsiveHelper.width(4),
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return Center(
-                              child: Icon(Icons.error,
-                                  color: Colors.red, size: ResponsiveHelper.iconSize(50)),
-                            );
-                          },
-                        )
-                      : Image.asset(
-                          "assets/images/chartimage.png",
-                          fit: BoxFit.contain,
-                        ),
                 ),
 
                 SizedBox(height: ResponsiveHelper.space(24)),
 
-                /// ---------- PLANETS ----------
+                /// ---------- PLANETARY POSITIONS ----------
                 Text(
-                  "Planetary Positions",
+                  "Planetary Positions :",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: ResponsiveHelper.fontSize(17),
@@ -141,45 +129,59 @@ class _Sign13DetailsState extends State<Sign13Details> {
                 ),
                 SizedBox(height: ResponsiveHelper.space(12)),
 
-                ...sign13.planets.entries.map((entry) {
+                ...sign13.planets.entries
+                    .where((e) => _personalPlanets.contains(e.key))
+                    .map((entry) {
                   final planet = entry.value;
+                  return _planetTile(
+                    "${planet.name}:",
+                    planet.sign,
+                    "in ${_getHouseLabel(planet.house)}",
+                  );
+                }),
 
-                  return Container(
-                    margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
-                    padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
-                    decoration: BoxDecoration(
-                      color: CustomColors.secondbackgroundColor,
-                      borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
-                      border: Border.all(color: const Color(0xff2B2F45)),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            planet.name,
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: ResponsiveHelper.fontSize(14),
-                            ),
-                          ),
-                        ),
-                        Text(
-                          "${planet.sign}  ${planet.degree}°",
-                          style: TextStyle(
-                            color: const Color(0xffA855F7),
-                            fontSize: ResponsiveHelper.fontSize(14),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
+                // Also show other planets not in personal/outer lists
+                ...sign13.planets.entries
+                    .where((e) => !_personalPlanets.contains(e.key) && !_outerPlanets.contains(e.key))
+                    .where((e) => e.key != 'Ascendant' && e.key != 'Midheaven')
+                    .map((entry) {
+                  final planet = entry.value;
+                  return _planetTile(
+                    "${planet.name}:",
+                    planet.sign,
+                    "in ${_getHouseLabel(planet.house)}",
+                  );
+                }),
+
+                SizedBox(height: ResponsiveHelper.space(24)),
+
+                /// ---------- OUTER PLANETS KEY ASPECTS ----------
+                Text(
+                  "Outer Planets Key Aspects :",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ResponsiveHelper.fontSize(17),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: ResponsiveHelper.space(12)),
+
+                ...sign13.planets.entries
+                    .where((e) => _outerPlanets.contains(e.key))
+                    .map((entry) {
+                  final planet = entry.value;
+                  return _planetTile(
+                    "${planet.name}:",
+                    planet.sign,
+                    "in ${_getHouseLabel(planet.house)}",
                   );
                 }),
 
                 SizedBox(height: ResponsiveHelper.space(40)),
 
+                /// ---------- GENERATE READING ----------
                 Obx(() => CustomButton(
-                  text: "Generate",
+                  text: "Generate Reading",
                   isLoading: controller.isGeneratingInterpretation.value,
                   onpress: () async {
                     controller.isGeneratingInterpretation.value = true;
@@ -201,47 +203,28 @@ class _Sign13DetailsState extends State<Sign13Details> {
     );
   }
 
-  /// ---------- INFO CARD ----------
-  Widget _infoCard(sign13) {
-    return Container(
-      padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
-      decoration: BoxDecoration(
-        color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
-        border: Border.all(color: const Color(0xff262A40)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Info",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: ResponsiveHelper.fontSize(18),
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          SizedBox(height: ResponsiveHelper.space(16)),
-          _infoRow("Name", sign13.name),
-          _infoRow("Birth Date", sign13.birthDate),
-          _infoRow("Birth Time", sign13.birthTime),
-          _infoRow("Sun Sign", sign13.sunSign),
-          _infoRow("Moon Sign", sign13.moonSign),
-          _infoRow("Rising Sign", sign13.risingSign),
-        ],
-      ),
-    );
+  // ==================== HELPER WIDGETS ====================
+
+  String _getHouseLabel(dynamic house) {
+    if (house == null) return '';
+    final h = house.toString();
+    switch (h) {
+      case '1': return '1st house';
+      case '2': return '2nd house';
+      case '3': return '3rd house';
+      default: return '${h}th house';
+    }
   }
 
-  Widget _infoRow(String label, String value) {
+  Widget _infoRow(String key, String value) {
     return Padding(
-      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(12)),
       child: Row(
         children: [
           SizedBox(
-            width: ResponsiveHelper.width(120),
+            width: ResponsiveHelper.width(110),
             child: Text(
-              "$label:",
+              key,
               style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
             ),
           ),
@@ -252,6 +235,47 @@ class _Sign13DetailsState extends State<Sign13Details> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _planetTile(String planet, String sign, String detail) {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
+      decoration: BoxDecoration(
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
+        border: Border.all(color: const Color(0xff2B2F45)),
+      ),
+      child: RichText(
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: '$planet ',
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: ResponsiveHelper.fontSize(14),
+              ),
+            ),
+            TextSpan(
+              text: sign,
+              style: TextStyle(
+                color: CustomColors.primaryColor,
+                fontSize: ResponsiveHelper.fontSize(14),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            TextSpan(
+              text: ' $detail',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: ResponsiveHelper.fontSize(14),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
