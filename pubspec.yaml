@@ -52,6 +52,7 @@ dependencies:
   country_state_city: ^0.1.6
   http: ^1.6.0
   photo_view: 0.15.0
+  glossy: ^0.0.5
 
 dev_dependencies:
   flutter_test:

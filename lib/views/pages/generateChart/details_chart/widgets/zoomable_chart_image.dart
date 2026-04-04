@@ -2,6 +2,7 @@
 import 'package:astrology_app/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:astrology_app/utils/color.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ZoomableChartImage extends StatefulWidget {
   final String imageUrl;
@@ -22,130 +23,94 @@ class ZoomableChartImage extends StatefulWidget {
 }
 
 class _ZoomableChartImageState extends State<ZoomableChartImage> {
-  late TransformationController _transformationController;
-  double _currentScale = 1.0;
+  late PhotoViewController _photoViewController;
 
   @override
   void initState() {
     super.initState();
-    _transformationController = TransformationController();
-    _transformationController.addListener(_onScaleChanged);
+    // Start with a generic 1.0 scale which maps to the initial "contained" fit
+    _photoViewController = PhotoViewController(initialScale: 1.0);
   }
 
   @override
   void dispose() {
-    _transformationController.removeListener(_onScaleChanged);
-    _transformationController.dispose();
+    _photoViewController.dispose();
     super.dispose();
   }
 
-  void _onScaleChanged() {
-    _currentScale = _transformationController.value.getMaxScaleOnAxis();
-  }
-
+  /// Incremental zoom-in with a faster, multiplication-based approach
   void _zoomIn() {
-    if (_currentScale < 3.0) {
-      _applyZoom(1.5);
-    }
+    double currentScale = _photoViewController.scale ?? 1.0;
+    _photoViewController.scale = currentScale * 1.3;
   }
 
+  /// Zoom-out that allows returning to the initial state safely
   void _zoomOut() {
-    if (_currentScale > 1.0) {
-      // If we go below 1.0, reset safely
-      if (_currentScale / 1.5 < 1.0) {
-        _transformationController.value = Matrix4.identity();
-      } else {
-        _applyZoom(1 / 1.5);
-      }
+    double currentScale = _photoViewController.scale ?? 1.0;
+    // Attempt to zoom out by the same ratio
+    double newScale = currentScale / 1.3;
+    
+    // PhotoView will automatically respect the minScale (contained) boundary.
+    // We just need to make sure we don't accidentally get stuck at a value just above 1.0
+    if (newScale < 1.05) {
+      _photoViewController.scale = 1.0;
+    } else {
+      _photoViewController.scale = newScale;
     }
-  }
-
-  void _applyZoom(double zoomFactor) {
-    // Zoom around the center of the widget safely
-    final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
-    if (renderBox == null) return;
-    
-    final Offset center = renderBox.size.center(Offset.zero);
-    
-    final Matrix4 matrix = _transformationController.value.clone();
-    
-    matrix.translate(center.dx, center.dy);
-    matrix.scale(zoomFactor);
-    matrix.translate(-center.dx, -center.dy);
-    
-    _transformationController.value = matrix;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        height: widget.height,
-        width: MediaQuery.of(context).size.width,
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-        ),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Using InteractiveViewer enables robust native panning anywhere when zoomed in!
-            InteractiveViewer(
-              transformationController: _transformationController,
-              minScale: 1.0,
-              maxScale: 3.0,
-              panEnabled: true,
-              scaleEnabled: true,
-              clipBehavior: Clip.none,
-              child: Center(
-                child: widget.imageUrl.isNotEmpty
-                    ? Image.network(
-                        widget.imageUrl,
-                        fit: BoxFit.contain,
-                        loadingBuilder: (context, child, progress) {
-                          if (progress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              color: widget.loadingColor,
-                              strokeWidth: ResponsiveHelper.width(4),
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Center(
-                            child: Icon(Icons.error,
-                                color: Colors.red,
-                                size: ResponsiveHelper.iconSize(50)),
-                          );
-                        },
-                      )
-                    : Image.asset(
-                        widget.fallbackAssetImage,
-                        fit: BoxFit.contain,
-                      ),
+    return Container(
+      height: widget.height,
+      width: double.infinity,
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        color: const Color(0xFF1F2544),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
+      ),
+      child: Stack(
+        children: [
+          PhotoView(
+            imageProvider: widget.imageUrl.isNotEmpty
+                ? NetworkImage(widget.imageUrl)
+                : AssetImage(widget.fallbackAssetImage) as ImageProvider,
+            controller: _photoViewController,
+            minScale: PhotoViewComputedScale.contained,
+            maxScale: PhotoViewComputedScale.covered * 5.0,
+            initialScale: PhotoViewComputedScale.contained,
+            basePosition: Alignment.center,
+            backgroundDecoration: const BoxDecoration(color: Colors.transparent),
+            loadingBuilder: (context, event) => Center(
+              child: CircularProgressIndicator(
+                color: widget.loadingColor,
+                strokeWidth: ResponsiveHelper.width(4),
               ),
             ),
-            // Zoom controls overlay
-            Positioned(
-              right: ResponsiveHelper.padding(10),
-              bottom: ResponsiveHelper.padding(10),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _zoomButton(
-                    icon: Icons.add,
-                    onTap: _zoomIn,
-                  ),
-                  SizedBox(height: ResponsiveHelper.space(8)),
-                  _zoomButton(
-                    icon: Icons.remove,
-                    onTap: _zoomOut,
-                  ),
-                ],
-              ),
+            errorBuilder: (context, error, stackTrace) => Center(
+              child: Icon(Icons.error, color: Colors.red, size: ResponsiveHelper.iconSize(50)),
             ),
-          ],
-        ),
+          ),
+          // Zoom controls overlay
+          Positioned(
+            right: ResponsiveHelper.padding(16),
+            bottom: ResponsiveHelper.padding(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _zoomButton(
+                  icon: Icons.add,
+                  onTap: _zoomIn,
+                ),
+                SizedBox(height: ResponsiveHelper.space(12)),
+                _zoomButton(
+                  icon: Icons.remove,
+                  onTap: _zoomOut,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -154,16 +119,16 @@ class _ZoomableChartImageState extends State<ZoomableChartImage> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(ResponsiveHelper.padding(6)),
+        padding: EdgeInsets.all(ResponsiveHelper.padding(10)),
         decoration: BoxDecoration(
-          color: CustomColors.secondbackgroundColor.withValues(alpha: 0.8),
+          color: const Color(0xFF1F2544),
           shape: BoxShape.circle,
-          border: Border.all(color: CustomColors.primaryColor, width: 1.5),
+          border: Border.all(color: CustomColors.primaryColor, width: 2),
         ),
         child: Icon(
           icon,
           color: CustomColors.primaryColor,
-          size: ResponsiveHelper.iconSize(20),
+          size: ResponsiveHelper.iconSize(24),
         ),
       ),
     );

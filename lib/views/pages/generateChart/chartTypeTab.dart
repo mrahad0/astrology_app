@@ -78,46 +78,40 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
               ),
               SizedBox(height: ResponsiveHelper.space(20)),
               Container(
-                padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
+                padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
                 decoration: BoxDecoration(
                   color: CustomColors.secondbackgroundColor,
-                  borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
-                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                  borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+                  border: Border.all(color: const Color(0xFF2F3448)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Choose Astrology Systems",
+                    Obx(() => Text(
+                      "${controller.selectedChartType.value} Chart (Platinum Plan)",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: ResponsiveHelper.fontSize(18),
+                        fontSize: ResponsiveHelper.fontSize(16),
                         fontWeight: FontWeight.w600,
                       ),
-                    ),
-                    SizedBox(height: ResponsiveHelper.space(16)),
+                    )),
+                    SizedBox(height: ResponsiveHelper.space(20)),
                     Obx(() {
-                      final availableSystems = controller.availableSystems;
-                      final isNatal =
-                          controller.selectedChartType.value == 'Natal';
+                      final isNatal = controller.selectedChartType.value == 'Natal';
+                      final isTransit = controller.selectedChartType.value == 'Transit';
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (availableSystems.contains('Western'))
-                            _chartBox("Western Astrology", 'Western'),
-                          if (availableSystems.contains('Western'))
-                            SizedBox(height: ResponsiveHelper.space(10)),
-                          if (availableSystems.contains('Vedic'))
-                            _chartBox("Vedic Astrology", 'Vedic'),
-                          if (isNatal) ...[
-                            SizedBox(height: ResponsiveHelper.space(10)),
-                            _chartBox("13-Signs (Ophiuchus)", 'Ophiuchus'),
-                            SizedBox(height: ResponsiveHelper.space(10)),
+                          _chartBox("Western Astrology", 'Western'),
+                          _chartBox("Vedic Astrology", 'Vedic'),
+                          _chartBox("13-Signs (Ophiuchus)", 'Ophiuchus'),
+
+                          if (isNatal || isTransit)
                             _chartBox("Evolutionary", 'Evolutionary'),
-                            SizedBox(height: ResponsiveHelper.space(10)),
+
+                          if (isNatal) ...[
                             _chartBox("Galactic Astrology", 'Galactic'),
-                            SizedBox(height: ResponsiveHelper.space(10)),
                             _chartBox(
                                 "Human Design Profile (Type, Strategy, Authority, Profile, Cross)",
                                 'Human Design'),
@@ -130,7 +124,7 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
               ),
               const Spacer(),
               CustomButton(
-                text: "Next",
+                text: "Review & Generate",
                 onpress: _handleNext,
               ),
               SizedBox(height: ResponsiveHelper.space(20)),
@@ -161,39 +155,34 @@ class _ChartTypeTabState extends State<ChartTypeTab> {
 
       return InkWell(
         onTap: () => controller.toggleSystem(systemKey),
-        child: Container(
-          height: ResponsiveHelper.height(65), // Adjusted height for potential text wrapping
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(
-            horizontal: ResponsiveHelper.padding(12),
-            vertical: ResponsiveHelper.padding(10),
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
-            border: Border.all(color: Colors.white24),
-            color: CustomColors.secondbackgroundColor,
-          ),
+        child: Padding(
+          padding: EdgeInsets.only(bottom: ResponsiveHelper.padding(16)),
           child: Row(
             children: [
-              Checkbox(
-                value: isSelected,
-                onChanged: (v) => controller.toggleSystem(systemKey),
-                activeColor: const Color(0xFF8A2BE2),
-                checkColor: Colors.white,
-                side: const BorderSide(color: Colors.white),
+              SizedBox(
+                width: ResponsiveHelper.width(22),
+                height: ResponsiveHelper.height(22),
+                child: Checkbox(
+                  value: isSelected,
+                  onChanged: (v) => controller.toggleSystem(systemKey),
+                  activeColor: Colors.transparent,
+                  fillColor: MaterialStateProperty.resolveWith((states) => Colors.transparent),
+                  checkColor: Colors.white,
+                  side: const BorderSide(color: Colors.white, width: 1.2),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(ResponsiveHelper.radius(4))),
+                ),
               ),
+              SizedBox(width: ResponsiveHelper.space(12)),
               Expanded(
-                  child: Text(title,
-                      style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)))),
-              IconButton(
-                onPressed: () {
-                  final description =
-                      ChartDescriptions.descriptions[systemKey] ?? '';
-                  _showDescriptionDialog(description);
-                },
-                icon: Icon(Icons.info_outline,
-                    color: CustomColors.primaryColor, size: ResponsiveHelper.iconSize(18),),
-              )
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.9),
+                    fontSize: ResponsiveHelper.fontSize(14),
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

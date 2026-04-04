@@ -1,4 +1,4 @@
-// lib/views/pages/generateChart/details_chart/vedic_details.dart
+// lib/views/pages/generateChart/details_chart/western_details.dart
 import 'package:astrology_app/views/pages/generateChart/details_chart/widgets/zoomable_chart_image.dart';
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/controllers/ai_compresive/ai_compresive_controller.dart';
@@ -8,15 +8,16 @@ import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../data/models/chart_models/transit_chart_model.dart';
 
-class VedicDetails extends StatefulWidget {
-  const VedicDetails({super.key});
+class WesternDetails extends StatefulWidget {
+  const WesternDetails({super.key});
 
   @override
-  State<VedicDetails> createState() => _VedicDetailsState();
+  State<WesternDetails> createState() => _WesternDetailsState();
 }
 
-class _VedicDetailsState extends State<VedicDetails> {
+class _WesternDetailsState extends State<WesternDetails> {
   final ChartController controller = Get.find<ChartController>();
 
   @override
@@ -44,9 +45,8 @@ class _VedicDetailsState extends State<VedicDetails> {
 
   // ==================== NATAL VIEW ====================
   Widget _buildNatalChart() {
-    final realData = controller.natalResponse.value?.charts['vedic'];
+    final realData = controller.natalResponse.value?.charts['western'];
     
-    // MOCK DATA for "Frontend Only" state (matching shared image)
     final mockInfo = {
       'name': 'Sadiqul',
       'dob': '11/13/2005',
@@ -56,40 +56,28 @@ class _VedicDetailsState extends State<VedicDetails> {
     };
 
     final List<Map<String, String>> mockPlanets = [
-      {'name': 'Sun', 'sign': 'Gemini', 'house': '9th house'},
-      {'name': 'Moon', 'sign': 'Pisces', 'house': '6th house'},
-      {'name': 'Mars', 'sign': 'Gemini', 'house': '9th house'},
-      {'name': 'Mercury', 'sign': 'Cancer', 'house': '10th house'},
-      {'name': 'Jupiter', 'sign': 'Cancer', 'house': '10th house'},
-      {'name': 'Venus', 'sign': 'Cancer', 'house': '10th house'},
-      {'name': 'Saturn', 'sign': 'Cancer', 'house': '10th house'},
-      {'name': 'Rahu', 'sign': 'Cancer', 'house': '10th house'},
-      {'name': 'Ketu', 'sign': 'Cancer', 'house': '10th house'},
+      {'name': 'Sun', 'sign': 'Gemini', 'house': 'in 9th house'},
+      {'name': 'Moon', 'sign': 'Pisces', 'house': 'in 6th house'},
+      {'name': 'Mercury', 'sign': 'Gemini', 'house': 'in 9th house'},
+      {'name': 'Venus', 'sign': 'Cancer', 'house': 'in 10th house'},
+      {'name': 'Mars', 'sign': 'Cancer', 'house': 'in 10th house'},
     ];
 
-    final List<Map<String, String>> mockLifepath = [
-      {'label': 'Dharma', 'sign': 'Taurus', 'extra': 'in Rohini'},
-      {'label': 'Karma', 'sign': 'Taurus', 'extra': 'in Rohini'},
-      {'label': 'Artha', 'sign': 'Taurus', 'extra': 'in Rohini'},
-      {'label': 'Kama', 'sign': 'Aquarius', 'extra': 'in Dhanishta'},
+    final List<Map<String, String>> mockAspects = [
+      {'planet': 'Sun', 'aspect': 'Opposition', 'degree': '1°'},
+      {'planet': 'Moon', 'aspect': 'Conjunction', 'degree': '2.1°'},
+      {'planet': 'Rising', 'aspect': 'Square', 'degree': '2.1°'},
+      {'planet': 'Mercury', 'aspect': 'Trine', 'degree': '2.7°'},
+      {'planet': 'Venus', 'aspect': 'Sextile', 'degree': '2.1°'},
+      {'planet': 'Mars', 'aspect': 'Conjunction', 'degree': '2.1°'},
     ];
-
-    final mockLunar = [
-      {
-        'label': 'Nakshatra placement (Moon Nakshatra)',
-        'sign': 'Taurus',
-        'detail': 'in Rohini'
-      },
-      {
-        'label': 'Nakshatra pada',
-        'sign': 'Aquarius',
-        'detail': 'in Dhanishta'
-      },
-      {
-        'label': 'Current Dasha',
-        'sign': 'Venus',
-        'detail': '\nRemaining: 18 years'
-      },
+    
+    final List<Map<String, String>> mockOuterPlanets = [
+      {'name': 'Jupiter', 'sign': 'Gemini', 'house': 'in 9th house'},
+      {'name': 'Saturn', 'sign': 'Pisces', 'house': 'in 6th house'},
+      {'name': 'Uranus', 'sign': 'Gemini', 'house': 'in 9th house'},
+      {'name': 'Neptune', 'sign': 'Cancer', 'house': 'in 10th house'},
+      {'name': 'Pluto', 'sign': 'Cancer', 'house': 'in 10th house'},
     ];
 
     return SingleChildScrollView(
@@ -99,8 +87,6 @@ class _VedicDetailsState extends State<VedicDetails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: ResponsiveHelper.space(10)),
-
-          /// ---- INFO CARD ----
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
@@ -112,36 +98,20 @@ class _VedicDetailsState extends State<VedicDetails> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("Info",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: ResponsiveHelper.fontSize(18),
-                        fontWeight: FontWeight.w600)),
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.w600)),
                 SizedBox(height: ResponsiveHelper.space(20)),
                 _infoRow("Name:", mockInfo['name']!),
                 _infoRow("Date of Birth:", mockInfo['dob']!),
                 _infoRow("Birth Time:", mockInfo['time']!),
                 _infoRow("Time Zone:", mockInfo['timezone']!),
-                _infoRow(
-                  "Birth City / Birth Country:",
-                  mockInfo['cityCountry']!,
-                ),
+                _infoRow("Birth City / Birth Country:", mockInfo['cityCountry']!),
               ],
             ),
           ),
-
           SizedBox(height: ResponsiveHelper.space(24)),
-
-          /// ---- VEDIC CHART TITLE ----
-          Text(
-            "Vedic Chart Wheel",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: ResponsiveHelper.fontSize(17),
-                fontWeight: FontWeight.w600),
-          ),
+          Text("Birth Chart Wheel",
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600)),
           SizedBox(height: ResponsiveHelper.space(16)),
-
-          /// ---- CHART IMAGE (FROM BACKEND) ----
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
             decoration: BoxDecoration(
@@ -150,56 +120,26 @@ class _VedicDetailsState extends State<VedicDetails> {
               border: Border.all(color: const Color(0xff2F3448).withOpacity(0.5)),
             ),
             child: ZoomableChartImage(
-              imageUrl: realData?.imageUrl ?? "https://universal-astro.s3.ap-southeast-1.amazonaws.com/charts/vedic_chart.png", 
+              imageUrl: realData?.imageUrl ?? "https://universal-astro.s3.ap-southeast-1.amazonaws.com/charts/western_chart.png", 
               height: ResponsiveHelper.height(320),
             ),
           ),
-
           SizedBox(height: ResponsiveHelper.space(24)),
-
-          /// ---- SIDEREAL POSITIONS ----
-          Text(
-            "Sidereal planetary positions :",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: ResponsiveHelper.fontSize(17),
-                fontWeight: FontWeight.w600),
-          ),
+          Text("Personal Planets:",
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600)),
           SizedBox(height: ResponsiveHelper.space(12)),
-
-          ...mockPlanets.map((p) => _planetTile(p['name']!, p['sign']!, "in ${p['house']}")),
-
+          ...mockPlanets.map((p) => _planetTile(p['name']!, p['sign']!, p['house']!)),
           SizedBox(height: ResponsiveHelper.space(24)),
-
-          /// ---- LIFEPATH INDICATOR ----
-          Text(
-            "Lifepath indicator :",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: ResponsiveHelper.fontSize(17),
-                fontWeight: FontWeight.w600),
-          ),
+          Text("Personal Planets Key Aspects :",
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600)),
           SizedBox(height: ResponsiveHelper.space(12)),
-
-          ...mockLifepath.map((l) => _planetTile(l['label']!, l['sign']!, l['extra']!)),
-
+          ...mockAspects.map((a) => _aspectTile(a['planet']!, a['aspect']!, a['degree']!)),
           SizedBox(height: ResponsiveHelper.space(24)),
-
-          /// ---- LUNAR SYSTEM ----
-          Text(
-            "Lunar System :",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: ResponsiveHelper.fontSize(17),
-                fontWeight: FontWeight.w600),
-          ),
+          Text("Outer Planets  Key Aspects :",
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600)),
           SizedBox(height: ResponsiveHelper.space(12)),
-
-          ...mockLunar.map((m) => _lunarTile(m['label']!, m['sign']!, m['detail']!)),
-
+          ...mockOuterPlanets.map((p) => _planetTile(p['name']!, p['sign']!, p['house']!)),
           SizedBox(height: ResponsiveHelper.space(40)),
-
-          /// ---- GENERATE READING ----
           CustomButton(
             text: "Generate Reading",
             isLoading: controller.isGeneratingInterpretation.value,
@@ -213,7 +153,6 @@ class _VedicDetailsState extends State<VedicDetails> {
               Get.toNamed(Routes.aiComprehensive);
             },
           ),
-
           SizedBox(height: ResponsiveHelper.space(30)),
         ],
       ),
@@ -222,38 +161,37 @@ class _VedicDetailsState extends State<VedicDetails> {
 
   // ==================== TRANSIT VIEW ====================
   Widget _buildTransitChart() {
-    final realImage = controller.transitResponse.value?.images['vedic'];
+    final realImage = controller.transitResponse.value?.images['western'];
 
-    // MOCK DATA
     final mockTransitInfo = {
       'name': 'Sadiqul',
       'transitDate': 'June 14, 2024',
-      'quality': 'Positive',
+      'quality': 'Flowing',
     };
 
     final List<Map<String, String>> mockPlanets = [
-      {'name': 'Sun', 'sign': 'Gemini', 'house': '9th house'},
-      {'name': 'Moon', 'sign': 'Pisces', 'house': '6th house'},
-      {'name': 'Mars', 'sign': 'Gemini', 'house': '9th house'},
-      {'name': 'Mercury', 'sign': 'Cancer', 'house': '10th house'},
-      {'name': 'Jupiter', 'sign': 'Cancer', 'house': '10th house'},
-      {'name': 'Venus', 'sign': 'Cancer', 'house': '10th house'},
-      {'name': 'Saturn', 'sign': 'Cancer', 'house': '10th house'},
-      {'name': 'Rahu', 'sign': 'Cancer', 'house': '10th house'},
-      {'name': 'Ketu', 'sign': 'Cancer', 'house': '10th house'},
+      {'name': 'Sun', 'sign': 'Gemini', 'house': 'in 9th house'},
+      {'name': 'Moon', 'sign': 'Pisces', 'house': 'in 6th house'},
+      {'name': 'Mercury', 'sign': 'Gemini', 'house': 'in 9th house'},
+      {'name': 'Venus', 'sign': 'Cancer', 'house': 'in 10th house'},
+      {'name': 'Mars', 'sign': 'Cancer', 'house': 'in 10th house'},
     ];
 
-    final List<Map<String, String>> mockLifepath = [
-      {'label': 'Dharma', 'sign': 'Taurus', 'extra': 'in Rohini'},
-      {'label': 'Karma', 'sign': 'Taurus', 'extra': 'in Rohini'},
-      {'label': 'Artha', 'sign': 'Taurus', 'extra': 'in Rohini'},
-      {'label': 'Kama', 'sign': 'Aquarius', 'extra': 'in Dhanishta'},
+    final List<Map<String, String>> mockAspects = [
+      {'planet': 'Sun', 'aspect': 'Opposition', 'degree': '1°'},
+      {'planet': 'Moon', 'aspect': 'Conjunction', 'degree': '2.1°'},
+      {'planet': 'Rising', 'aspect': 'Square', 'degree': '2.1°'},
+      {'planet': 'Mercury', 'aspect': 'Trine', 'degree': '2.7°'},
+      {'planet': 'Venus', 'aspect': 'Sextile', 'degree': '2.1°'},
+      {'planet': 'Mars', 'aspect': 'Conjunction', 'degree': '2.1°'},
     ];
-
-    final mockLunar = [
-      {'label': 'Nakshatra placement', 'sign': 'Taurus', 'detail': 'in Rohini'},
-      {'label': 'Nakshatra pada', 'sign': 'Aquarius', 'detail': 'in Dhanishta'},
-      {'label': 'Current Dasha', 'sign': 'Venus', 'detail': '\nRemaining: 18 years'},
+    
+    final List<Map<String, String>> mockOuterPlanets = [
+      {'name': 'Jupiter', 'sign': 'Gemini', 'house': 'in 9th house'},
+      {'name': 'Saturn', 'sign': 'Pisces', 'house': 'in 6th house'},
+      {'name': 'Uranus', 'sign': 'Gemini', 'house': 'in 9th house'},
+      {'name': 'Neptune', 'sign': 'Cancer', 'house': 'in 10th house'},
+      {'name': 'Pluto', 'sign': 'Cancer', 'house': 'in 10th house'},
     ];
 
     return SingleChildScrollView(
@@ -263,8 +201,6 @@ class _VedicDetailsState extends State<VedicDetails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: ResponsiveHelper.space(10)),
-
-          /// ---- TRANSIT INFO CARD ----
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
@@ -276,10 +212,7 @@ class _VedicDetailsState extends State<VedicDetails> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("Transit Info",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: ResponsiveHelper.fontSize(18),
-                        fontWeight: FontWeight.w600)),
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.w600)),
                 SizedBox(height: ResponsiveHelper.space(20)),
                 _infoRow("Name:", mockTransitInfo['name']!),
                 _infoRow("Transit Date:", mockTransitInfo['transitDate']!),
@@ -287,20 +220,10 @@ class _VedicDetailsState extends State<VedicDetails> {
               ],
             ),
           ),
-
           SizedBox(height: ResponsiveHelper.space(24)),
-
-          /// ---- TRANSIT CHART TITLE ----
-          Text(
-            "Vedic Transit Chart Wheel",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: ResponsiveHelper.fontSize(17),
-                fontWeight: FontWeight.w600),
-          ),
+          Text("Western Transit Chart Wheel",
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600)),
           SizedBox(height: ResponsiveHelper.space(16)),
-
-          /// ---- CHART IMAGE (FROM BACKEND) ----
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
             decoration: BoxDecoration(
@@ -309,46 +232,27 @@ class _VedicDetailsState extends State<VedicDetails> {
               border: Border.all(color: const Color(0xff2F3448).withOpacity(0.5)),
             ),
             child: ZoomableChartImage(
-              imageUrl: realImage ?? "https://universal-astro.s3.ap-southeast-1.amazonaws.com/charts/vedic_transit.png", 
+              imageUrl: realImage ?? "https://universal-astro.s3.ap-southeast-1.amazonaws.com/charts/western_transit.png",
               height: ResponsiveHelper.height(320),
             ),
           ),
-
           SizedBox(height: ResponsiveHelper.space(24)),
-
-          Text(
-            "Sidereal planetary positions :",
-            style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600),
-          ),
+          Text("Personal Planets:",
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600)),
           SizedBox(height: ResponsiveHelper.space(12)),
-          ...mockPlanets.map((p) => _planetTile(p['name']!, p['sign']!, "in ${p['house']}")),
-
+          ...mockPlanets.map((p) => _planetTile(p['name']!, p['sign']!, p['house']!)),
           SizedBox(height: ResponsiveHelper.space(24)),
-
-          Text(
-            "Lifepath indicator :",
-            style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600),
-          ),
+          Text("Transit Key Aspects :",
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600)),
           SizedBox(height: ResponsiveHelper.space(12)),
-          ...mockLifepath.map((l) => _planetTile(l['label']!, l['sign']!, l['extra']!)),
-
+          ...mockAspects.map((a) => _aspectTile(a['planet']!, a['aspect']!, a['degree']!)),
           SizedBox(height: ResponsiveHelper.space(24)),
-
-          Text(
-            "Lunar System :",
-            style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600),
-          ),
+          Text("Outer Planets  Key Aspects :",
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600)),
           SizedBox(height: ResponsiveHelper.space(12)),
-          ...mockLunar.map((m) => _lunarTile(m['label']!, m['sign']!, m['detail']!)),
-
+          ...mockOuterPlanets.map((p) => _planetTile(p['name']!, p['sign']!, p['house']!)),
           SizedBox(height: ResponsiveHelper.space(40)),
-
-          CustomButton(
-            text: "Generate Reading",
-            isLoading: controller.isGeneratingInterpretation.value,
-            onpress: () {},
-          ),
-
+          CustomButton(text: "Generate Reading", isLoading: controller.isGeneratingInterpretation.value, onpress: () {}),
           SizedBox(height: ResponsiveHelper.space(30)),
         ],
       ),
@@ -357,38 +261,29 @@ class _VedicDetailsState extends State<VedicDetails> {
 
   // ==================== SYNASTRY VIEW ====================
   Widget _buildSynastryChart() {
-    final realImage = controller.synastryResponse.value?.images['vedic'];
+    final realImage = controller.synastryResponse.value?.images['western'];
 
-    // MOCK DATA
     final mockSynastryInfo = {
       'partner1': 'Sadiqul',
       'partner2': 'Sarah',
-      'score': '82%',
+      'score': '85%',
     };
 
     final List<Map<String, String>> mockPlanets = [
-      {'name': 'Sun', 'sign': 'Gemini', 'house': '9th house'},
-      {'name': 'Moon', 'sign': 'Pisces', 'house': '6th house'},
-      {'name': 'Mars', 'sign': 'Gemini', 'house': '9th house'},
-      {'name': 'Mercury', 'sign': 'Cancer', 'house': '10th house'},
-      {'name': 'Jupiter', 'sign': 'Cancer', 'house': '10th house'},
-      {'name': 'Venus', 'sign': 'Cancer', 'house': '10th house'},
-      {'name': 'Saturn', 'sign': 'Cancer', 'house': '10th house'},
-      {'name': 'Rahu', 'sign': 'Cancer', 'house': '10th house'},
-      {'name': 'Ketu', 'sign': 'Cancer', 'house': '10th house'},
+      {'name': 'Sun', 'sign': 'Gemini', 'house': 'in 9th house'},
+      {'name': 'Moon', 'sign': 'Pisces', 'house': 'in 6th house'},
+      {'name': 'Mercury', 'sign': 'Gemini', 'house': 'in 9th house'},
+      {'name': 'Venus', 'sign': 'Cancer', 'house': 'in 10th house'},
+      {'name': 'Mars', 'sign': 'Cancer', 'house': 'in 10th house'},
     ];
 
-    final List<Map<String, String>> mockLifepath = [
-      {'label': 'Dharma', 'sign': 'Taurus', 'extra': 'in Rohini'},
-      {'label': 'Karma', 'sign': 'Taurus', 'extra': 'in Rohini'},
-      {'label': 'Artha', 'sign': 'Taurus', 'extra': 'in Rohini'},
-      {'label': 'Kama', 'sign': 'Aquarius', 'extra': 'in Dhanishta'},
-    ];
-
-    final mockLunar = [
-      {'label': 'Nakshatra placement', 'sign': 'Taurus', 'detail': 'in Rohini'},
-      {'label': 'Nakshatra pada', 'sign': 'Aquarius', 'detail': 'in Dhanishta'},
-      {'label': 'Current Dasha', 'sign': 'Venus', 'detail': '\nRemaining: 18 years'},
+    final List<Map<String, String>> mockAspects = [
+      {'planet': 'Sun', 'aspect': 'Opposition', 'degree': '1°'},
+      {'planet': 'Moon', 'aspect': 'Conjunction', 'degree': '2.1°'},
+      {'planet': 'Rising', 'aspect': 'Square', 'degree': '2.1°'},
+      {'planet': 'Mercury', 'aspect': 'Trine', 'degree': '2.7°'},
+      {'planet': 'Venus', 'aspect': 'Sextile', 'degree': '2.1°'},
+      {'planet': 'Mars', 'aspect': 'Conjunction', 'degree': '2.1°'},
     ];
 
     return SingleChildScrollView(
@@ -398,8 +293,6 @@ class _VedicDetailsState extends State<VedicDetails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: ResponsiveHelper.space(10)),
-
-          /// ---- COMPATIBILITY SCORE CARD ----
           Container(
             width: double.infinity,
             padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
@@ -411,16 +304,10 @@ class _VedicDetailsState extends State<VedicDetails> {
             child: Column(
               children: [
                 Text("Harmony Score",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: ResponsiveHelper.fontSize(16),
-                        fontWeight: FontWeight.w400)),
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(16), fontWeight: FontWeight.w400)),
                 SizedBox(height: ResponsiveHelper.space(10)),
                 Text(mockSynastryInfo['score']!,
-                    style: TextStyle(
-                        color: CustomColors.primaryColor,
-                        fontSize: ResponsiveHelper.fontSize(40),
-                        fontWeight: FontWeight.bold)),
+                    style: TextStyle(color: CustomColors.primaryColor, fontSize: ResponsiveHelper.fontSize(40), fontWeight: FontWeight.bold)),
                 SizedBox(height: ResponsiveHelper.space(20)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -433,20 +320,10 @@ class _VedicDetailsState extends State<VedicDetails> {
               ],
             ),
           ),
-
           SizedBox(height: ResponsiveHelper.space(24)),
-
-          /// ---- SYNASTRY CHART TITLE ----
-          Text(
-            "Vedic Synastry Chart Wheel",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: ResponsiveHelper.fontSize(17),
-                fontWeight: FontWeight.w600),
-          ),
+          Text("Western Synastry Chart Wheel",
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600)),
           SizedBox(height: ResponsiveHelper.space(16)),
-
-          /// ---- CHART IMAGE (FROM BACKEND) ----
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
             decoration: BoxDecoration(
@@ -455,46 +332,19 @@ class _VedicDetailsState extends State<VedicDetails> {
               border: Border.all(color: const Color(0xff2F3448).withOpacity(0.5)),
             ),
             child: ZoomableChartImage(
-              imageUrl: realImage ?? "https://universal-astro.s3.ap-southeast-1.amazonaws.com/charts/vedic_synastry.png", 
+              imageUrl: realImage ?? "https://universal-astro.s3.ap-southeast-1.amazonaws.com/charts/western_synastry.png",
               height: ResponsiveHelper.height(320),
             ),
           ),
-
           SizedBox(height: ResponsiveHelper.space(24)),
-
-          Text(
-            "Sidereal planetary positions :",
-            style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600),
-          ),
+          Text("Synastry Overlay Aspects :",
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600)),
           SizedBox(height: ResponsiveHelper.space(12)),
-          ...mockPlanets.map((p) => _planetTile(p['name']!, p['sign']!, "in ${p['house']}")),
-
+          ...mockPlanets.map((p) => _planetTile(p['name']!, p['sign']!, p['house']!)),
           SizedBox(height: ResponsiveHelper.space(24)),
-
-          Text(
-            "Lifepath indicator :",
-            style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600),
-          ),
-          SizedBox(height: ResponsiveHelper.space(12)),
-          ...mockLifepath.map((l) => _planetTile(l['label']!, l['sign']!, l['extra']!)),
-
-          SizedBox(height: ResponsiveHelper.space(24)),
-
-          Text(
-            "Lunar System :",
-            style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600),
-          ),
-          SizedBox(height: ResponsiveHelper.space(12)),
-          ...mockLunar.map((m) => _lunarTile(m['label']!, m['sign']!, m['detail']!)),
-
+          ...mockAspects.map((a) => _aspectTile(a['planet']!, a['aspect']!, a['degree']!)),
           SizedBox(height: ResponsiveHelper.space(40)),
-
-          CustomButton(
-            text: "Generate Reading",
-            isLoading: controller.isGeneratingInterpretation.value,
-            onpress: () {},
-          ),
-
+          CustomButton(text: "Generate Reading", isLoading: controller.isGeneratingInterpretation.value, onpress: () {}),
           SizedBox(height: ResponsiveHelper.space(30)),
         ],
       ),
@@ -578,7 +428,7 @@ class _VedicDetailsState extends State<VedicDetails> {
     );
   }
 
-  Widget _lunarTile(String label, String sign, String detail) {
+  Widget _aspectTile(String planetName, String aspectName, String orbDegree) {
     return Container(
       width: double.infinity,
       margin: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
@@ -591,37 +441,30 @@ class _VedicDetailsState extends State<VedicDetails> {
         borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
         border: Border.all(color: const Color(0xFF2F3448)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
           Text(
-            label,
+            "$planetName: ",
             style: TextStyle(
               color: Colors.white,
               fontSize: ResponsiveHelper.fontSize(14),
               fontWeight: FontWeight.w400,
             ),
           ),
-          SizedBox(height: ResponsiveHelper.space(4)),
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: sign,
-                  style: TextStyle(
-                    color: CustomColors.primaryColor,
-                    fontSize: ResponsiveHelper.fontSize(14),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                TextSpan(
-                  text: " $detail",
-                  style: TextStyle(
-                    color: Colors.white60,
-                    fontSize: ResponsiveHelper.fontSize(14),
-                  ),
-                ),
-              ],
+          Text(
+            " $aspectName",
+            style: TextStyle(
+              color: const Color(0xffA4A9C1),
+              fontSize: ResponsiveHelper.fontSize(14),
+            ),
+          ),
+          SizedBox(width: ResponsiveHelper.space(6)),
+          Text(
+            orbDegree,
+            style: TextStyle(
+              color: CustomColors.primaryColor,
+              fontSize: ResponsiveHelper.fontSize(14),
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],

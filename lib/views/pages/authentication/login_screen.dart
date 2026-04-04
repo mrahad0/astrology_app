@@ -59,11 +59,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(height: ResponsiveHelper.space(10)),
 
                     Text(
-                      "Universal Astro Expert",
+                      "UNIVERSAL ASTRO™",
                       style: TextStyle(
+                        fontFamily: 'Roboto',
                         color: Colors.white,
                         fontSize: ResponsiveHelper.fontSize(24),
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 1.2,
                       ),
                     ),
 

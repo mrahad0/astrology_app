@@ -5,7 +5,7 @@ import 'package:astrology_app/views/pages/generateChart/details_chart/evolutiona
 import 'package:astrology_app/views/pages/generateChart/details_chart/glactic_details.dart';
 import 'package:astrology_app/views/pages/generateChart/details_chart/humanDesign_details.dart';
 import 'package:astrology_app/views/pages/generateChart/details_chart/vedic_details.dart';
-import 'package:astrology_app/views/pages/generateChart/details_chart/western_datails.dart';
+import 'package:astrology_app/views/pages/generateChart/details_chart/western_details.dart';
 import 'package:flutter/material.dart';
 
 // -----------------------------------------------------------
@@ -30,7 +30,7 @@ class _SingleReport extends State<SingleReport> {
   ];
 
   final pages = const [
-    WesternDatails(),
+    WesternDetails(),
     VedicDetails(),
     Sign13Details(),
     EvolutionaryDetails(),

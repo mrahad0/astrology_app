@@ -4,7 +4,7 @@ import 'package:astrology_app/views/pages/generateChart/details_chart/evolutiona
 import 'package:astrology_app/views/pages/generateChart/details_chart/glactic_details.dart';
 import 'package:astrology_app/views/pages/generateChart/details_chart/humanDesign_details.dart';
 import 'package:astrology_app/views/pages/generateChart/details_chart/vedic_details.dart';
-import 'package:astrology_app/views/pages/generateChart/details_chart/western_datails.dart';
+import 'package:astrology_app/views/pages/generateChart/details_chart/western_details.dart';
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,7 +31,7 @@ class _MainDetailChart extends State<MainDetailChart> {
   };
 
   final Map<String, Widget> systemPages = {
-    'western': const WesternDatails(),
+    'western': const WesternDetails(),
     'vedic': const VedicDetails(),
     'ophiuchus': const Sign13Details(),
     'evolutionary': const EvolutionaryDetails(),

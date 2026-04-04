@@ -205,9 +205,9 @@ class _TransitChartState extends State<TransitChart> {
             height: ResponsiveHelper.height(55),
             padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(14)),
             decoration: BoxDecoration(
-              color: const Color(0xFF111424),
+              color: CustomColors.secondbackgroundColor,
               borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-              border: Border.all(color: const Color(0xFF2F3448)),
+              border: Border.all(color: Colors.white38),
             ),
             child: Row(
               children: [
@@ -263,9 +263,9 @@ class _TransitChartState extends State<TransitChart> {
           vertical: ResponsiveHelper.padding(14),
         ),
         decoration: BoxDecoration(
-          color: const Color(0xFF111424),
+          color: CustomColors.secondbackgroundColor,
           borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-          border: Border.all(color: const Color(0xFF2F3448)),
+          border: Border.all(color: Colors.white38),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

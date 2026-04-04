@@ -1,11 +1,8 @@
 // lib/views/pages/ai_reading/ai_comprehensive.dart
 import 'package:astrology_app/Routes/routes.dart';
-import 'package:astrology_app/data/utils/pdf_generator.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/utils/responsive.dart';
-import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
 import '../../../controllers/ai_compresive/ai_compresive_controller.dart';
 
@@ -23,84 +20,97 @@ class AiComprehensive extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: CustomAppBar(
-          title: "Comprehensive Reading",
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
           leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: () => Navigator.pop(context),
             icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
           ),
+          title: Text(
+            "Comprehensive Reading",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(18),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          centerTitle: true,
         ),
         body: SafeArea(
           child: GetBuilder<InterpretationController>(
             init: Get.find<InterpretationController>(),
             builder: (controller) {
-              // 1. Show Loading State while fetching data
               if (controller.isLoading) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: ResponsiveHelper.width(4),
-                  ),
-                );
+                return const Center(child: CircularProgressIndicator(color: Colors.white));
               }
-              // 2. Calculate total word count from all interpretations
-              int totalWords = 0;
-              for (var interpretation in controller.interpretations) {
-                totalWords += interpretation.wordLimit ?? 0;
-              }
+
+              // MOCK DATA as requested from image
+              final mockInfo = {
+                'Name': 'Sadiqul',
+                'Date of Birth': '11/13/2005',
+                'Birth Time': '7:00 pm',
+                'Time Zone': 'GMT+6',
+                'Birth City / Birth Country': 'Dhaka, Bangladesh',
+              };
+
+              final mockSections = [
+                {
+                  'title': 'Vedic Perspective',
+                  'content': 'In the Vedic system, your Taurus Sun places emphasis on stability and material security...'
+                },
+                {
+                  'title': '13-Signs Interpretation',
+                  'content': 'The 13-sign system reveals nuances often missed in traditional 12-sign astrology. Your adjusted placements show.....'
+                },
+              ];
 
               return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Padding(
-                  padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
+                  padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(16)),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // --- Top Action Buttons ---
-                      _buildTopActionButtons(controller),
+                      SizedBox(height: ResponsiveHelper.space(10)),
+                      // --- Share & Download Row ---
+                      _buildActionRow(controller),
                       SizedBox(height: ResponsiveHelper.space(20)),
 
-                      // --- Dynamic Info Card ---
-                      _buildInfoCard(controller.userInfo),
+                      // --- Info Card ---
+                      _buildInfoCard(mockInfo),
                       SizedBox(height: ResponsiveHelper.space(20)),
 
-                      // --- Dynamic AI Sections from multiple interpretations ---
-                      if (controller.interpretations.isEmpty)
-                        Center(
-                          child: Padding(
-                            padding: EdgeInsets.only(top: ResponsiveHelper.space(40)),
-                            child: Text(
-                              "No interpretation results available.",
-                              style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
-                            ),
+                      // --- AI Sections ---
+                      ...mockSections.asMap().entries.map((entry) {
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: ResponsiveHelper.space(16)),
+                          child: _SectionCard(
+                            index: entry.key + 1,
+                            title: entry.value['title']!,
+                            content: entry.value['content']!,
                           ),
-                        )
-                      else
-                        ...controller.interpretations.asMap().entries.map((
-                          entry,
-                        ) {
-                          final index = entry.key + 1;
-                          final interpretation = entry.value;
-                          final title =
-                              "${interpretation.chartType ?? 'Chart'} - ${interpretation.system ?? 'System'}";
-                          final content = interpretation.rawInterpretation ?? '';
+                        );
+                      }),
 
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: ResponsiveHelper.space(16)),
-                            child: _SectionCard(
-                              sectionNumber: index,
-                              title: title,
-                              description: content,
-                            ),
-                          );
-                        }),
-
-                      SizedBox(height: ResponsiveHelper.space(20)),
-                      _buildCombinedInterpretationButton(),
-                      SizedBox(height: ResponsiveHelper.space(12)),
-                      _buildBottomActionButtons(controller),
-                      SizedBox(height: ResponsiveHelper.space(20)),
+                      SizedBox(height: ResponsiveHelper.space(10)),
+                      _buildMainButton("Combined Interpretation", () {
+                        Get.toNamed(Routes.combinedInterpretation);
+                      }),
+                      SizedBox(height: ResponsiveHelper.space(16)),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildMainButton("Save Reading", () {}),
+                          ),
+                          SizedBox(width: ResponsiveHelper.space(12)),
+                          Expanded(
+                            child: _buildSecondaryButton("View Reading", () {
+                              Get.toNamed(Routes.aiReading, arguments: {'showBackButton': true});
+                            }),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: ResponsiveHelper.space(30)),
                     ],
                   ),
                 ),
@@ -112,381 +122,136 @@ class AiComprehensive extends StatelessWidget {
     );
   }
 
-  // --- Helper Widgets ---
-
-  Widget _buildTopActionButtons(InterpretationController controller) {
+  Widget _buildActionRow(InterpretationController controller) {
     return Container(
-      padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
+      padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(12), horizontal: ResponsiveHelper.padding(8)),
       decoration: BoxDecoration(
-        color: CustomColors.secondbackgroundColor,
+        color: const Color(0xFF1F2544).withOpacity(0.6),
         borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
-        border: Border.all(color: const Color(0xFF2A2F4A)),
+        border: Border.all(color: const Color(0xff2F3448).withOpacity(0.5)),
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Expanded(child: _buildShareButton(controller)),
-          SizedBox(width: ResponsiveHelper.space(12)),
-          Expanded(child: _buildDownloadButton(controller)),
+          _actionItem(Icons.share_outlined, "Share", () {}),
+          Container(width: 1, height: 24, color: Colors.white24),
+          _actionItem(Icons.file_download_outlined, "Download", () {}),
         ],
       ),
     );
   }
 
-  Widget _buildCombinedInterpretationButton() {
+  Widget _actionItem(IconData icon, String label, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
+          SizedBox(width: ResponsiveHelper.space(8)),
+          Text(label, style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14))),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoCard(Map<String, String> info) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1F2544).withOpacity(0.7),
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+        border: Border.all(color: const Color(0xff2F3448)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Info",
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.w600)),
+          SizedBox(height: ResponsiveHelper.space(20)),
+          ...info.entries.map((e) => Padding(
+                padding: EdgeInsets.only(bottom: ResponsiveHelper.space(12)),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: ResponsiveHelper.width(130),
+                      child: Text(e.key + ":", style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14))),
+                    ),
+                    Expanded(
+                      child: Text(e.value, style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
+                    ),
+                  ],
+                ),
+              )),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMainButton(String text, VoidCallback onPress) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {
-          Get.toNamed(Routes.combinedInterpretation);
-        },
+        onPressed: onPress,
         style: ElevatedButton.styleFrom(
           backgroundColor: CustomColors.primaryColor,
           padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10))),
+        ),
+        child: Text(text, style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(15), fontWeight: FontWeight.bold)),
+      ),
+    );
+  }
+
+  Widget _buildSecondaryButton(String text, VoidCallback onPress) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: onPress,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF232A44),
+          padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+            borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
+            side: const BorderSide(color: Color(0xff2F3448)),
           ),
         ),
-        child: Text(
-          'Combined Interpretation',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: ResponsiveHelper.fontSize(14),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        child: Text(text, style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(15), fontWeight: FontWeight.bold)),
       ),
-    );
-  }
-
-  Widget _buildInfoCard(Map<String, dynamic> userInfo) {
-    return Container(
-      padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
-      decoration: BoxDecoration(
-        color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
-        border: Border.all(color: const Color(0xFF2A2F4A)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Info',
-            style: TextStyle(
-              fontSize: ResponsiveHelper.fontSize(16),
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(height: ResponsiveHelper.space(16)),
-          if (userInfo.isEmpty)
-            Text(
-              'No user information available.',
-              style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
-            )
-          else
-            ...userInfo.entries
-                .map(
-                  (entry) => Padding(
-                    padding: EdgeInsets.only(bottom: ResponsiveHelper.space(12)),
-                    child: InfoRow(
-                      label: '${entry.key}:',
-                      value: '${entry.value}',
-                    ),
-                  ),
-                )
-                .toList(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBottomActionButtons(InterpretationController controller) {
-    return Row(
-      children: [
-        Expanded(
-          child: ElevatedButton(
-            onPressed: controller.isSaving
-                ? null
-                : () async {
-                    final success = await controller.saveCharts();
-                    if (success) {
-                      // Navigate to Reading screen to see saved charts
-                      Get.toNamed(
-                        Routes.aiReading,
-                        arguments: {'showBackButton': true},
-                      );
-                    }
-                  },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: CustomColors.primaryColor,
-              padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
-              ),
-            ),
-            child: controller.isSaving
-                ? SizedBox(
-                    height: ResponsiveHelper.height(20),
-                    width: ResponsiveHelper.width(20),
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: ResponsiveHelper.width(2),
-                    ),
-                  )
-                : Text(
-                    'Save Reading',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: ResponsiveHelper.fontSize(14),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-          ),
-        ),
-        SizedBox(width: ResponsiveHelper.space(12)),
-        Expanded(
-          child: OutlinedButton(
-            onPressed: () {
-              Get.toNamed(
-                Routes.aiReading,
-                arguments: {'showBackButton': true},
-              );
-            },
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.white,
-              side: const BorderSide(color: Color(0xFF2A2F4A)),
-              padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
-              ),
-            ),
-            child: Text(
-              'View Reading',
-              style: TextStyle(
-                fontSize: ResponsiveHelper.fontSize(14),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  /// Share button - shares interpretation as PDF
-  Widget _buildShareButton(InterpretationController controller) {
-    return OutlinedButton(
-      onPressed: controller.isSharing
-          ? null
-          : () async {
-              await PdfGenerator.generateAndSharePdf(
-                controller: controller,
-                onStart: () => controller.setSharing(true),
-                onComplete: () => controller.setSharing(false),
-              );
-            },
-      style: OutlinedButton.styleFrom(
-        foregroundColor: Colors.white,
-        side: const BorderSide(color: Color(0xFF2A2F4A)),
-        padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(12)),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8))),
-      ),
-      child: controller.isSharing
-          ? SizedBox(
-              height: ResponsiveHelper.height(20),
-              width: ResponsiveHelper.width(20),
-              child: CircularProgressIndicator(
-                color: Colors.white,
-                strokeWidth: ResponsiveHelper.width(2),
-              ),
-            )
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.share, size: ResponsiveHelper.iconSize(18)),
-                SizedBox(width: ResponsiveHelper.space(8)),
-                Text(
-                  'Share',
-                  style: TextStyle(fontSize: ResponsiveHelper.fontSize(14)),
-                ),
-              ],
-            ),
-    );
-  }
-
-  /// Download button - saves as PDF file
-  Widget _buildDownloadButton(InterpretationController controller) {
-    return OutlinedButton(
-      onPressed: controller.isDownloading
-          ? null
-          : () async {
-              await PdfGenerator.generateAndSharePdf(
-                controller: controller,
-                onStart: () => controller.setDownloading(true),
-                onComplete: () => controller.setDownloading(false),
-              );
-            },
-      style: OutlinedButton.styleFrom(
-        foregroundColor: Colors.white,
-        side: const BorderSide(color: Color(0xFF2A2F4A)),
-        padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(12)),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8))),
-      ),
-      child: controller.isDownloading
-          ? SizedBox(
-              height: ResponsiveHelper.height(20),
-              width: ResponsiveHelper.width(20),
-              child: CircularProgressIndicator(
-                color: Colors.white,
-                strokeWidth: ResponsiveHelper.width(2),
-              ),
-            )
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.download, size: ResponsiveHelper.iconSize(18)),
-                SizedBox(width: ResponsiveHelper.space(8)),
-                Text(
-                  'Download',
-                  style: TextStyle(fontSize: ResponsiveHelper.fontSize(14)),
-                ),
-              ],
-            ),
     );
   }
 }
 
-// --- Internal SectionCard with Read More Logic (100 words) ---
-class _SectionCard extends StatefulWidget {
-  final int sectionNumber;
+class _SectionCard extends StatelessWidget {
+  final int index;
   final String title;
-  final String description;
+  final String content;
 
-  const _SectionCard({
-    required this.sectionNumber,
-    required this.title,
-    required this.description,
-  });
-
-  @override
-  State<_SectionCard> createState() => _SectionCardState();
-}
-
-class _SectionCardState extends State<_SectionCard> {
-  bool isExpanded = false;
+  const _SectionCard({required this.index, required this.title, required this.content});
 
   @override
   Widget build(BuildContext context) {
-    // Split description into words for 100-word preview
-    final words = widget.description.split(' ');
-    final bool needsTruncation = words.length > 100;
-    final String previewText = needsTruncation
-        ? "${words.take(100).join(' ')}..."
-        : widget.description;
-
     return Container(
+      width: double.infinity,
       padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
       decoration: BoxDecoration(
-        color: CustomColors.secondbackgroundColor,
+        color: const Color(0xFF1F2544).withOpacity(0.7),
         borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
-        border: Border.all(color: const Color(0xFF2A2F4A)),
+        border: Border.all(color: const Color(0xff2F3448)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Section ${widget.sectionNumber}',
-            style: TextStyle(color: const Color(0xFF9726f2), fontSize: ResponsiveHelper.fontSize(14)),
-          ),
+          Text("Section $index", style: TextStyle(color: const Color(0xFF9726f2), fontSize: ResponsiveHelper.fontSize(13))),
           SizedBox(height: ResponsiveHelper.space(8)),
-          Text(
-            widget.title,
-            style: TextStyle(
-              fontSize: ResponsiveHelper.fontSize(18),
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(height: ResponsiveHelper.space(8)),
-          MarkdownBody(
-            data: isExpanded ? widget.description : previewText,
-            styleSheet: MarkdownStyleSheet(
-              p: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14), height: 1.5),
-              strong: TextStyle(
-                color: Colors.white,
-                fontSize: ResponsiveHelper.fontSize(14),
-                fontWeight: FontWeight.bold,
-              ),
-              em: TextStyle(
-                color: Colors.white70,
-                fontSize: ResponsiveHelper.fontSize(14),
-                fontStyle: FontStyle.italic,
-              ),
-              h1: TextStyle(
-                color: Colors.white,
-                fontSize: ResponsiveHelper.fontSize(20),
-                fontWeight: FontWeight.bold,
-              ),
-              h2: TextStyle(
-                color: Colors.white,
-                fontSize: ResponsiveHelper.fontSize(18),
-                fontWeight: FontWeight.bold,
-              ),
-              h3: TextStyle(
-                color: Colors.white,
-                fontSize: ResponsiveHelper.fontSize(16),
-                fontWeight: FontWeight.bold,
-              ),
-              listBullet: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
-            ),
-          ),
-          if (needsTruncation) ...[
-            SizedBox(height: ResponsiveHelper.space(12)),
-            GestureDetector(
-              onTap: () => setState(() => isExpanded = !isExpanded),
-              child: Text(
-                isExpanded ? "Read Less" : "Read More",
-                style: TextStyle(
-                  color: CustomColors.primaryColor,
-                  fontSize: ResponsiveHelper.fontSize(14),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
+          Text(title,
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600)),
+          SizedBox(height: ResponsiveHelper.space(12)),
+          Text(content,
+              style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: ResponsiveHelper.fontSize(14), height: 1.4)),
         ],
       ),
-    );
-  }
-}
-
-class InfoRow extends StatelessWidget {
-  final String label;
-  final String value;
-  const InfoRow({super.key, required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(
-          width: ResponsiveHelper.width(120),
-          child: Text(
-            label,
-            style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
-          ),
-        ),
-        Expanded(
-          child: Text(
-            value,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: ResponsiveHelper.fontSize(14),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

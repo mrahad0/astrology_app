@@ -11,6 +11,12 @@ class NotificationController extends GetxController {
   final Rx<NotificationModel?> notificationModel = Rx<NotificationModel?>(null);
   final RxList<NotificationData> notifications = <NotificationData>[].obs;
   final RxInt unreadCount = 0.obs;
+  
+  // Notification Preferences
+  final RxBool majorTransitAlerts = true.obs;
+  final RxBool dailyCosmicUpdate = true.obs;
+  final RxBool readingReadyAlert = true.obs;
+  final RxBool monthlyReminder = true.obs;
 
   @override
   void onInit() {

@@ -9,7 +9,6 @@ class AuthController extends GetxController {
   Timer? timer;
 
   void onRememberMeChanged(bool value) => isRememberMe(value);
-
   void disposeTimer() {
     timer?.cancel();
     secondsRemaining.value = 30;

@@ -12,7 +12,6 @@ import 'package:astrology_app/views/pages/generateChart/transit_chart.dart';
 import 'package:astrology_app/views/pages/generateChart/natal_chart.dart';
 import 'package:astrology_app/views/pages/generateChart/chartTypeTab.dart';
 import 'package:astrology_app/views/pages/generateChart/details_chart/mainDetail_chart/mainDetail_chart.dart';
-import 'package:astrology_app/views/pages/generateChart/details_chart/western_datails.dart';
 import 'package:astrology_app/views/pages/generateChart/generate_chart_screen/generate_chart_screen.dart';
 import 'package:astrology_app/views/pages/main_screen/main_Screen.dart';
 import 'package:astrology_app/views/pages/payment_card/payment_card.dart';
@@ -29,6 +28,7 @@ import 'package:astrology_app/views/pages/subscription/subscription_page.dart';
 import 'package:get/get.dart';
 import '../views/pages/authentication/newpass_screen.dart';
 import '../views/pages/authentication/register_screen.dart';
+import '../views/pages/generateChart/details_chart/western_details.dart';
 import '../views/pages/generateChart/review_Tab.dart';
 
 class Routes {
@@ -199,7 +199,7 @@ List<GetPage> pages = [
     name: Routes.westernDetails,
     transition: Transition.noTransition,
     transitionDuration: const Duration(milliseconds: 0),
-    page: () => WesternDatails(),
+    page: () => WesternDetails(),
   ),
   GetPage(
     name: Routes.mainDetailChart,

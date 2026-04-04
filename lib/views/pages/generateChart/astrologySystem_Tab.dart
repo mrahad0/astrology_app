@@ -32,14 +32,13 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
           child: Column(
             children: [
               Container(
-                height: ResponsiveHelper.height(200),
                 width: double.infinity,
                 padding: EdgeInsets.all(ResponsiveHelper.padding(12)),
                 decoration: BoxDecoration(
                   color: CustomColors.secondbackgroundColor,
                   borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
                   border: Border.all(
-                    color: Color(0xff2A2F45),
+                    color: const Color(0xFF2F3448),
                     width: 1,
                   ),
                 ),
@@ -55,15 +54,40 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
                       ),
                     ),
                     SizedBox(height: ResponsiveHelper.space(16)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(child: buildCard(0, "Natal \nChart", "assets/icons/natal.svg")),
-                        SizedBox(width: ResponsiveHelper.space(8)),
-                        Expanded(child: buildCard(1, "Transit \nChart", "assets/icons/transit.svg")),
-                        SizedBox(width: ResponsiveHelper.space(8)),
-                        Expanded(child: buildCard(2, "Synastry \nChart", "assets/icons/synastry.svg")),
-                      ],
+                    buildNatalCard(),
+                    SizedBox(height: ResponsiveHelper.space(12)),
+                    IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            child: buildComplexCard(
+                              1,
+                              "Transit Chart Only\nApplies to",
+                              "assets/icons/transit.svg",
+                              [
+                                "Western Astrology",
+                                "Vedic Astrology",
+                                "13-Sign Zodiac",
+                                "Evolutionary Astrology",
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: ResponsiveHelper.space(12)),
+                          Expanded(
+                            child: buildComplexCard(
+                              2,
+                              "Synastry Chart\nOnly Applies to",
+                              "assets/icons/synastry.svg",
+                              [
+                                "Western Astrology",
+                                "Vedic Astrology",
+                                "13-Sign Zodiac",
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -94,7 +118,44 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
     );
   }
 
-  Widget buildCard(int index, String title, String url) {
+  Widget buildNatalCard() {
+    bool isSelected = selectedIndex == 0;
+    return GestureDetector(
+      onTap: () => setState(() => selectedIndex = 0),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
+        decoration: BoxDecoration(
+          color: const Color(0xFF111424),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+          border: Border.all(
+            color: isSelected ? Colors.purple : const Color(0xFF2F3448),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            SvgPicture.asset(
+              "assets/icons/natal.svg",
+              width: ResponsiveHelper.iconSize(28),
+              height: ResponsiveHelper.iconSize(28),
+            ),
+            SizedBox(height: ResponsiveHelper.space(12)),
+            Text(
+              "Natal Chart",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: ResponsiveHelper.fontSize(14),
+                fontWeight: FontWeight.w600,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildComplexCard(int index, String title, String url, List<String> items) {
     bool isSelected = selectedIndex == index;
 
     return GestureDetector(
@@ -102,34 +163,51 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
         setState(() => selectedIndex = index);
       },
       child: Container(
-        height: ResponsiveHelper.height(115), // Increased slightly to accommodate scaled text
-        padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
+        padding: EdgeInsets.symmetric(
+            vertical: ResponsiveHelper.padding(16),
+            horizontal: ResponsiveHelper.padding(12)),
         decoration: BoxDecoration(
-          color: const Color(0xff1B1F33),
+          color: const Color(0xFF111424),
           borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
           border: Border.all(
-            color: isSelected ? Colors.purple : const Color(0xff2A2F45),
+            color: isSelected ? Colors.purple : const Color(0xFF2F3448),
             width: 1,
           ),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
               url,
-              width: ResponsiveHelper.iconSize(24),
-              height: ResponsiveHelper.iconSize(24),
+              width: ResponsiveHelper.iconSize(28),
+              height: ResponsiveHelper.iconSize(28),
             ),
             SizedBox(height: ResponsiveHelper.space(12)),
             Text(
               title,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: isSelected ? Colors.purple : Colors.white,
+                color: Colors.white,
                 fontSize: ResponsiveHelper.fontSize(14),
                 fontWeight: FontWeight.w600,
               ),
-            )
+            ),
+            SizedBox(height: ResponsiveHelper.space(12)),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: items.asMap().entries.map((e) {
+                return Padding(
+                  padding: EdgeInsets.only(bottom: ResponsiveHelper.space(4)),
+                  child: Text(
+                    "${e.key + 1}. ${e.value}",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: ResponsiveHelper.fontSize(12),
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
           ],
         ),
       ),
