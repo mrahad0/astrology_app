@@ -2,99 +2,104 @@
 import 'package:astrology_app/Routes/routes.dart';
 import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/utils/responsive.dart';
-import 'package:astrology_app/views/base/custom_alertDialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
+class ReportModel {
+  final String title;
+  final String price;
+  final String description;
+
+  ReportModel({
+    required this.title,
+    required this.price,
+    required this.description,
+  });
+}
 
 class SubscriptionPage extends StatefulWidget {
   const SubscriptionPage({super.key});
 
   @override
   State<SubscriptionPage> createState() => _SubscriptionPageState();
-
-  static TextStyle get labelStyle => TextStyle(color: Colors.white70, fontSize: ResponsiveHelper.fontSize(14));
-  static TextStyle get valueStyle => TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14));
-
-  static Widget infoRow(String label, String value, {bool green = false}) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: labelStyle),
-          Text(
-            value,
-            style: valueStyle.copyWith(color: green ? Colors.greenAccent : Colors.white),
-          ),
-        ],
-      ),
-    );
-  }
-  // ------------------- PLAN CARD -------------------
-
-  static Widget planCard(String title, String subtitle, String price, String url, BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
-      decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage(url), fit: BoxFit.cover),
-        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-        border: Border.all(color: const Color(0xff2E334A)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: TextStyle(color: Colors.black, fontSize: ResponsiveHelper.fontSize(16), fontWeight: FontWeight.bold)),
-          SizedBox(height: ResponsiveHelper.space(6)),
-          Text(subtitle, style: TextStyle(color: Colors.black, fontSize: ResponsiveHelper.fontSize(12))),
-          SizedBox(height: ResponsiveHelper.space(10)),
-          Text(price, style: TextStyle(color: Colors.black, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.bold)),
-          SizedBox(height: ResponsiveHelper.space(12)),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                CustomAlertdialog(
-                  onPressed: (){
-                    Get.toNamed(Routes.paymentCard);
-                  },
-                  context: context,
-                  title: "Confirm Upgrade",
-                  content: "You're about to upgrade to Premium for \$39.99/month. Your usage stats will reset.",
-                ).show(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: CustomColors.primaryColor,
-                padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(8)),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10))),
-              ),
-              child: Text("Upgrade", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14))),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ------------------- FEATURE ITEM -------------------
-
-  static Widget featureItem(String text) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: ResponsiveHelper.space(10)),
-      child: Row(
-        children: [
-          SvgPicture.asset("assets/icons/tick-01.svg", height: ResponsiveHelper.iconSize(14), width: ResponsiveHelper.iconSize(14)),
-          SizedBox(width: ResponsiveHelper.space(8)),
-          Expanded(child: Text(text, style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)))),
-        ],
-      ),
-    );
-  }
 }
 
 class _SubscriptionPageState extends State<SubscriptionPage> {
+  int _visibleCount = 3;
+
+  final List<ReportModel> reports = [
+    ReportModel(
+      title: "Western Astrology Report",
+      price: "\$12.99",
+      description: "Your complete Astrology report gives you every chart, analysis, and deep-dive overview across all systems—fully unlocked. Explore your personality, life path, cosmic patterns, karmic lessons, and multidimensional influences through every major astrological lens.",
+    ),
+    ReportModel(
+      title: "Vedic Astrology Report",
+      price: "\$12.99",
+      description: "Your complete Astrology report gives you every chart, analysis, and deep-dive overview across all systems—fully unlocked. Explore your personality, life path, cosmic patterns, karmic lessons, and multidimensional influences through every major astrological lens.",
+    ),
+    ReportModel(
+      title: "13 Sign + Zodiac Report",
+      price: "\$12.99",
+      description: "Your complete Astrology report gives you every chart, analysis, and deep-dive overview across all systems—fully unlocked. Explore your personality, life path, cosmic patterns, karmic lessons, and multidimensional influences through every major astrological lens.",
+    ),
+    ReportModel(
+      title: "Evolution Astrology Report",
+      price: "\$12.99",
+      description: "Your complete Astrology report gives you every chart, analysis, and deep-dive overview across all systems—fully unlocked. Explore your personality, life path, cosmic patterns, karmic lessons, and multidimensional influences through every major astrological lens.",
+    ),
+    ReportModel(
+      title: "Human Design report",
+      price: "\$12.99",
+      description: "Your complete Astrology report gives you every chart, analysis, and deep-dive overview across all systems—fully unlocked. Explore your personality, life path, cosmic patterns, karmic lessons, and multidimensional influences through every major astrological lens.",
+    ),
+    ReportModel(
+      title: "Galactic Astrology Report",
+      price: "\$12.99",
+      description: "Your complete Astrology report gives you every chart, analysis, and deep-dive overview across all systems—fully unlocked. Explore your personality, life path, cosmic patterns, karmic lessons, and multidimensional influences through every major astrological lens.",
+    ),
+    ReportModel(
+      title: "Synastry Single Report",
+      price: "\$12.99",
+      description: "Your complete Astrology report gives you every chart, analysis, and deep-dive overview across all systems—fully unlocked. Explore your personality, life path, cosmic patterns, karmic lessons, and multidimensional influences through every major astrological lens.",
+    ),
+    ReportModel(
+      title: "Child Natal Report",
+      price: "\$12.99",
+      description: "Your complete Astrology report gives you every chart, analysis, and deep-dive overview across all systems—fully unlocked. Explore your personality, life path, cosmic patterns, karmic lessons, and multidimensional influences through every major astrological lens.",
+    ),
+    ReportModel(
+      title: "Transit 6 Month Report",
+      price: "\$12.99",
+      description: "Your complete Astrology report gives you every chart, analysis, and deep-dive overview across all systems—fully unlocked. Explore your personality, life path, cosmic patterns, karmic lessons, and multidimensional influences through every major astrological lens.",
+    ),
+    ReportModel(
+      title: "Transit 12 Month Report",
+      price: "\$12.99",
+      description: "Your complete Astrology report gives you every chart, analysis, and deep-dive overview across all systems—fully unlocked. Explore your personality, life path, cosmic patterns, karmic lessons, and multidimensional influences through every major astrological lens.",
+    ),
+    ReportModel(
+      title: "Synastry Report",
+      price: "\$12.99",
+      description: "Your complete Astrology report gives you every chart, analysis, and deep-dive overview across all systems—fully unlocked. Explore your personality, life path, cosmic patterns, karmic lessons, and multidimensional influences through every major astrological lens.",
+    ),
+    ReportModel(
+      title: "Solar Return Report",
+      price: "\$12.99",
+      description: "Your complete Astrology report gives you every chart, analysis, and deep-dive overview across all systems—fully unlocked. Explore your personality, life path, cosmic patterns, karmic lessons, and multidimensional influences through every major astrological lens.",
+    ),
+    ReportModel(
+      title: "Progression Chart Report",
+      price: "\$12.99",
+      description: "Your complete Astrology report gives you every chart, analysis, and deep-dive overview across all systems—fully unlocked. Explore your personality, life path, cosmic patterns, karmic lessons, and multidimensional influences through every major astrological lens.",
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    // Determine which reports to show
+    final visibleReports = reports.take(_visibleCount).toList();
+
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -104,236 +109,205 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: SafeArea(
-        child: SingleChildScrollView(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
+            onPressed: () => Get.back(),
+          ),
+          title: Text(
+            "Single Report",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(22),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          centerTitle: false,
+        ),
+        body: SingleChildScrollView(
           padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20))),
-                  SizedBox(width: ResponsiveHelper.space(20)),
-                  Text(
-                    "Subscription",
-                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(24), fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              SizedBox(height: ResponsiveHelper.space(16)),
-
-              infoCard(),
-
-              SizedBox(height: ResponsiveHelper.space(16)),
-
               Text(
-                "Single Report",
-                style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.w500),
+                "Get your comprehensive astrology birth chart report depth analysis and discover what the stars have for you",
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.85),
+                  fontSize: ResponsiveHelper.fontSize(16),
+                  fontWeight: FontWeight.w400,
+                  height: 1.5,
+                ),
               ),
-
-              SizedBox(height: ResponsiveHelper.space(16)),
-
-              singlefeaturesCard(),
-
-              SizedBox(height: ResponsiveHelper.space(16)),
-
-              Text(
-                "Upgrade Your Plan",
-                style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.w500),
+              SizedBox(height: ResponsiveHelper.space(24)),
+              
+              // Reports List
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: visibleReports.length,
+                separatorBuilder: (context, index) => SizedBox(height: ResponsiveHelper.space(16)),
+                itemBuilder: (context, index) {
+                  final report = visibleReports[index];
+                  return _buildReportCard(report);
+                },
               ),
+              
+              SizedBox(height: ResponsiveHelper.space(24)),
 
-              SizedBox(height: ResponsiveHelper.space(16)),
-
-              featuresCard(),
-
-              SizedBox(height: ResponsiveHelper.space(16)),
-
+              // Buttons Section (Always shows "Subscription Plan", shows "See more" conditionally)
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SubscriptionPage.planCard(
-                            "Standard",
-                            "For serious astrology enthusiasts",
-                            "\$19.99/month",
-                            "assets/images/standerd.png",
-                            context
+                  if (_visibleCount < reports.length)
+                    Row(
+                      children: [
+                        // See more button
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _visibleCount += 3;
+                                if (_visibleCount > reports.length) {
+                                  _visibleCount = reports.length;
+                                }
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(14)),
+                              decoration: BoxDecoration(
+                                color: CustomColors.primaryColor,
+                                borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "See more",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: ResponsiveHelper.fontSize(16),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                      SizedBox(width: ResponsiveHelper.space(12)),
-                      Expanded(
-                        child: SubscriptionPage.planCard(
-                            "Premium",
-                            "For serious astrology enthusiasts",
-                            "\$29.99/month",
-                            "assets/images/premium.png",
-                            context
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: ResponsiveHelper.space(12)),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: SubscriptionPage.planCard(
-                            "Platinum",
-                            "For serious astrology enthusiasts",
-                            "\$19.99/month",
-                            "assets/images/platenium.png",
-                            context
-                        ),
-                      ),
-                      Expanded(flex: 1, child: SizedBox(width: ResponsiveHelper.space(12))), // Empty space on right
-                    ],
-                  ),
+                        SizedBox(width: ResponsiveHelper.space(12)),
+                        // Subscription Plan button
+                        Expanded(child: _buildSubscriptionPlanButton()),
+                      ],
+                    )
+                  else
+                    // Only Subscription Plan button when everything is visible
+                    _buildSubscriptionPlanButton(fullWidth: true),
                 ],
               ),
-
-              SizedBox(height: ResponsiveHelper.space(30)),
-
-              featuresCard(),
+              
+              SizedBox(height: ResponsiveHelper.space(40)),
             ],
           ),
         ),
       ),
-     ),
     );
   }
 
-  // ------------------- INFO CARD -------------------
+  Widget _buildSubscriptionPlanButton({bool fullWidth = false}) {
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(Routes.singlePurchasePlan);
+      },
+      child: Container(
+        width: fullWidth ? double.infinity : null,
+        padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(14)),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.white.withOpacity(0.5)),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
+        ),
+        child: Center(
+          child: Text(
+            "Subscription Plan →",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(14),
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-  Widget infoCard() {
+  Widget _buildReportCard(ReportModel report) {
     return Container(
-      padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
+      padding: EdgeInsets.all(ResponsiveHelper.padding(18)),
       decoration: BoxDecoration(
-        color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-        border: Border.all(color: const Color(0xff2E334A)),
+        color: const Color(0xFF1E2442).withOpacity(0.8), // Card background color
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Info", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.bold)),
-          SizedBox(height: ResponsiveHelper.space(16)),
-          SubscriptionPage.infoRow("Current Plan:", "Free"),
-          SubscriptionPage.infoRow("Monthly Cost:", "\$0"),
-          SubscriptionPage.infoRow("Renewal Date:", "7:00 pm"),
-          SubscriptionPage.infoRow("Status:", "Active", green: true),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  report.title,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ResponsiveHelper.fontSize(18),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Text(
+                report.price,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: ResponsiveHelper.fontSize(18),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: ResponsiveHelper.space(12)),
+          Text(
+            report.description,
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.7),
+              fontSize: ResponsiveHelper.fontSize(14),
+              height: 1.4,
+            ),
+          ),
+          SizedBox(height: ResponsiveHelper.space(20)),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                Get.toNamed(Routes.paymentCard);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: CustomColors.primaryColor,
+                padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(14)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
+                ),
+                elevation: 0,
+              ),
+              child: Text(
+                "Purchase",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: ResponsiveHelper.fontSize(16),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
-
-  // ------------------- FEATURES CARD -------------------
-
-  Widget featuresCard() {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
-      decoration: BoxDecoration(
-        color: CustomColors.secondbackgroundColor,
-        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-        border: Border.all(color: const Color(0xff2E334A)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Current Plan Features",
-              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.bold)),
-          SizedBox(height: ResponsiveHelper.space(16)),
-          SubscriptionPage.featureItem("1 chart (local storage)"),
-          SubscriptionPage.featureItem("Western + Vedic astrology only"),
-          SubscriptionPage.featureItem("Pre-written interpretations for individual placements"),
-          SubscriptionPage.featureItem("0 AI syntheses"),
-          SubscriptionPage.featureItem("Ad-supported"),
-        ],
-      ),
-    );
-  }
-}
-
-// -------------------Single FEATURES CARD -------------------
-
-
-Widget singlefeaturesCard() {
-  return Container(
-    width: double.infinity,
-    padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
-    decoration: BoxDecoration(
-      color: CustomColors.secondbackgroundColor,
-      borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-      border: Border.all(color: const Color(0xff2E334A)),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Unlock a universe of insights with one simple purchase. This all-inclusive plan grants you full access to every astrology system, including Western, Vedic, 13-Sign (Ophiuchus), and premium systems like Galactic Astrology and Human Design.\nWith the All-Access Astrology Plan, you experience:s",
-            style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(15), fontWeight: FontWeight.w500)),
-        SizedBox(height: ResponsiveHelper.space(16)),
-        SubscriptionPage.featureItem("Full system unlocks"),
-        SubscriptionPage.featureItem("Unlimited readings & interpretations"),
-        SubscriptionPage.featureItem("Detailed charts & personalized breakdowns"),
-        SubscriptionPage.featureItem("Multi-system comparisons & deeper insights"),
-        SubscriptionPage.featureItem("Lifetime access to future enhancements"),
-
-        SizedBox(height: ResponsiveHelper.space(16)),
-
-        Text("\$149.99/single purchase", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18), fontWeight: FontWeight.w400)),
-
-        SizedBox(height: ResponsiveHelper.space(16)),
-
-        SizedBox(
-          width: double.infinity,
-          child: OutlinedButton(
-            onPressed: () {
-              Get.toNamed(Routes.singlePurchasePlan);
-            },
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.white,
-              side: const BorderSide(color: Color(0xFF2A2F4A)),
-              padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
-              ),
-            ),
-            child: Text(
-              'View Details',
-              style: TextStyle(fontSize: ResponsiveHelper.fontSize(16)),
-            ),
-          ),
-        ),
-
-        SizedBox(height: ResponsiveHelper.space(16)),
-
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () {
-              Get.toNamed(Routes.paymentType);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: CustomColors.primaryColor,
-              padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
-              ),
-            ),
-            child: Text(
-              'Purchase',
-              style: TextStyle(fontSize: ResponsiveHelper.fontSize(16), fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
 }

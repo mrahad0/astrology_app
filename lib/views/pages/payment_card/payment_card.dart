@@ -26,14 +26,33 @@ class _MyCartScreenState extends State<PaymentCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: "Payment",
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/subcription_bg.png"),
+          fit: BoxFit.cover,
+          opacity: 0.8,
         ),
       ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
+          ),
+          title: Text(
+            "Payment",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: ResponsiveHelper.fontSize(22),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          centerTitle: false,
+        ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -149,6 +168,7 @@ class _MyCartScreenState extends State<PaymentCard> {
             ),
           ),
         ],
+      ),
       ),
     );
   }
