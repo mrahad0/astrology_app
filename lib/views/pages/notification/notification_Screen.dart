@@ -26,6 +26,7 @@ class NotificationScreen extends StatelessWidget {
         elevation: 0,
         scrolledUnderElevation: 0,
         automaticallyImplyLeading: false,
+        titleSpacing: ResponsiveHelper.padding(20),
         title: Text(
           'Notification',
           style: TextStyle(

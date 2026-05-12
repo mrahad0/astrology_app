@@ -66,7 +66,7 @@ class _NewpassScreenState extends State<NewpassScreen> {
                           'Forgot Password',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: ResponsiveHelper.fontSize(18),
+                            fontSize: ResponsiveHelper.fontSize(24),
                             fontWeight: FontWeight.w500,
                           ),
                         ),

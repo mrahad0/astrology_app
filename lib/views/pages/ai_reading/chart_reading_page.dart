@@ -95,7 +95,7 @@ class ChartReadingPage extends StatelessWidget {
                       child: Text(
                         "$wordCount words",
                         style: const TextStyle(
-                          color: Color(0xFF9A3BFF),
+                          color: Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
@@ -107,7 +107,7 @@ class ChartReadingPage extends StatelessWidget {
                 Text(
                   "Reading for $name",
                   style: const TextStyle(
-                    color: Colors.grey,
+                    color: Colors.white,
                     fontSize: 14,
                   ),
                 ),
@@ -129,11 +129,11 @@ class ChartReadingPage extends StatelessWidget {
             child: MarkdownBody(
               data: interpretation,
               styleSheet: MarkdownStyleSheet(
-                p: const TextStyle(color: Colors.grey, fontSize: 15, height: 1.7),
+                p: const TextStyle(color: Colors.white, fontSize: 15, height: 1.7),
                 strong: const TextStyle(
                     color: Colors.white, fontWeight: FontWeight.bold),
                 em: const TextStyle(
-                    color: Colors.white70, fontStyle: FontStyle.italic),
+                    color: Colors.white, fontStyle: FontStyle.italic),
                 h1: const TextStyle(
                     color: Colors.white,
                     fontSize: 22,
@@ -149,9 +149,9 @@ class ChartReadingPage extends StatelessWidget {
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
                     height: 2),
-                listBullet: const TextStyle(color: Color(0xFF9A3BFF)),
+                listBullet: const TextStyle(color: Colors.white),
                 blockquote: const TextStyle(
-                  color: Colors.grey,
+                  color: Colors.white,
                   fontStyle: FontStyle.italic
                   ,
                 ),
@@ -184,14 +184,14 @@ class ChartReadingPage extends StatelessWidget {
             Icon(
               Icons.auto_stories_outlined,
               size: 80,
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.white.withOpacity(0.5),
             ),
             const SizedBox(height: 24),
             const Text(
               "The interpretation is not generated for this chart",
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.grey,
+                color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
@@ -201,7 +201,7 @@ class ChartReadingPage extends StatelessWidget {
               "Generate an interpretation from the chart details page to view your personalized reading.",
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.grey.withOpacity(0.7),
+                color: Colors.white,
                 fontSize: 14,
               ),
             ),

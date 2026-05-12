@@ -97,9 +97,9 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff2F3448)),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              color: const Color(0xFF1F2544),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,9 +140,9 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
             decoration: BoxDecoration(
-              color: const Color(0xFF1F2544),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              border: Border.all(color: const Color(0xff2F3448).withOpacity(0.5)),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: ZoomableChartImage(
               imageUrl: evolutionaryData?.imageUrl ?? "https://universal-astro.s3.ap-southeast-1.amazonaws.com/charts/evolutionary_chart.png", 
@@ -232,9 +232,9 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff2F3448)),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              color: const Color(0xFF1F2544),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,9 +255,9 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
             decoration: BoxDecoration(
-              color: const Color(0xFF1F2544),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              border: Border.all(color: const Color(0xff2F3448).withOpacity(0.5)),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: ZoomableChartImage(
               imageUrl: realImage ?? "https://universal-astro.s3.ap-southeast-1.amazonaws.com/charts/evolutionary_transit.png",
@@ -329,9 +329,9 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
             width: double.infinity,
             padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff2F3448)),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              color: const Color(0xFF1F2544),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: Column(
               children: [
@@ -339,7 +339,7 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
                     style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(16), fontWeight: FontWeight.w400)),
                 SizedBox(height: ResponsiveHelper.space(10)),
                 Text(mockSynastryInfo['score']!,
-                    style: TextStyle(color: CustomColors.primaryColor, fontSize: ResponsiveHelper.fontSize(40), fontWeight: FontWeight.bold)),
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(40), fontWeight: FontWeight.bold)),
                 SizedBox(height: ResponsiveHelper.space(20)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -359,9 +359,9 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
             decoration: BoxDecoration(
-              color: const Color(0xFF1F2544),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              border: Border.all(color: const Color(0xff2F3448).withOpacity(0.5)),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: ZoomableChartImage(
               imageUrl: realImage ?? "https://universal-astro.s3.ap-southeast-1.amazonaws.com/charts/evolutionary_synastry.png",
@@ -400,7 +400,7 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
   Widget _partnerLabel(String label, String name) {
     return Column(
       children: [
-        Text(label, style: TextStyle(color: Colors.white54, fontSize: ResponsiveHelper.fontSize(12))),
+        Text(label, style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(12))),
         SizedBox(height: ResponsiveHelper.space(4)),
         Text(name, style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w600)),
       ],
@@ -418,7 +418,7 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
           SizedBox(
             width: ResponsiveHelper.width(110),
             child: Text(key,
-                style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14))),
+                style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14))),
           ),
           Expanded(
             child: Text(value,
@@ -444,9 +444,9 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
     return Container(
       padding: EdgeInsets.all(ResponsiveHelper.padding(14)),
       decoration: BoxDecoration(
-        color: const Color(0xFF1F2544),
+        color: CustomColors.secondbackgroundColor,
         borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
-        border: Border.all(color: const Color(0xff2F3448).withOpacity(0.5)),
+        border: Border.all(color: const Color(0xFF2F3448)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -455,7 +455,7 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
           Text(
             label,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white,
               fontSize: ResponsiveHelper.fontSize(12),
               fontWeight: FontWeight.w400,
             ),
@@ -467,7 +467,7 @@ class _EvolutionaryDetailsState extends State<EvolutionaryDetails> {
               Text(
                 sign,
                 style: TextStyle(
-                  color: CustomColors.primaryColor,
+                  color: Colors.white,
                   fontSize: ResponsiveHelper.fontSize(15),
                   fontWeight: FontWeight.w600,
                 ),

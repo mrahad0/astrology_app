@@ -23,19 +23,18 @@ class AiComprehensive extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
+          leading: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
           ),
           title: Text(
             "Comprehensive Reading",
             style: TextStyle(
               color: Colors.white,
-              fontSize: ResponsiveHelper.fontSize(18),
+              fontSize: ResponsiveHelper.fontSize(24),
               fontWeight: FontWeight.w600,
             ),
           ),
-          centerTitle: true,
         ),
         body: SafeArea(
           child: GetBuilder<InterpretationController>(
@@ -126,9 +125,9 @@ class AiComprehensive extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(12), horizontal: ResponsiveHelper.padding(8)),
       decoration: BoxDecoration(
-        color: const Color(0xFF1F2544).withOpacity(0.6),
+        color: CustomColors.secondbackgroundColor,
         borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
-        border: Border.all(color: const Color(0xff2F3448).withOpacity(0.5)),
+        border: Border.all(color: const Color(0xFF2F3448)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -159,9 +158,9 @@ class AiComprehensive extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
       decoration: BoxDecoration(
-        color: const Color(0xFF1F2544).withOpacity(0.7),
+        color: CustomColors.secondbackgroundColor,
         borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
-        border: Border.all(color: const Color(0xff2F3448)),
+        border: Border.all(color: const Color(0xFF2F3448)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +175,7 @@ class AiComprehensive extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: ResponsiveHelper.width(130),
-                      child: Text(e.key + ":", style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14))),
+                      child: Text(e.key + ":", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14))),
                     ),
                     Expanded(
                       child: Text(e.value, style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
@@ -210,11 +209,11 @@ class AiComprehensive extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPress,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF232A44),
+          backgroundColor: CustomColors.secondbackgroundColor,
           padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-            side: const BorderSide(color: Color(0xff2F3448)),
+            side: const BorderSide(color: Color(0xFF2F3448)),
           ),
         ),
         child: Text(text, style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(15), fontWeight: FontWeight.bold)),
@@ -236,20 +235,20 @@ class _SectionCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
       decoration: BoxDecoration(
-        color: const Color(0xFF1F2544).withOpacity(0.7),
+        color: CustomColors.secondbackgroundColor,
         borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
-        border: Border.all(color: const Color(0xff2F3448)),
+        border: Border.all(color: const Color(0xFF2F3448)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Section $index", style: TextStyle(color: const Color(0xFF9726f2), fontSize: ResponsiveHelper.fontSize(13))),
+          Text("Section $index", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(13))),
           SizedBox(height: ResponsiveHelper.space(8)),
           Text(title,
               style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(17), fontWeight: FontWeight.w600)),
           SizedBox(height: ResponsiveHelper.space(12)),
           Text(content,
-              style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: ResponsiveHelper.fontSize(14), height: 1.4)),
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), height: 1.4)),
         ],
       ),
     );

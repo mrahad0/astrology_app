@@ -27,12 +27,14 @@ class _SynastryChart extends State<SynastryChart> {
   final TextEditingController name1Controller = TextEditingController();
   final TextEditingController city1Controller = TextEditingController();
   final TextEditingController country1Controller = TextEditingController();
+  final TextEditingController location1Controller = TextEditingController();
   DateTime? selectedDate1;
   TimeOfDay? selectedTime1;
 
   final TextEditingController name2Controller = TextEditingController();
   final TextEditingController city2Controller = TextEditingController();
   final TextEditingController country2Controller = TextEditingController();
+  final TextEditingController location2Controller = TextEditingController();
   DateTime? selectedDate2;
   TimeOfDay? selectedTime2;
 
@@ -100,25 +102,22 @@ class _SynastryChart extends State<SynastryChart> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Birth Country", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
+                        Text("Birth Location", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
                         SizedBox(height: ResponsiveHelper.space(8)),
                         AutocompleteLocationField(
-                          controller: country1Controller,
-                          hintText: "Enter accurate birth country name",
-                          getSuggestions: LocationService.searchCountries,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: ResponsiveHelper.space(15)),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Birth City", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
-                        SizedBox(height: ResponsiveHelper.space(8)),
-                        AutocompleteLocationField(
-                          controller: city1Controller,
-                          hintText: "Enter accurate birth city name",
-                          getSuggestions: (q) => LocationService.searchCities(country1Controller.text, q),
+                          controller: location1Controller,
+                          hintText: "Enter city, country",
+                          getSuggestions: LocationService.searchGlobalLocations,
+                          onSelected: (selection) {
+                            if (selection.contains(',')) {
+                              final parts = selection.split(',');
+                              city1Controller.text = parts[0].trim();
+                              country1Controller.text = parts[1].trim();
+                            } else {
+                              city1Controller.text = selection.trim();
+                              country1Controller.text = "";
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -159,25 +158,22 @@ class _SynastryChart extends State<SynastryChart> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Birth Country", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
+                        Text("Birth Location", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
                         SizedBox(height: ResponsiveHelper.space(8)),
                         AutocompleteLocationField(
-                          controller: country2Controller,
-                          hintText: "Enter accurate birth country name",
-                          getSuggestions: LocationService.searchCountries,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: ResponsiveHelper.space(15)),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Birth City", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
-                        SizedBox(height: ResponsiveHelper.space(8)),
-                        AutocompleteLocationField(
-                          controller: city2Controller,
-                          hintText: "Enter accurate birth city name",
-                          getSuggestions: (q) => LocationService.searchCities(country2Controller.text, q),
+                          controller: location2Controller,
+                          hintText: "Enter city, country",
+                          getSuggestions: LocationService.searchGlobalLocations,
+                          onSelected: (selection) {
+                            if (selection.contains(',')) {
+                              final parts = selection.split(',');
+                              city2Controller.text = parts[0].trim();
+                              country2Controller.text = parts[1].trim();
+                            } else {
+                              city2Controller.text = selection.trim();
+                              country2Controller.text = "";
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -246,8 +242,8 @@ class _SynastryChart extends State<SynastryChart> {
     DateTime? d = await showDatePicker(
       context: context,
       initialDate: DateTime(2000),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      firstDate: DateTime(1),
+      lastDate: DateTime(100000),
     );
 
     if (d != null) {
@@ -296,7 +292,7 @@ class _SynastryChart extends State<SynastryChart> {
             decoration: BoxDecoration(
               color: CustomColors.secondbackgroundColor,
               borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-              border: Border.all(color: Colors.white38),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: Row(
               children: [

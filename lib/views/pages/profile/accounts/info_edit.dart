@@ -155,25 +155,22 @@ class _PersonalInfoEditState extends State<PersonalInfoEdit> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Birth Country", style: TextStyle(fontSize: ResponsiveHelper.fontSize(14), color: Colors.white)),
+                      Text("Birth Location", style: TextStyle(fontSize: ResponsiveHelper.fontSize(14), color: Colors.white)),
                       SizedBox(height: ResponsiveHelper.space(8)),
                       AutocompleteLocationField(
-                        controller: controller.countryController,
-                        hintText: "Enter birth country",
-                        getSuggestions: LocationService.searchCountries,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: ResponsiveHelper.space(20)),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Birth City", style: TextStyle(fontSize: ResponsiveHelper.fontSize(14), color: Colors.white)),
-                      SizedBox(height: ResponsiveHelper.space(8)),
-                      AutocompleteLocationField(
-                        controller: controller.cityController,
-                        hintText: "Enter birth city",
-                        getSuggestions: (q) => LocationService.searchCities(controller.countryController.text, q),
+                        controller: controller.locationController,
+                        hintText: "Enter city, country",
+                        getSuggestions: LocationService.searchGlobalLocations,
+                        onSelected: (selection) {
+                          if (selection.contains(',')) {
+                            final parts = selection.split(',');
+                            controller.cityController.text = parts[0].trim();
+                            controller.countryController.text = parts[1].trim();
+                          } else {
+                            controller.cityController.text = selection.trim();
+                            controller.countryController.text = "";
+                          }
+                        },
                       ),
                     ],
                   ),
@@ -233,18 +230,18 @@ class CustomTextField extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
           decoration: InputDecoration(
             filled: true,
-            fillColor: const Color(0xFF0F1329),
+            fillColor: CustomColors.secondbackgroundColor,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8)),
-              borderSide: const BorderSide(color: Color(0xFF2A2F4A)),
+              borderSide: const BorderSide(color: Color(0xFF2F3448)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8)),
-              borderSide: const BorderSide(color: Color(0xFF2A2F4A)),
+              borderSide: const BorderSide(color: Color(0xFF2F3448)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8)),
-              borderSide: const BorderSide(color: Color(0xFF3A3F5A)),
+              borderSide: const BorderSide(color: Color(0xFF2F3448)),
             ),
             contentPadding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(16), vertical: ResponsiveHelper.padding(14)),
           ),

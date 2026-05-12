@@ -65,16 +65,17 @@ class _ZoomableChartImageState extends State<ZoomableChartImage> {
       height: widget.height,
       width: double.infinity,
       clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-        color: const Color(0xFF1F2544),
-        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
+      decoration: const BoxDecoration(
+        color: Colors.transparent,
       ),
       child: Stack(
         children: [
           PhotoView(
-            imageProvider: widget.imageUrl.isNotEmpty
-                ? NetworkImage(widget.imageUrl)
-                : AssetImage(widget.fallbackAssetImage) as ImageProvider,
+            imageProvider: widget.imageUrl.startsWith('assets/')
+                ? AssetImage(widget.imageUrl) as ImageProvider
+                : widget.imageUrl.isNotEmpty
+                    ? NetworkImage(widget.imageUrl)
+                    : AssetImage(widget.fallbackAssetImage) as ImageProvider,
             controller: _photoViewController,
             minScale: PhotoViewComputedScale.contained,
             maxScale: PhotoViewComputedScale.covered * 5.0,
@@ -121,13 +122,12 @@ class _ZoomableChartImageState extends State<ZoomableChartImage> {
       child: Container(
         padding: EdgeInsets.all(ResponsiveHelper.padding(10)),
         decoration: BoxDecoration(
-          color: const Color(0xFF1F2544),
+          color: CustomColors.secondbackgroundColor,
           shape: BoxShape.circle,
-          border: Border.all(color: CustomColors.primaryColor, width: 2),
         ),
         child: Icon(
           icon,
-          color: CustomColors.primaryColor,
+          color: Colors.white,
           size: ResponsiveHelper.iconSize(24),
         ),
       ),

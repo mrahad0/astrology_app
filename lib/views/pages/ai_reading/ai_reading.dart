@@ -72,14 +72,15 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          titleSpacing: showBackButton ? 0 : ResponsiveHelper.padding(20),
           leading: showBackButton
-              ? IconButton(
-                  icon: Icon(
+              ? GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Icon(
                     Icons.arrow_back_ios,
                     color: Colors.white,
-                    size: ResponsiveHelper.iconSize(28),
+                    size: ResponsiveHelper.iconSize(24),
                   ),
-                  onPressed: () => Navigator.pop(context),
                 )
               : null,
           title: Text(
@@ -147,7 +148,7 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
                   children: [
                     Text(
                       "Your chart collection",
-                      style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(15)),
+                      style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(15)),
                     ),
                     SizedBox(height: ResponsiveHelper.space(20)),
 
@@ -234,7 +235,7 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
                               ? "No chart interpretations generated yet"
                               : "${filters[selectedFilter.value]} – No interpretations",
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: Colors.white,
                             fontSize: ResponsiveHelper.fontSize(16),
                             fontWeight: FontWeight.w500,
                           ),
@@ -302,12 +303,12 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
           SizedBox(height: ResponsiveHelper.space(4)),
           Text(
             userInfo['name'] ?? 'Generated Reading',
-            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Color(0xffA0A4B8)),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Colors.white),
           ),
           SizedBox(height: ResponsiveHelper.space(4)),
           Text(
             "${interp.interpretations.length} system(s) generated",
-            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Color(0xffA0A4B8)),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Colors.white),
           ),
           SizedBox(height: ResponsiveHelper.space(4)),
           Text(
@@ -374,17 +375,17 @@ class _AiReadingScreenState extends State<AiReadingScreen> {
           SizedBox(height: ResponsiveHelper.space(4)),
           Text(
             chart.name,
-            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Color(0xffA0A4B8)),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Colors.white),
           ),
           SizedBox(height: ResponsiveHelper.space(4)),
           Text(
             chart.date,
-            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Color(0xffA0A4B8)),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Colors.white),
           ),
           SizedBox(height: ResponsiveHelper.space(4)),
           Text(
             "${chart.city}, ${chart.country}",
-            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Color(0xffA0A4B8)),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Colors.white),
           ),
           SizedBox(height: ResponsiveHelper.space(18)),
           CustomButton(

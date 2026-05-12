@@ -42,13 +42,13 @@ class CustomTextFromField extends StatelessWidget {
       focusNode: focusNode,
       onChanged: onChanged,
       onFieldSubmitted: onFieldSubmitted,
-      style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
+      style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(16)),
       decoration: InputDecoration(
         hintText: hintText,
         suffixIcon: suffixIcon,
         hintStyle: TextStyle(
-          color: Color(0xffABABAB),
-          fontSize: ResponsiveHelper.fontSize(14),
+          color: Colors.grey,
+          fontSize: ResponsiveHelper.fontSize(16),
           fontWeight: FontWeight.w400,
         ),
 
@@ -56,17 +56,17 @@ class CustomTextFromField extends StatelessWidget {
         fillColor: CustomColors.secondbackgroundColor,
 
         contentPadding: EdgeInsets.symmetric(
-          horizontal: ResponsiveHelper.padding(12),
-          vertical: ResponsiveHelper.padding(14),
+          horizontal: ResponsiveHelper.padding(14),
+          vertical: ResponsiveHelper.padding(16),
         ),
 
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-          borderSide: const BorderSide(color: Colors.white38),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+          borderSide: const BorderSide(color: Color(0xFF2F3448)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-          borderSide: const BorderSide(color: Colors.white38),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+          borderSide: const BorderSide(color: Color(0xFF2F3448)),
         ),
 
         errorBorder: OutlineInputBorder(

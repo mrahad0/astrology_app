@@ -8,6 +8,7 @@ import 'package:astrology_app/views/pages/generateChart/details_chart/western_de
 import 'package:astrology_app/controllers/chart_controller/chart_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:astrology_app/utils/color.dart';
 import '../13sign_details.dart' show Sign13Details;
 
 class MainDetailChart extends StatefulWidget {
@@ -108,7 +109,7 @@ class _MainDetailChart extends State<MainDetailChart> {
                       "Generated Chart",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: ResponsiveHelper.fontSize(20),
+                        fontSize: ResponsiveHelper.fontSize(24),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -118,8 +119,9 @@ class _MainDetailChart extends State<MainDetailChart> {
                 Container(
                   height: ResponsiveHelper.height(60),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1E1C3A),
+                    color: CustomColors.secondbackgroundColor,
                     borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
+                    border: Border.all(color: const Color(0xFF2F3448)),
                   ),
                   child: displayedTabs.length == 1
                       ? _buildSingleTab(displayedTabs[0])

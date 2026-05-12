@@ -126,7 +126,7 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
         width: double.infinity,
         padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(16)),
         decoration: BoxDecoration(
-          color: const Color(0xFF111424),
+          color: CustomColors.secondbackgroundColor,
           borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
           border: Border.all(
             color: isSelected ? Colors.purple : const Color(0xFF2F3448),
@@ -167,7 +167,7 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
             vertical: ResponsiveHelper.padding(16),
             horizontal: ResponsiveHelper.padding(12)),
         decoration: BoxDecoration(
-          color: const Color(0xFF111424),
+          color: CustomColors.secondbackgroundColor,
           borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
           border: Border.all(
             color: isSelected ? Colors.purple : const Color(0xFF2F3448),
@@ -197,13 +197,28 @@ class _AstrologysystemTab extends State<AstrologysystemTab> {
               children: items.asMap().entries.map((e) {
                 return Padding(
                   padding: EdgeInsets.only(bottom: ResponsiveHelper.space(4)),
-                  child: Text(
-                    "${e.key + 1}. ${e.value}",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: ResponsiveHelper.fontSize(12),
-                      fontWeight: FontWeight.w400,
-                    ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${e.key + 1}. ",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: ResponsiveHelper.fontSize(12),
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          e.value,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: ResponsiveHelper.fontSize(12),
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 );
               }).toList(),

@@ -24,6 +24,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final rePasswordController = TextEditingController();
   final countryController = TextEditingController();
   final cityController = TextEditingController();
+  final locationController = TextEditingController();
   final timeOfBirthController = TextEditingController();
   final dobController = TextEditingController();
 
@@ -36,6 +37,7 @@ class _SignupScreenState extends State<SignupScreen> {
     rePasswordController.dispose();
     countryController.dispose();
     cityController.dispose();
+    locationController.dispose();
     super.dispose();
   }
 
@@ -111,7 +113,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             "Create a new account",
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: ResponsiveHelper.fontSize(26),
+                              fontSize: ResponsiveHelper.fontSize(24),
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -207,28 +209,24 @@ class _SignupScreenState extends State<SignupScreen> {
 
                     ),
 
-                    _label("Birth Country"),
+                    _label("Birth Location"),
                     AutocompleteLocationField(
-                      controller: countryController,
-                      hintText: "Enter country",
-                      getSuggestions: LocationService.searchCountries,
-                      validator: (value){
-                        if(value == null || value.isEmpty){
-                          return "Country is required";
+                      controller: locationController,
+                      hintText: "Enter city, country",
+                      getSuggestions: LocationService.searchGlobalLocations,
+                      onSelected: (selection) {
+                        if (selection.contains(',')) {
+                          final parts = selection.split(',');
+                          cityController.text = parts[0].trim();
+                          countryController.text = parts[1].trim();
+                        } else {
+                          cityController.text = selection.trim();
+                          countryController.text = "";
                         }
-                        return null;
                       },
-                    ),
-
-
-                    _label("Birth City"),
-                    AutocompleteLocationField(
-                      controller: cityController,
-                      hintText: "Enter city",
-                      getSuggestions: (query) => LocationService.searchCities(countryController.text, query),
                       validator: (value){
                         if(value == null || value.isEmpty){
-                          return "City is required";
+                          return "Location is required";
                         }
                         return null;
                       },
@@ -283,8 +281,8 @@ class _SignupScreenState extends State<SignupScreen> {
     final picked = await showDatePicker(
       context: context,
       initialDate: DateTime(2000),
-      firstDate: DateTime(1950),
-      lastDate: DateTime.now(),
+      firstDate: DateTime(1),
+      lastDate: DateTime(100000),
       builder: (context, child) =>
           Theme(data: ThemeData.dark(), child: child!),
     );

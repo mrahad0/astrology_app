@@ -12,9 +12,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(
         title,
-        style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(18)),
+        style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(24), fontWeight: FontWeight.w600),
       ),
-      leading: leading,
+      leading: leading ?? GestureDetector(
+        onTap: () => Navigator.pop(context),
+        child: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
+      ),
       automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
       elevation: 0,

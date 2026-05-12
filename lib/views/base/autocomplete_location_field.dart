@@ -8,6 +8,7 @@ class AutocompleteLocationField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Future<List<String>> Function(String) getSuggestions;
   final void Function(String)? onSelected;
+  final Widget? suffixIcon;
 
   const AutocompleteLocationField({
     Key? key,
@@ -16,6 +17,7 @@ class AutocompleteLocationField extends StatelessWidget {
     required this.getSuggestions,
     this.validator,
     this.onSelected,
+    this.suffixIcon,
   }) : super(key: key);
 
   @override
@@ -49,8 +51,10 @@ class AutocompleteLocationField extends StatelessWidget {
           focusNode: focusNode,
           onFieldSubmitted: (v) => onFieldSubmitted(),
           validator: validator,
+          suffixIcon: suffixIcon,
         );
       },
+// ... rest remains same
       optionsViewBuilder: (context, onSelected, options) {
         final dropdownWidth = ResponsiveHelper.isTablet
             ? (ResponsiveHelper.maxContentWidth ?? MediaQuery.of(context).size.width) - ResponsiveHelper.padding(40)

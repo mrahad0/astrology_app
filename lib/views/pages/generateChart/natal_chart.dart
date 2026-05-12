@@ -26,6 +26,7 @@ class _NatalChart extends State<NatalChart> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
 
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
@@ -94,25 +95,22 @@ class _NatalChart extends State<NatalChart> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Birth Country", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
+                        Text("Birth Location", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
                         SizedBox(height: ResponsiveHelper.space(8)),
                         AutocompleteLocationField(
-                          controller: countryController,
-                          hintText: "Enter accurate birth country name",
-                          getSuggestions: LocationService.searchCountries,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: ResponsiveHelper.space(15)),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Birth City", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
-                        SizedBox(height: ResponsiveHelper.space(8)),
-                        AutocompleteLocationField(
-                          controller: cityController,
-                          hintText: "Enter accurate birth city name",
-                          getSuggestions: (q) => LocationService.searchCities(countryController.text, q),
+                          controller: locationController,
+                          hintText: "Enter city, country",
+                          getSuggestions: LocationService.searchGlobalLocations,
+                          onSelected: (selection) {
+                            if (selection.contains(',')) {
+                              final parts = selection.split(',');
+                              cityController.text = parts[0].trim();
+                              countryController.text = parts[1].trim();
+                            } else {
+                              cityController.text = selection.trim();
+                              countryController.text = "";
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -167,8 +165,8 @@ class _NatalChart extends State<NatalChart> {
     DateTime? d = await showDatePicker(
       context: context,
       initialDate: DateTime(2000),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      firstDate: DateTime(1),
+      lastDate: DateTime(100000),
     );
 
     if (d != null) {
@@ -205,7 +203,7 @@ class _NatalChart extends State<NatalChart> {
             decoration: BoxDecoration(
               color: CustomColors.secondbackgroundColor,
               borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-              border: Border.all(color: Colors.white38),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: Row(
               children: [

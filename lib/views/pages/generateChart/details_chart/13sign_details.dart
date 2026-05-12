@@ -89,9 +89,9 @@ class _Sign13DetailsState extends State<Sign13Details> {
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff2F3448)),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              color: const Color(0xFF1F2544),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,9 +130,9 @@ class _Sign13DetailsState extends State<Sign13Details> {
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
             decoration: BoxDecoration(
-              color: const Color(0xFF1F2544),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              border: Border.all(color: const Color(0xff2F3448).withOpacity(0.5)),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: ZoomableChartImage(
               imageUrl: realData?.imageUrl ?? "https://universal-astro.s3.ap-southeast-1.amazonaws.com/charts/13sign_chart.png", 
@@ -145,7 +145,7 @@ class _Sign13DetailsState extends State<Sign13Details> {
             child: Text(
               "In the 13-sign system, your placements shift slightly",
               style: TextStyle(
-                color: Colors.white54,
+                color: Colors.white,
                 fontSize: ResponsiveHelper.fontSize(12),
               ),
             ),
@@ -242,9 +242,9 @@ class _Sign13DetailsState extends State<Sign13Details> {
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff2F3448)),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              color: const Color(0xFF1F2544),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,9 +265,9 @@ class _Sign13DetailsState extends State<Sign13Details> {
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
             decoration: BoxDecoration(
-              color: const Color(0xFF1F2544),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              border: Border.all(color: const Color(0xff2F3448).withOpacity(0.5)),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: ZoomableChartImage(
               imageUrl: realImage ?? "https://universal-astro.s3.ap-southeast-1.amazonaws.com/charts/13sign_transit.png",
@@ -338,9 +338,9 @@ class _Sign13DetailsState extends State<Sign13Details> {
             width: double.infinity,
             padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff2F3448)),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              color: const Color(0xFF1F2544),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: Column(
               children: [
@@ -348,7 +348,7 @@ class _Sign13DetailsState extends State<Sign13Details> {
                     style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(16), fontWeight: FontWeight.w400)),
                 SizedBox(height: ResponsiveHelper.space(10)),
                 Text(mockSynastryInfo['score']!,
-                    style: TextStyle(color: CustomColors.primaryColor, fontSize: ResponsiveHelper.fontSize(40), fontWeight: FontWeight.bold)),
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(40), fontWeight: FontWeight.bold)),
                 SizedBox(height: ResponsiveHelper.space(20)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -368,9 +368,9 @@ class _Sign13DetailsState extends State<Sign13Details> {
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
             decoration: BoxDecoration(
-              color: const Color(0xFF1F2544),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              border: Border.all(color: const Color(0xff2F3448).withOpacity(0.5)),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: ZoomableChartImage(
               imageUrl: realImage ?? "https://universal-astro.s3.ap-southeast-1.amazonaws.com/charts/13sign_synastry.png",
@@ -402,7 +402,7 @@ class _Sign13DetailsState extends State<Sign13Details> {
   Widget _partnerLabel(String label, String name) {
     return Column(
       children: [
-        Text(label, style: TextStyle(color: Colors.white54, fontSize: ResponsiveHelper.fontSize(12))),
+        Text(label, style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(12))),
         SizedBox(height: ResponsiveHelper.space(4)),
         Text(name, style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w600)),
       ],
@@ -420,7 +420,7 @@ class _Sign13DetailsState extends State<Sign13Details> {
           SizedBox(
             width: ResponsiveHelper.width(130),
             child: Text(key,
-                style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14))),
+                style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14))),
           ),
           Expanded(
             child: Text(value,
@@ -439,9 +439,9 @@ class _Sign13DetailsState extends State<Sign13Details> {
         vertical: ResponsiveHelper.padding(12),
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFF1F2544),
-        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-        border: Border.all(color: const Color(0xFF2F3448).withOpacity(0.5)),
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+        border: Border.all(color: const Color(0xFF2F3448)),
       ),
       child: Row(
         children: [
@@ -456,7 +456,7 @@ class _Sign13DetailsState extends State<Sign13Details> {
           Text(
             sign,
             style: TextStyle(
-              color: CustomColors.primaryColor,
+              color: Colors.white,
               fontSize: ResponsiveHelper.fontSize(14),
               fontWeight: FontWeight.w600,
             ),

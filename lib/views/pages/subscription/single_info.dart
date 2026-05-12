@@ -4,6 +4,8 @@ import 'package:astrology_app/utils/color.dart';
 import 'package:astrology_app/utils/responsive.dart';
 import 'package:astrology_app/views/base/custom_appBar.dart';
 import 'package:astrology_app/views/base/custom_button.dart';
+import 'package:astrology_app/views/base/autocomplete_location_field.dart';
+import 'package:astrology_app/data/services/location_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,6 +21,7 @@ class _SingleInfo extends State<SingleInfo> {
   final TextEditingController dateController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
 
   @override
@@ -102,33 +105,29 @@ class _SingleInfo extends State<SingleInfo> {
                             ),
                             SizedBox(height: ResponsiveHelper.space(20)),
 
-                            /// Birth City
+                            /// Birth Location
                             Text(
-                              "Birth City",
+                              "Birth Location",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: ResponsiveHelper.fontSize(15),
                               ),
                             ),
                             SizedBox(height: ResponsiveHelper.space(8)),
-                            _buildTextField(
-                              controller: cityController,
-                              hint: "Enter accurate birth city name",
-                            ),
-                            SizedBox(height: ResponsiveHelper.space(20)),
-
-                            /// Birth Country
-                            Text(
-                              "Birth Country",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: ResponsiveHelper.fontSize(15),
-                              ),
-                            ),
-                            SizedBox(height: ResponsiveHelper.space(8)),
-                            _buildTextField(
-                              controller: countryController,
-                              hint: "Enter accurate birth country",
+                            AutocompleteLocationField(
+                              controller: locationController,
+                              hintText: "Enter city, country",
+                              getSuggestions: LocationService.searchGlobalLocations,
+                              onSelected: (selection) {
+                                if (selection.contains(',')) {
+                                  final parts = selection.split(',');
+                                  cityController.text = parts[0].trim();
+                                  countryController.text = parts[1].trim();
+                                } else {
+                                  cityController.text = selection.trim();
+                                  countryController.text = "";
+                                }
+                              },
                             ),
                             SizedBox(height: ResponsiveHelper.space(20)),
 
@@ -245,8 +244,8 @@ class _SingleInfo extends State<SingleInfo> {
         final DateTime? picked = await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
-          firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
+          firstDate: DateTime(1),
+          lastDate: DateTime(100000),
           builder: (context, child) {
             return Theme(
               data: Theme.of(context).copyWith(
@@ -276,6 +275,7 @@ class _SingleInfo extends State<SingleInfo> {
     dateController.dispose();
     cityController.dispose();
     countryController.dispose();
+    locationController.dispose();
     timeController.dispose();
     super.dispose();
   }

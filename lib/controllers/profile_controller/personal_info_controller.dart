@@ -16,6 +16,7 @@ class PersonalInfoController extends GetxController {
   final TextEditingController timeController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
 
 
   RxString profileImageUrl = ''.obs;
@@ -28,6 +29,7 @@ class PersonalInfoController extends GetxController {
     timeController.dispose();
     countryController.dispose();
     cityController.dispose();
+    locationController.dispose();
     super.onClose();
   }
 
@@ -49,6 +51,9 @@ class PersonalInfoController extends GetxController {
         timeController.text = profile?.timeOfBirth ?? '';
         countryController.text = profile?.birthCountry ?? '';
         cityController.text = profile?.birthCity ?? '';
+        locationController.text = (profile?.birthCity != null && profile?.birthCountry != null && profile!.birthCity!.isNotEmpty && profile.birthCountry!.isNotEmpty)
+            ? "${profile.birthCity}, ${profile.birthCountry}"
+            : (profile?.birthCity ?? profile?.birthCountry ?? '');
 
         profileImageUrl.value = profile?.profilePictureUrl ?? '';
       } else {

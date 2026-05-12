@@ -199,9 +199,9 @@ class _GalacticDetailsState extends State<GalacticDetails> {
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff2F3448)),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              color: const Color(0xFF1F2544),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,9 +240,9 @@ class _GalacticDetailsState extends State<GalacticDetails> {
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
             decoration: BoxDecoration(
-              color: const Color(0xFF1F2544),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              border: Border.all(color: const Color(0xff2F3448).withOpacity(0.5)),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: ZoomableChartImage(
               imageUrl: realData?.imageUrl ?? "https://universal-astro.s3.ap-southeast-1.amazonaws.com/charts/galactic_chart.png", 
@@ -370,9 +370,9 @@ class _GalacticDetailsState extends State<GalacticDetails> {
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff2F3448)),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              color: const Color(0xFF1F2544),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -393,9 +393,9 @@ class _GalacticDetailsState extends State<GalacticDetails> {
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
             decoration: BoxDecoration(
-              color: const Color(0xFF1F2544),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              border: Border.all(color: const Color(0xff2F3448).withOpacity(0.5)),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: ZoomableChartImage(
               imageUrl: realImage ?? "https://universal-astro.s3.ap-southeast-1.amazonaws.com/charts/galactic_transit.png",
@@ -495,9 +495,9 @@ class _GalacticDetailsState extends State<GalacticDetails> {
             width: double.infinity,
             padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff2F3448)),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              color: const Color(0xFF1F2544),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: Column(
               children: [
@@ -505,7 +505,7 @@ class _GalacticDetailsState extends State<GalacticDetails> {
                     style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(16), fontWeight: FontWeight.w400)),
                 SizedBox(height: ResponsiveHelper.space(10)),
                 Text(mockSynastryInfo['score']!,
-                    style: TextStyle(color: CustomColors.primaryColor, fontSize: ResponsiveHelper.fontSize(40), fontWeight: FontWeight.bold)),
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(40), fontWeight: FontWeight.bold)),
                 SizedBox(height: ResponsiveHelper.space(20)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -525,9 +525,9 @@ class _GalacticDetailsState extends State<GalacticDetails> {
           Container(
             padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
             decoration: BoxDecoration(
-              color: const Color(0xFF1F2544),
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-              border: Border.all(color: const Color(0xff2F3448).withOpacity(0.5)),
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+              border: Border.all(color: const Color(0xFF2F3448)),
             ),
             child: ZoomableChartImage(
               imageUrl: realImage ?? "https://universal-astro.s3.ap-southeast-1.amazonaws.com/charts/galactic_synastry.png",
@@ -562,7 +562,7 @@ class _GalacticDetailsState extends State<GalacticDetails> {
   Widget _partnerLabel(String label, String name) {
     return Column(
       children: [
-        Text(label, style: TextStyle(color: Colors.white54, fontSize: ResponsiveHelper.fontSize(12))),
+        Text(label, style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(12))),
         SizedBox(height: ResponsiveHelper.space(4)),
         Text(name, style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w600)),
       ],
@@ -606,9 +606,9 @@ class _GalacticDetailsState extends State<GalacticDetails> {
         vertical: ResponsiveHelper.padding(12),
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFF1F2544),
-        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-        border: Border.all(color: const Color(0xFF2F3448).withOpacity(0.5)),
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+        border: Border.all(color: const Color(0xFF2F3448)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -626,7 +626,7 @@ class _GalacticDetailsState extends State<GalacticDetails> {
               Text(
                 sign,
                 style: TextStyle(
-                  color: CustomColors.primaryColor,
+                  color: Colors.white,
                   fontSize: ResponsiveHelper.fontSize(14),
                   fontWeight: FontWeight.w600,
                 ),
@@ -671,9 +671,9 @@ class _GalacticDetailsState extends State<GalacticDetails> {
         vertical: ResponsiveHelper.padding(12),
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFF1F2544),
-        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-        border: Border.all(color: const Color(0xFF2F3448).withOpacity(0.5)),
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+        border: Border.all(color: const Color(0xFF2F3448)),
       ),
       child: Wrap(
         children: [
@@ -687,7 +687,7 @@ class _GalacticDetailsState extends State<GalacticDetails> {
           Text(
             planet,
             style: TextStyle(
-              color: CustomColors.primaryColor,
+              color: Colors.white,
               fontSize: ResponsiveHelper.fontSize(14),
               fontWeight: FontWeight.w600,
             ),
@@ -725,9 +725,9 @@ class _GalacticDetailsState extends State<GalacticDetails> {
         vertical: ResponsiveHelper.padding(12),
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFF1F2544),
-        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-        border: Border.all(color: const Color(0xFF2F3448).withOpacity(0.5)),
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+        border: Border.all(color: const Color(0xFF2F3448)),
       ),
       child: Text(
         display,
@@ -752,9 +752,9 @@ class _GalacticDetailsState extends State<GalacticDetails> {
         vertical: ResponsiveHelper.padding(12),
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFF1F2544),
-        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-        border: Border.all(color: const Color(0xFF2F3448).withOpacity(0.5)),
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+        border: Border.all(color: const Color(0xFF2F3448)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -771,7 +771,7 @@ class _GalacticDetailsState extends State<GalacticDetails> {
             Text(
               subtitle,
               style: TextStyle(
-                color: CustomColors.primaryColor,
+                color: Colors.white,
                 fontSize: ResponsiveHelper.fontSize(14),
                 fontWeight: FontWeight.w600,
               ),
@@ -796,9 +796,9 @@ class _GalacticDetailsState extends State<GalacticDetails> {
         vertical: ResponsiveHelper.padding(12),
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFF1F2544),
-        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-        border: Border.all(color: const Color(0xFF2F3448).withOpacity(0.5)),
+        color: CustomColors.secondbackgroundColor,
+        borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+        border: Border.all(color: const Color(0xFF2F3448)),
       ),
       child: Wrap(
         children: [
@@ -812,7 +812,7 @@ class _GalacticDetailsState extends State<GalacticDetails> {
           Text(
             sign,
             style: TextStyle(
-              color: CustomColors.primaryColor,
+              color: Colors.white,
               fontSize: ResponsiveHelper.fontSize(14),
               fontWeight: FontWeight.w600,
             ),
@@ -841,7 +841,7 @@ class _GalacticDetailsState extends State<GalacticDetails> {
           SizedBox(
             width: ResponsiveHelper.width(110),
             child: Text(key,
-                style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14))),
+                style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14))),
           ),
           Expanded(
             child: Text(value,

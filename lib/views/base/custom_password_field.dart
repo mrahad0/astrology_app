@@ -31,12 +31,12 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
       obscureText: _obscureText,
       validator: widget.validator,
 
-      style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
+      style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(16)),
       decoration: InputDecoration(
         hintText: widget.hintText,
         hintStyle: TextStyle(
-          color: Color(0xffABABAB),
-          fontSize: ResponsiveHelper.fontSize(14),
+          color: Colors.grey,
+          fontSize: ResponsiveHelper.fontSize(16),
           fontWeight: FontWeight.w400,
         ),
 
@@ -44,17 +44,17 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
         fillColor: CustomColors.secondbackgroundColor,
 
         contentPadding: EdgeInsets.symmetric(
-          horizontal: ResponsiveHelper.padding(12),
-          vertical: ResponsiveHelper.padding(14),
+          horizontal: ResponsiveHelper.padding(14),
+          vertical: ResponsiveHelper.padding(16),
         ),
 
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-          borderSide: const BorderSide(color: Colors.white38),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-          borderSide: const BorderSide(color: Colors.white38),
+          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
         ),
 
         errorBorder: OutlineInputBorder(

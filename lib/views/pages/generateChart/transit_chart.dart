@@ -27,11 +27,13 @@ class _TransitChartState extends State<TransitChart> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
   DateTime? birthDate;
   TimeOfDay? birthTime;
 
-  // Plus transit date
-  DateTime? futureDate;
+  // Transit dates
+  DateTime? futureStartDate;
+  DateTime? pastDate;
 
   @override
   Widget build(BuildContext context) {
@@ -51,128 +53,144 @@ class _TransitChartState extends State<TransitChart> {
             icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(24)),
           ),
         ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  _stepBar(true),
-                  _stepBar(true),
-                  _stepBar(false),
-                  _stepBar(false),
-                ],
-              ),
-              SizedBox(height: ResponsiveHelper.space(25)),
-
-              Text(
-                "Birth Information (For Natal Chart)",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: ResponsiveHelper.fontSize(18),
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: ResponsiveHelper.space(20)),
-
-              // Birth Info Container
-              Container(
-                padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-                  color: CustomColors.secondbackgroundColor,
-                  border: Border.all(color: const Color(0xFF2F3448)),
-                ),
-                child: Column(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(20), vertical: ResponsiveHelper.padding(10)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    _inputField("Name", "enter your name", controller: nameController),
-                    SizedBox(height: ResponsiveHelper.space(15)),
-                    _inputField("Date of Birth", birthDate == null ? "dd/mm/yyyy" : "${birthDate!.day.toString().padLeft(2, '0')}/${birthDate!.month.toString().padLeft(2, '0')}/${birthDate!.year}",
-                        icon: Icons.calendar_today, onTap: pickBirthDate),
-                    SizedBox(height: ResponsiveHelper.space(15)),
-                    _inputField("Birth Time", birthTime == null ? "enter birth time" : "${birthTime!.hour}:${birthTime!.minute.toString().padLeft(2, '0')}",
-                        icon: Icons.access_time, onTap: pickBirthTime),
-                    SizedBox(height: ResponsiveHelper.space(15)),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Birth Country", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
-                        SizedBox(height: ResponsiveHelper.space(8)),
-                        AutocompleteLocationField(
-                          controller: countryController,
-                          hintText: "Enter accurate birth country name",
-                          getSuggestions: LocationService.searchCountries,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: ResponsiveHelper.space(15)),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Birth City", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
-                        SizedBox(height: ResponsiveHelper.space(8)),
-                        AutocompleteLocationField(
-                          controller: cityController,
-                          hintText: "Enter accurate birth city name",
-                          getSuggestions: (q) => LocationService.searchCities(countryController.text, q),
-                        ),
-                      ],
-                    ),
+                    _stepBar(true),
+                    _stepBar(true),
+                    _stepBar(false),
+                    _stepBar(false),
                   ],
                 ),
-              ),
+                SizedBox(height: ResponsiveHelper.space(25)),
 
-              SizedBox(height: ResponsiveHelper.space(25)),
-
-              Text(
-                "Transit Date",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: ResponsiveHelper.fontSize(18),
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: ResponsiveHelper.space(20)),
-
-              // Transit Date Container
-              Container(
-                padding: EdgeInsets.all(ResponsiveHelper.padding(20)),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(ResponsiveHelper.radius(14)),
-                  color: CustomColors.secondbackgroundColor,
-                  border: Border.all(color: const Color(0xFF2F3448)),
+                // Top Birth Information Section
+                Container(
+                  padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+                    color: CustomColors.secondbackgroundColor,
+                    border: Border.all(color: Colors.white.withOpacity(0.1)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Birth Information",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: ResponsiveHelper.fontSize(18),
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(height: ResponsiveHelper.space(20)),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _dateField(
+                              title: "Future start date",
+                              value: futureStartDate,
+                              onTap: pickFutureStartDate,
+                            ),
+                          ),
+                          SizedBox(width: ResponsiveHelper.space(12)),
+                          Expanded(
+                            child: _dateField(
+                              title: "Past Date",
+                              value: pastDate,
+                              onTap: pickPastDate,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                child: _dateField(
-                  title: "Transit Date",
-                  value: futureDate,
-                  onTap: pickTransitDate,
-                ),
-              ),
 
-              SizedBox(height: ResponsiveHelper.space(60)),
-              CustomButton(
-                text: "Next",
-                onpress: () {
-                  if (_validateInputs()) {
-                    controller.setChartData({
-                      'type': 'Transit',
-                      'name': nameController.text,
-                      'dateOfBirth': birthDate,
-                      'birthTime': birthTime,
-                      'birthCity': cityController.text,
-                      'birthCountry': countryController.text,
-                      'futureDate': futureDate,
-                    });
-                    Get.toNamed(Routes.chartType);
-                  }
-                },
-              ),
-              SizedBox(height: ResponsiveHelper.space(20)),
-            ],
+                SizedBox(height: ResponsiveHelper.space(25)),
+
+                // Bottom Birth Information Section
+                Container(
+                  padding: EdgeInsets.all(ResponsiveHelper.padding(16)),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
+                    color: CustomColors.secondbackgroundColor,
+                    border: Border.all(color: Colors.white.withOpacity(0.1)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Birth Information",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: ResponsiveHelper.fontSize(18),
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(height: ResponsiveHelper.space(20)),
+                      _inputField("Name", "Enter your name", controller: nameController),
+                      SizedBox(height: ResponsiveHelper.space(15)),
+                      _inputField("Date of Birth", birthDate == null ? "mm/dd/yyyy" : "${birthDate!.month.toString().padLeft(2, '0')}/${birthDate!.day.toString().padLeft(2, '0')}/${birthDate!.year}",
+                          icon: Icons.calendar_month_outlined, onTap: pickBirthDate),
+                      SizedBox(height: ResponsiveHelper.space(15)),
+                      _inputField("Birth Time", birthTime == null ? "Enter accurate birth time" : "${birthTime!.hour}:${birthTime!.minute.toString().padLeft(2, '0')}",
+                          onTap: pickBirthTime),
+                      SizedBox(height: ResponsiveHelper.space(15)),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Birth Location", style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500)),
+                          SizedBox(height: ResponsiveHelper.space(8)),
+                          AutocompleteLocationField(
+                            controller: locationController,
+                            hintText: "Enter city, country",
+                            getSuggestions: LocationService.searchGlobalLocations,
+                            onSelected: (selection) {
+                              if (selection.contains(',')) {
+                                final parts = selection.split(',');
+                                cityController.text = parts[0].trim();
+                                countryController.text = parts[1].trim();
+                              } else {
+                                cityController.text = selection.trim();
+                                countryController.text = "";
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: ResponsiveHelper.space(40)),
+                CustomButton(
+                  text: "Next",
+                  onpress: () {
+                    if (_validateInputs()) {
+                      controller.setChartData({
+                        'type': 'Transit',
+                        'name': nameController.text,
+                        'dateOfBirth': birthDate,
+                        'birthTime': birthTime,
+                        'birthCity': cityController.text,
+                        'birthCountry': countryController.text,
+                        'futureStartDate': futureStartDate,
+                        'pastDate': pastDate,
+                      });
+                      Get.toNamed(Routes.chartType);
+                    }
+                  },
+                ),
+                SizedBox(height: ResponsiveHelper.space(20)),
+              ],
+            ),
           ),
         ),
       ),
-     ),
     );
   }
 
@@ -182,7 +200,8 @@ class _TransitChartState extends State<TransitChart> {
         countryController.text.isEmpty ||
         birthDate == null ||
         birthTime == null ||
-        futureDate == null) {
+        futureStartDate == null ||
+        pastDate == null) {
       showCustomSnackBar("All fields are required.");
       return false;
     }
@@ -206,8 +225,8 @@ class _TransitChartState extends State<TransitChart> {
             padding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(14)),
             decoration: BoxDecoration(
               color: CustomColors.secondbackgroundColor,
-              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-              border: Border.all(color: Colors.white38),
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+              border: Border.all(color: Colors.white.withOpacity(0.1)),
             ),
             child: Row(
               children: [
@@ -218,7 +237,7 @@ class _TransitChartState extends State<TransitChart> {
                     child: Text(
                       hint,
                       style: TextStyle(
-                        color: hint.contains("dd/mm/yyyy") || hint.contains("Enter accurate")
+                        color: (hint.contains("mm/dd/yyyy") || hint.contains("Enter"))
                             ? Colors.grey
                             : Colors.white,
                         fontSize: ResponsiveHelper.fontSize(16),
@@ -237,7 +256,7 @@ class _TransitChartState extends State<TransitChart> {
                   ),
                 ),
                 if (icon != null)
-                  Icon(icon, color: Colors.grey, size: ResponsiveHelper.iconSize(20)),
+                  Icon(icon, color: Colors.white.withOpacity(0.6), size: ResponsiveHelper.iconSize(24)),
               ],
             ),
           ),
@@ -252,47 +271,45 @@ class _TransitChartState extends State<TransitChart> {
     Function()? onTap,
   }) {
     final String text = value == null
-        ? ""
-        : "${value!.day.toString().padLeft(2, '0')}/${value!.month.toString().padLeft(2, '0')}/${value!.year}";
+        ? "mm/dd/yyyy"
+        : "${value!.month.toString().padLeft(2, '0')}/${value!.day.toString().padLeft(2, '0')}/${value!.year}";
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: ResponsiveHelper.padding(14),
-          vertical: ResponsiveHelper.padding(14),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.w500),
         ),
-        decoration: BoxDecoration(
-          color: CustomColors.secondbackgroundColor,
-          borderRadius: BorderRadius.circular(ResponsiveHelper.radius(10)),
-          border: Border.all(color: Colors.white38),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
+        SizedBox(height: ResponsiveHelper.space(8)),
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            height: ResponsiveHelper.height(55),
+            padding: EdgeInsets.symmetric(
+              horizontal: ResponsiveHelper.padding(14),
             ),
-            SizedBox(height: ResponsiveHelper.space(6)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+            decoration: BoxDecoration(
+              color: CustomColors.secondbackgroundColor,
+              borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
+              border: Border.all(color: Colors.white.withOpacity(0.1)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: Text(
-                    text.isEmpty ? "dd/mm/yyyy" : text,
-                    style: TextStyle(
-                      color: text.isEmpty ? Colors.grey : Colors.white,
-                      fontSize: ResponsiveHelper.fontSize(16),
-                    ),
+                Text(
+                  text,
+                  style: TextStyle(
+                    color: value == null ? Colors.grey : Colors.white,
+                    fontSize: ResponsiveHelper.fontSize(16),
                   ),
                 ),
-                Icon(Icons.calendar_today, size: ResponsiveHelper.iconSize(18), color: Colors.grey),
+                Icon(Icons.calendar_month_outlined, size: ResponsiveHelper.iconSize(24), color: Colors.white.withOpacity(0.6)),
               ],
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -300,8 +317,8 @@ class _TransitChartState extends State<TransitChart> {
     final picked = await showDatePicker(
       context: context,
       initialDate: birthDate ?? DateTime(2000),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      firstDate: DateTime(1),
+      lastDate: DateTime(100000),
     );
     if (picked != null) setState(() => birthDate = picked);
   }
@@ -314,14 +331,24 @@ class _TransitChartState extends State<TransitChart> {
     if (picked != null) setState(() => birthTime = picked);
   }
 
-  Future<void> pickTransitDate() async {
+  Future<void> pickFutureStartDate() async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: futureDate ?? DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
+      initialDate: futureStartDate ?? DateTime.now(),
+      firstDate: DateTime(1),
+      lastDate: DateTime(100000),
     );
-    if (picked != null) setState(() => futureDate = picked);
+    if (picked != null) setState(() => futureStartDate = picked);
+  }
+
+  Future<void> pickPastDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: pastDate ?? DateTime.now(),
+      firstDate: DateTime(1),
+      lastDate: DateTime(100000),
+    );
+    if (picked != null) setState(() => pastDate = picked);
   }
 
   Widget _stepBar(bool filled) {
@@ -330,7 +357,7 @@ class _TransitChartState extends State<TransitChart> {
         height: ResponsiveHelper.height(4),
         margin: EdgeInsets.only(right: ResponsiveHelper.space(6)),
         decoration: BoxDecoration(
-          color: filled ? Colors.purple : const Color(0xFF2F3448),
+          color: filled ? const Color(0xFF9726f2) : const Color(0xFF2F3448),
           borderRadius: BorderRadius.circular(ResponsiveHelper.radius(20)),
         ),
       ),

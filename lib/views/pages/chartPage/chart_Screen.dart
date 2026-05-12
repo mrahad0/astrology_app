@@ -40,10 +40,11 @@ class _ChartScreenState extends State<ChartScreen> {
         elevation: 0,
         automaticallyImplyLeading: false,
         scrolledUnderElevation: 0,
+        titleSpacing: ResponsiveHelper.padding(20),
         title: Text(
           'Chart',
           style: TextStyle(
-            fontSize: ResponsiveHelper.fontSize(28),
+            fontSize: ResponsiveHelper.fontSize(24),
             fontWeight: FontWeight.w600,
             color: Colors.white,
           ),
@@ -60,7 +61,7 @@ class _ChartScreenState extends State<ChartScreen> {
             children: [
               Text(
                 "Create your chart",
-                style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(20)),
+                style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(20)),
               ),
               SizedBox(height: ResponsiveHelper.space(24)),
 
@@ -110,7 +111,7 @@ class _ChartScreenState extends State<ChartScreen> {
                     },
                     icon: Icon(
                       Icons.info_outline,
-                      color: CustomColors.primaryColor,
+                      color: Colors.white,
                       size: ResponsiveHelper.iconSize(18),
                     ),
                   ),
@@ -126,7 +127,7 @@ class _ChartScreenState extends State<ChartScreen> {
                 if (controller.recentCharts.isEmpty) {
                   return Text(
                     "No recent charts found",
-                    style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
+                    style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
                   );
                 }
                 return Column(
@@ -227,17 +228,17 @@ class _ChartScreenState extends State<ChartScreen> {
           SizedBox(height: ResponsiveHelper.space(6)),
           Text(
             chart.name,
-            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Color(0xffA0A4B8)),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Colors.white),
           ),
           SizedBox(height: ResponsiveHelper.space(6)),
           Text(
             chart.date,
-            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Color(0xffA0A4B8)),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Colors.white),
           ),
           SizedBox(height: ResponsiveHelper.space(6)),
           Text(
             "${chart.city}, ${chart.country}",
-            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Color(0xffA0A4B8)),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Colors.white),
           ),
           SizedBox(height: ResponsiveHelper.space(18)),
           Row(

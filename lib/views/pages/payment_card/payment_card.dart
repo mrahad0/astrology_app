@@ -47,11 +47,10 @@ class _MyCartScreenState extends State<PaymentCard> {
             "Payment",
             style: TextStyle(
               color: Colors.white,
-              fontSize: ResponsiveHelper.fontSize(22),
-              fontWeight: FontWeight.bold,
+              fontSize: ResponsiveHelper.fontSize(24),
+              fontWeight: FontWeight.w600,
             ),
           ),
-          centerTitle: false,
         ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.end,

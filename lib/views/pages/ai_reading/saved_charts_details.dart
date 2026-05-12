@@ -121,7 +121,7 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("Word Count",
-                      style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(12))),
+                      style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(12))),
                   SizedBox(height: ResponsiveHelper.space(4)),
                   Text("$wordCount words",
                       style: TextStyle(
@@ -134,7 +134,7 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("Generated",
-                      style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(12))),
+                      style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(12))),
                   SizedBox(height: ResponsiveHelper.space(4)),
                   Text(formattedDate,
                       style: TextStyle(
@@ -269,10 +269,10 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.image_not_supported,
-                          color: Colors.grey, size: ResponsiveHelper.iconSize(50)),
+                          color: Colors.white, size: ResponsiveHelper.iconSize(50)),
                       SizedBox(height: ResponsiveHelper.space(8)),
                       Text("Failed to load chart image",
-                          style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14))),
+                          style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14))),
                     ],
                   ),
                 );
@@ -337,7 +337,7 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
             // Synastry: Show both profiles
             Text("Person 1",
                 style: TextStyle(
-                    color: const Color(0xFF9A3BFF),
+                    color: Colors.white,
                     fontSize: ResponsiveHelper.fontSize(14),
                     fontWeight: FontWeight.w600)),
             SizedBox(height: ResponsiveHelper.space(8)),
@@ -348,12 +348,12 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
             _infoRow("Country:", country.isNotEmpty ? country : "-"),
             
             SizedBox(height: ResponsiveHelper.space(16)),
-            const Divider(color: Colors.grey),
+            const Divider(color: Colors.white24),
             SizedBox(height: ResponsiveHelper.space(8)),
             
             Text("Person 2",
                 style: TextStyle(
-                    color: const Color(0xFF9A3BFF),
+                    color: Colors.white,
                     fontSize: ResponsiveHelper.fontSize(14),
                     fontWeight: FontWeight.w600)),
             SizedBox(height: ResponsiveHelper.space(8)),
@@ -364,7 +364,7 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
             _infoRow("Country:", person2Country?.isNotEmpty == true ? person2Country! : "-"),
             
             SizedBox(height: ResponsiveHelper.space(16)),
-            const Divider(color: Colors.grey),
+            const Divider(color: Colors.white24),
             SizedBox(height: ResponsiveHelper.space(8)),
           ] else ...[
             // Standard: Single person info
@@ -389,7 +389,7 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label,
-              style: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14))),
+              style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14))),
           Flexible(
             child: Text(value,
                 style: TextStyle(
@@ -425,11 +425,11 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
           MarkdownBody(
             data: interpretation,
             styleSheet: MarkdownStyleSheet(
-              p: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14), height: 1.6),
+              p: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), height: 1.6),
               strong: TextStyle(
                   color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontWeight: FontWeight.bold),
               em: TextStyle(
-                  color: Colors.white70, fontSize: ResponsiveHelper.fontSize(14), fontStyle: FontStyle.italic),
+                  color: Colors.white, fontSize: ResponsiveHelper.fontSize(14), fontStyle: FontStyle.italic),
               h1: TextStyle(
                   color: Colors.white,
                   fontSize: ResponsiveHelper.fontSize(20),
@@ -442,7 +442,7 @@ class _SavedChartsDetailsState extends State<SavedChartsDetails> {
                   color: Colors.white,
                   fontSize: ResponsiveHelper.fontSize(16),
                   fontWeight: FontWeight.bold),
-              listBullet: TextStyle(color: Colors.grey, fontSize: ResponsiveHelper.fontSize(14)),
+              listBullet: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(14)),
             ),
           ),
         ],

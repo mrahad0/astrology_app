@@ -51,22 +51,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
 
                     Image.asset(
-                      "assets/images/logo.png1.png",
+                      "assets/images/Logo (2) 2.png",
                       height: ResponsiveHelper.height(250),
                       width: ResponsiveHelper.width(250),
-                    ),
-
-                    SizedBox(height: ResponsiveHelper.space(10)),
-
-                    Text(
-                      "UNIVERSAL ASTRO™",
-                      style: TextStyle(
-                        fontFamily: 'Roboto',
-                        color: Colors.white,
-                        fontSize: ResponsiveHelper.fontSize(24),
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 1.2,
-                      ),
+                      fit: BoxFit.contain,
                     ),
 
                     SizedBox(height: ResponsiveHelper.space(30)),
@@ -75,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        "E-mail",
+                        "Email",
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
@@ -83,6 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
+
                     SizedBox(height: ResponsiveHelper.space(10)),
 
                     CustomTextFromField(

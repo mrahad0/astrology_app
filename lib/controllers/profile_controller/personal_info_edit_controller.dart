@@ -19,6 +19,7 @@ class PersonalInfoEditController extends GetxController {
   final timeController = TextEditingController();
   final countryController = TextEditingController();
   final cityController = TextEditingController();
+  final locationController = TextEditingController();
 
   // Image
   Rx<File?> profileImageFile = Rx<File?>(null);
@@ -55,6 +56,9 @@ class PersonalInfoEditController extends GetxController {
         timeController.text = profile?.timeOfBirth ?? '';
         countryController.text = profile?.birthCountry ?? '';
         cityController.text = profile?.birthCity ?? '';
+        locationController.text = (profile?.birthCity != null && profile?.birthCountry != null && profile!.birthCity!.isNotEmpty && profile.birthCountry!.isNotEmpty)
+            ? "${profile.birthCity}, ${profile.birthCountry}"
+            : (profile?.birthCity ?? profile?.birthCountry ?? '');
         profileImageUrl.value = profile?.profilePictureUrl ?? '';
       } else {
         ApiChecker.checkApi(response);
@@ -143,6 +147,7 @@ class PersonalInfoEditController extends GetxController {
     timeController.dispose();
     countryController.dispose();
     cityController.dispose();
+    locationController.dispose();
     super.onClose();
   }
 }

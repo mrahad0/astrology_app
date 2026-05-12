@@ -1,5 +1,6 @@
 
 import 'package:astrology_app/utils/responsive.dart';
+import 'package:astrology_app/utils/color.dart';
 import 'package:flutter/material.dart';
 
 
@@ -18,8 +19,9 @@ class CustomBottomBar extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.padding(10)),
       decoration: BoxDecoration(
-        color: const Color(0xFF1F2544),
+        color: CustomColors.secondbackgroundColor,
         borderRadius: BorderRadius.circular(ResponsiveHelper.radius(40)),
+        border: Border.all(color: const Color(0xFF2F3448)),
         boxShadow: [
           BoxShadow(
             blurRadius: 20,

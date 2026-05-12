@@ -47,22 +47,22 @@ class _ForgotpassScreenState extends State<ForgotpassScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        color: Colors.white,
-                        icon: Icon(Icons.arrow_back_ios_new),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-
-                      SizedBox(width: ResponsiveHelper.space(10)),
-
-                      Text('Forgot Password',style: TextStyle(
-                          color: Colors.white,
-                          fontSize: ResponsiveHelper.fontSize(18),
-                          fontWeight: FontWeight.w500
-                      ),),
-                    ],
+                  GestureDetector(
+                    onTap:() => Navigator.pop(context),
+                    child: Row(
+                      children: [
+                        Icon(Icons.arrow_back_ios, color: Colors.white),
+                        SizedBox(width: ResponsiveHelper.space(10)),
+                        Text(
+                          "Forget Password",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: ResponsiveHelper.fontSize(24),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
 
                   SizedBox(height: ResponsiveHelper.space(250)),
@@ -77,7 +77,7 @@ class _ForgotpassScreenState extends State<ForgotpassScreen> {
 
                   Align(alignment: Alignment.topLeft,
                       child: Text(
-                        "E-mail",
+                        "Email",
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,

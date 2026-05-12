@@ -132,18 +132,17 @@ class _SavedChartState extends State<SavedChart> {
           SizedBox(height: ResponsiveHelper.space(4)),
           Text(
             chart.name,
-            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: const Color(
-                0xffa0a3b8)),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Colors.white),
           ),
           SizedBox(height: ResponsiveHelper.space(4)),
           Text(
             chart.date,
-            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: const Color(0xffA0A4B8)),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Colors.white),
           ),
           SizedBox(height: ResponsiveHelper.space(4)),
           Text(
             "${chart.city}, ${chart.country}",
-            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: const Color(0xffA0A4B8)),
+            style: TextStyle(fontSize: ResponsiveHelper.fontSize(13), color: Colors.white),
           ),
           SizedBox(height: ResponsiveHelper.space(18)),
           CustomButton(

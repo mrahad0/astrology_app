@@ -84,7 +84,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             'Forgot Password',
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: ResponsiveHelper.fontSize(18),
+                                fontSize: ResponsiveHelper.fontSize(24),
                                 fontWeight: FontWeight.w500),
                           ),
                         ],

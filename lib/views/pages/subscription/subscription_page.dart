@@ -112,19 +112,18 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
-            onPressed: () => Get.back(),
+          leading: GestureDetector(
+            onTap: () => Get.back(),
+            child: Icon(Icons.arrow_back_ios, color: Colors.white, size: ResponsiveHelper.iconSize(20)),
           ),
           title: Text(
             "Single Report",
             style: TextStyle(
               color: Colors.white,
-              fontSize: ResponsiveHelper.fontSize(22),
-              fontWeight: FontWeight.bold,
+              fontSize: ResponsiveHelper.fontSize(24),
+              fontWeight: FontWeight.w600,
             ),
           ),
-          centerTitle: false,
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(ResponsiveHelper.padding(20)),

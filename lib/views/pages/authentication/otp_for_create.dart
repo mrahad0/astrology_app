@@ -83,7 +83,7 @@ class _OtpForCreate extends State<OtpForCreate> {
                           'Verify Email',
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: ResponsiveHelper.fontSize(18),
+                              fontSize: ResponsiveHelper.fontSize(24),
                               fontWeight: FontWeight.w500),
                         ),
                       ],

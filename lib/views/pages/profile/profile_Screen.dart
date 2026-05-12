@@ -25,6 +25,7 @@ class ProfileScreen extends StatelessWidget {
           elevation: 0,
           scrolledUnderElevation: 0,
           automaticallyImplyLeading: false,
+          titleSpacing: ResponsiveHelper.padding(20),
           title: Text(
             'Profile',
             style: TextStyle(fontSize: ResponsiveHelper.fontSize(24), fontWeight: FontWeight.w600,color: Colors.white),

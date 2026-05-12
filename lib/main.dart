@@ -36,10 +36,13 @@ class _Astrology_AppState extends State<Astrology_App> {
     var token = await PrefsHelper.getString(AppConstants.bearerToken);
     debugPrint("issue token : $token");
     if (token.isNotEmpty) {
-      Get.offAllNamed(
-          Routes.mainScreen);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.offAllNamed(Routes.mainScreen);
+      });
     } else {
-      Get.offAllNamed(Routes.loginScreen);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.offAllNamed(Routes.loginScreen);
+      });
     }
   }
 
@@ -64,7 +67,19 @@ class _Astrology_AppState extends State<Astrology_App> {
           },
         ),
 
-        appBarTheme: AppBarTheme(backgroundColor: Colors.transparent),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: false,
+          titleSpacing: 0,
+          leadingWidth: 40,
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+            fontFamily: "Manrope",
+          ),
+        ),
       ),
 
       // Initialize ResponsiveHelper globally

@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 /// Base design width is 375px (standard mobile). On tablets (width >= 600),
 /// dimensions scale up proportionally so the UI looks well-proportioned.
 class ResponsiveHelper {
-  static late double _screenWidth;
-  static late double _screenHeight;
-  static late double _shortestSide;
+  static double _screenWidth = 375.0;
+  static double _screenHeight = 812.0;
+  static double _shortestSide = 375.0;
 
   /// Initialize with the current BuildContext. Call once in the app's root builder.
   static void init(BuildContext context) {

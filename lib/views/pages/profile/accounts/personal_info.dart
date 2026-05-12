@@ -133,9 +133,7 @@ class PersonalInfo extends StatelessWidget {
                     SizedBox(height: ResponsiveHelper.space(20)),
                     CustomTextField(label: 'Time of Birth', controller: controller.timeController),
                     SizedBox(height: ResponsiveHelper.space(20)),
-                    CustomTextField(label: 'Birth Country', controller: controller.countryController),
-                    SizedBox(height: ResponsiveHelper.space(20)),
-                    CustomTextField(label: 'Birth City', controller: controller.cityController),
+                    CustomTextField(label: 'Birth Location', controller: controller.locationController),
                   ],
                 ),
               ),
@@ -179,18 +177,18 @@ class CustomTextField extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontSize: ResponsiveHelper.fontSize(15)),
           decoration: InputDecoration(
             filled: true,
-            fillColor: const Color(0xFF0F1329),
+            fillColor: CustomColors.secondbackgroundColor,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8)),
-              borderSide: const BorderSide(color: Color(0xFF2A2F4A)),
+              borderSide: const BorderSide(color: Color(0xFF2F3448)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8)),
-              borderSide: const BorderSide(color: Color(0xFF2A2F4A)),
+              borderSide: const BorderSide(color: Color(0xFF2F3448)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(ResponsiveHelper.radius(8)),
-              borderSide: const BorderSide(color: Color(0xFF3A3F5A)),
+              borderSide: const BorderSide(color: Color(0xFF2F3448)),
             ),
             contentPadding: EdgeInsets.symmetric(horizontal: ResponsiveHelper.padding(16), vertical: ResponsiveHelper.padding(14)),
           ),

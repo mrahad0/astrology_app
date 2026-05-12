@@ -86,4 +86,32 @@ class LocationService {
     // Convert to set to remove duplicates, then map back to list
     return matchedLocalLocations.toSet().take(100).toList();
   }
+
+  static Future<List<String>> searchGlobalLocations(String query) async {
+    if (query.length < 2) return [];
+    try {
+      final url = Uri.parse('https://geocoding-api.open-meteo.com/v1/search').replace(queryParameters: {
+        'name': query,
+        'count': '10',
+        'language': 'en',
+        'format': 'json',
+      });
+      
+      final response = await http.get(url).timeout(const Duration(seconds: 3));
+      
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['results'] != null) {
+          return (data['results'] as List).map((result) {
+            final name = result['name'] ?? '';
+            final country = result['country'] ?? '';
+            return country.isNotEmpty ? "$name, $country" : name;
+          }).toList().cast<String>();
+        }
+      }
+    } catch (e) {
+      return [];
+    }
+    return [];
+  }
 }

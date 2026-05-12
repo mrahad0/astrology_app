@@ -39,7 +39,7 @@ class CombinedInterpretationScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: CustomColors.secondbackgroundColor,
                       borderRadius: BorderRadius.circular(ResponsiveHelper.radius(16)),
-                      border: Border.all(color: const Color(0xFF2A2F4A)),
+                      border: Border.all(color: const Color(0xFF2F3448)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +47,7 @@ class CombinedInterpretationScreen extends StatelessWidget {
                         Text(
                           'Section 3',
                           style: TextStyle(
-                            color: const Color(0xFF9726f2),
+                            color: Colors.white,
                             fontSize: ResponsiveHelper.fontSize(14),
                           ),
                         ),
@@ -64,7 +64,7 @@ class CombinedInterpretationScreen extends StatelessWidget {
                         Text(
                           "This section brings together the meanings of the individual placements and aspects described earlier. Instead of looking at each astrological factor separately from individual types of astrology, it considers how they interact with one another to form broader patterns in the charts. The goal is to provide a more holistic view of personality tendencies, life themes and potential areas of development reflected in the overall astrological configuration. The combined interpretation provides a unified understanding. By viewing these elements together, it highlights broader patterns and themes that may not appear when each system is examined separately.",
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: Colors.white,
                             fontSize: ResponsiveHelper.fontSize(14),
                             height: 1.5,
                           ),
@@ -119,9 +119,9 @@ class CombinedInterpretationScreen extends StatelessWidget {
           vertical: ResponsiveHelper.padding(12),
         ),
         decoration: BoxDecoration(
-          color: const Color(0xFF282D46), // Dark background for outlined buttons in screenshot
+          color: CustomColors.secondbackgroundColor,
           borderRadius: BorderRadius.circular(ResponsiveHelper.radius(12)),
-          border: Border.all(color: const Color(0xFF3F4A75)),
+          border: Border.all(color: const Color(0xFF2F3448)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
